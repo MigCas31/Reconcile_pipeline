@@ -1,0 +1,1273 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "address": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "build_meta": {
+      "oneOf": [
+        {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "properties": {
+            "built_at": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "built_at"
+          ],
+          "title": "BuildMeta",
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "building_center": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "z": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "z"
+      ],
+      "title": "Vec3",
+      "type": "object"
+    },
+    "ceiling": {
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "adjacency": {
+            "enum": [
+              "externalAir",
+              "groundSlab",
+              "groundSlabUFH",
+              "unheatedAttic",
+              "unheatedBasementFloor",
+              "basementWallGroundShallow",
+              "basementWallGroundDeep",
+              "internalToHeated",
+              "internalToUnheatedHost",
+              "partyWall",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "arrangement_cell_id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "corners": {
+            "items": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "z": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y",
+                "z"
+              ],
+              "title": "Vec3",
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "holes": {
+            "items": {
+              "items": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "additionalProperties": false,
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "z": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y",
+                  "z"
+                ],
+                "title": "Vec3",
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "type": "array"
+          },
+          "locator_id": {
+            "type": "string"
+          },
+          "merged_from": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "plane": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "a": {
+                "type": "number"
+              },
+              "b": {
+                "type": "number"
+              },
+              "c": {
+                "type": "number"
+              },
+              "d": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "title": "Plane",
+            "type": "object"
+          },
+          "role": {
+            "enum": [
+              "ceiling",
+              "kneewall"
+            ],
+            "type": "string"
+          },
+          "source": {
+            "enum": [
+              "flat_emit",
+              "attic_flat_lid",
+              "roof_arrangement",
+              "roof_arrangement_attic",
+              "thermal_cap",
+              "raw_fallback",
+              "flat_ceiling",
+              "computed_oblique",
+              "flat_gap_closure",
+              "kneewall",
+              "raw_scan",
+              "merged_coplanar"
+            ],
+            "type": "string"
+          },
+          "support_quality": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "corners",
+          "holes",
+          "plane",
+          "source",
+          "arrangement_cell_id",
+          "locator_id"
+        ],
+        "title": "CeilingPiece",
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "classification": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "has_gable": {
+          "type": "boolean"
+        },
+        "has_half_height": {
+          "type": "boolean"
+        },
+        "n_flat": {
+          "type": "integer"
+        },
+        "n_oblique": {
+          "type": "integer"
+        },
+        "n_rooms": {
+          "type": "integer"
+        },
+        "n_stories": {
+          "type": "integer"
+        },
+        "roof_type": {
+          "enum": [
+            "none",
+            "flat",
+            "shed",
+            "gable",
+            "hip",
+            "mansard",
+            "pyramid",
+            "cross_gable",
+            "complex"
+          ],
+          "type": "string"
+        },
+        "tier": {
+          "type": "integer"
+        },
+        "tier_label": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "tier",
+        "tier_label",
+        "roof_type",
+        "n_stories",
+        "n_rooms",
+        "n_oblique",
+        "n_flat",
+        "has_half_height",
+        "has_gable"
+      ],
+      "title": "TierClassification",
+      "type": "object"
+    },
+    "dormer_faces": {
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "adjacency": {
+            "enum": [
+              "externalAir",
+              "groundSlab",
+              "groundSlabUFH",
+              "unheatedAttic",
+              "unheatedBasementFloor",
+              "basementWallGroundShallow",
+              "basementWallGroundDeep",
+              "internalToHeated",
+              "internalToUnheatedHost",
+              "partyWall",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "corners": {
+            "items": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "z": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y",
+                "z"
+              ],
+              "title": "Vec3",
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "cutouts": {
+            "items": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "corners": {
+                  "items": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "additionalProperties": false,
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      },
+                      "z": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "title": "Vec3",
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "corners"
+              ],
+              "title": "Quad",
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "dormer_cheek",
+              "dormer_header",
+              "dormer_front"
+            ],
+            "type": "string"
+          },
+          "locator_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "corners",
+          "kind",
+          "locator_id"
+        ],
+        "title": "DormerFace",
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "gable_closures": {
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "adjacency": {
+            "enum": [
+              "externalAir",
+              "groundSlab",
+              "groundSlabUFH",
+              "unheatedAttic",
+              "unheatedBasementFloor",
+              "basementWallGroundShallow",
+              "basementWallGroundDeep",
+              "internalToHeated",
+              "internalToUnheatedHost",
+              "partyWall",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "corners": {
+            "items": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "z": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y",
+                "z"
+              ],
+              "title": "Vec3",
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "lower",
+              "upper"
+            ],
+            "type": "string"
+          },
+          "locator_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "corners",
+          "kind",
+          "locator_id"
+        ],
+        "title": "GableClosure",
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "gaps": {
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "adjacency": {
+            "enum": [
+              "externalAir",
+              "groundSlab",
+              "groundSlabUFH",
+              "unheatedAttic",
+              "unheatedBasementFloor",
+              "basementWallGroundShallow",
+              "basementWallGroundDeep",
+              "internalToHeated",
+              "internalToUnheatedHost",
+              "partyWall",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "corners": {
+            "items": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "z": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y",
+                "z"
+              ],
+              "title": "Vec3",
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "gap_floor",
+              "gap_ceiling",
+              "side",
+              "stitch",
+              "stitch_floor",
+              "stitch_ceiling",
+              "exterior_side",
+              "exterior_floor",
+              "exterior_ceiling"
+            ],
+            "type": "string"
+          },
+          "locator_id": {
+            "type": "string"
+          },
+          "scope": {
+            "enum": [
+              "intra_story",
+              "inter_story",
+              "exterior",
+              "junction"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "corners",
+          "kind",
+          "scope",
+          "locator_id"
+        ],
+        "title": "GapPiece",
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "knee_walls": {
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "adjacency": {
+            "enum": [
+              "externalAir",
+              "groundSlab",
+              "groundSlabUFH",
+              "unheatedAttic",
+              "unheatedBasementFloor",
+              "basementWallGroundShallow",
+              "basementWallGroundDeep",
+              "internalToHeated",
+              "internalToUnheatedHost",
+              "partyWall",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "corners": {
+            "items": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "z": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y",
+                "z"
+              ],
+              "title": "Vec3",
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "knee"
+            ],
+            "type": "string"
+          },
+          "locator_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "corners",
+          "kind",
+          "locator_id"
+        ],
+        "title": "KneeWall",
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "roof_quality": {
+      "oneOf": [
+        {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "properties": {
+            "components": {
+              "additionalProperties": {
+                "type": "number"
+              },
+              "type": "object"
+            },
+            "predicted_rating": {
+              "type": "number"
+            },
+            "quality_version": {
+              "type": "string"
+            },
+            "score": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "score",
+            "predicted_rating",
+            "components",
+            "quality_version"
+          ],
+          "title": "RoofQuality",
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "rooms": {
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "doors": {
+            "items": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "corners": {
+                  "items": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "additionalProperties": false,
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      },
+                      "z": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "title": "Vec3",
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "corners"
+              ],
+              "title": "Quad",
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "floor": {
+            "items": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "adjacency": {
+                  "enum": [
+                    "externalAir",
+                    "groundSlab",
+                    "groundSlabUFH",
+                    "unheatedAttic",
+                    "unheatedBasementFloor",
+                    "basementWallGroundShallow",
+                    "basementWallGroundDeep",
+                    "internalToHeated",
+                    "internalToUnheatedHost",
+                    "partyWall",
+                    "unknown"
+                  ],
+                  "type": "string"
+                },
+                "corners": {
+                  "items": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "additionalProperties": false,
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      },
+                      "z": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "title": "Vec3",
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "holes": {
+                  "items": {
+                    "items": {
+                      "$schema": "https://json-schema.org/draft/2020-12/schema",
+                      "additionalProperties": false,
+                      "properties": {
+                        "x": {
+                          "type": "number"
+                        },
+                        "y": {
+                          "type": "number"
+                        },
+                        "z": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "x",
+                        "y",
+                        "z"
+                      ],
+                      "title": "Vec3",
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "corners"
+              ],
+              "title": "HorizontalLid",
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "heating": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "locator_id": {
+            "type": "string"
+          },
+          "story": {
+            "type": "integer"
+          },
+          "walls": {
+            "items": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "adjacency": {
+                  "enum": [
+                    "externalAir",
+                    "groundSlab",
+                    "groundSlabUFH",
+                    "unheatedAttic",
+                    "unheatedBasementFloor",
+                    "basementWallGroundShallow",
+                    "basementWallGroundDeep",
+                    "internalToHeated",
+                    "internalToUnheatedHost",
+                    "partyWall",
+                    "unknown"
+                  ],
+                  "type": "string"
+                },
+                "corners": {
+                  "items": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "additionalProperties": false,
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      },
+                      "z": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "title": "Vec3",
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "cutouts": {
+                  "items": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "additionalProperties": false,
+                    "properties": {
+                      "corners": {
+                        "items": {
+                          "$schema": "https://json-schema.org/draft/2020-12/schema",
+                          "additionalProperties": false,
+                          "properties": {
+                            "x": {
+                              "type": "number"
+                            },
+                            "y": {
+                              "type": "number"
+                            },
+                            "z": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "x",
+                            "y",
+                            "z"
+                          ],
+                          "title": "Vec3",
+                          "type": "object"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "corners"
+                    ],
+                    "title": "Quad",
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "descent_strip": {
+                  "oneOf": [
+                    {
+                      "items": {
+                        "$schema": "https://json-schema.org/draft/2020-12/schema",
+                        "additionalProperties": false,
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y",
+                          "z"
+                        ],
+                        "title": "Vec3",
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "locator_id": {
+                  "type": "string"
+                },
+                "synthetic": {
+                  "type": "boolean"
+                },
+                "uplift_strip": {
+                  "oneOf": [
+                    {
+                      "items": {
+                        "$schema": "https://json-schema.org/draft/2020-12/schema",
+                        "additionalProperties": false,
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y",
+                          "z"
+                        ],
+                        "title": "Vec3",
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "corners",
+                "descent_strip",
+                "uplift_strip",
+                "cutouts",
+                "locator_id",
+                "synthetic"
+              ],
+              "title": "Wall",
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "windows": {
+            "items": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "corners": {
+                  "items": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "additionalProperties": false,
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      },
+                      "z": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "title": "Vec3",
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "corners"
+              ],
+              "title": "Quad",
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "story",
+          "floor",
+          "walls",
+          "doors",
+          "windows",
+          "locator_id"
+        ],
+        "title": "Room",
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "schema_version": {
+      "enum": [
+        "1"
+      ]
+    },
+    "stairs": {
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "capture_coverage": {
+            "type": "number"
+          },
+          "from_story": {
+            "type": "integer"
+          },
+          "locator_id": {
+            "type": "string"
+          },
+          "position": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              },
+              "z": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "x",
+              "y",
+              "z"
+            ],
+            "title": "Vec3",
+            "type": "object"
+          },
+          "riser_height": {
+            "type": "number"
+          },
+          "rotation": {
+            "type": "number"
+          },
+          "segments": {
+            "items": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "attachment_side": {
+                  "enum": [
+                    "front",
+                    "left",
+                    "right"
+                  ],
+                  "type": "string"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "length": {
+                  "type": "number"
+                },
+                "segment_type": {
+                  "enum": [
+                    "stair",
+                    "landing"
+                  ],
+                  "type": "string"
+                },
+                "step_count": {
+                  "type": "integer"
+                },
+                "width": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "segment_type",
+                "width",
+                "length",
+                "height",
+                "step_count",
+                "attachment_side"
+              ],
+              "title": "StairSegment",
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "slab_opening_polygon": {
+            "items": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "z": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y",
+                "z"
+              ],
+              "title": "Vec3",
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "source_fragment_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "stair_type": {
+            "enum": [
+              "straight",
+              "curved",
+              "spiral"
+            ],
+            "type": "string"
+          },
+          "step_count": {
+            "type": "integer"
+          },
+          "to_story": {
+            "type": "integer"
+          },
+          "total_rise": {
+            "type": "number"
+          },
+          "width": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "locator_id",
+          "position",
+          "rotation",
+          "stair_type",
+          "width",
+          "total_rise",
+          "step_count",
+          "from_story",
+          "to_story",
+          "segments",
+          "riser_height",
+          "source_fragment_ids",
+          "capture_coverage"
+        ],
+        "title": "Stair",
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "story_labels": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "uuid": {
+      "type": "string"
+    },
+    "visual_shells": {
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false,
+        "properties": {
+          "corners": {
+            "items": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": false,
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "z": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y",
+                "z"
+              ],
+              "title": "Vec3",
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "locator_id": {
+            "type": "string"
+          },
+          "plane": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "a": {
+                "type": "number"
+              },
+              "b": {
+                "type": "number"
+              },
+              "c": {
+                "type": "number"
+              },
+              "d": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "title": "Plane",
+            "type": "object"
+          },
+          "source_oblique_index": {
+            "type": "integer"
+          },
+          "tag": {
+            "enum": [
+              "above_ceiling_below_ridge",
+              "outside_kneewall_below_eave",
+              "gable_end"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "corners",
+          "plane",
+          "tag",
+          "source_oblique_index",
+          "locator_id"
+        ],
+        "title": "VisualShellPiece",
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "uuid",
+    "address",
+    "building_center",
+    "classification",
+    "rooms",
+    "gaps",
+    "ceiling",
+    "knee_walls",
+    "dormer_faces",
+    "gable_closures"
+  ],
+  "title": "TierPayload",
+  "type": "object"
+}

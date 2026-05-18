@@ -1,0 +1,1908 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>Weak scan-ceiling support — committed oblique roofs</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 16px; background: #f6f7f9; color: #222; font-size: 13px; }
+h1 { font-size: 18px; margin: 0 0 4px; }
+.meta { color: #555; margin-bottom: 12px; }
+table { border-collapse: collapse; width: 100%; background: white; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+th, td { padding: 6px 8px; border-bottom: 1px solid #eee; text-align: left; vertical-align: top; }
+th { background: #eef2f7; cursor: pointer; user-select: none; position: sticky; top: 0; z-index: 1; font-weight: 600; }
+th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
+tr:hover { background: #f9fbfd; }
+.neg { color: #a8322a; }
+.pos { color: #256029; }
+a.open { display: inline-block; padding: 2px 8px; background: #1f6feb; color: white; border-radius: 4px; text-decoration: none; font-size: 11px; }
+a.open:hover { background: #0a56d4; }
+a.raw { display: inline-block; padding: 1px 6px; background: #e8eef7; color: #1f4e8e; border-radius: 3px; text-decoration: none; font-size: 11px; margin: 1px 2px 1px 0; }
+a.raw:hover { background: #d2dcee; }
+details summary { cursor: pointer; color: #666; font-size: 11px; }
+.addr { color: #666; font-size: 11px; }
+.mono { font-family: ui-monospace, Menlo, monospace; font-size: 11px; }
+.flag-normal { background: #fff3e0; }
+.flag-dy { background: #ffebe6; }
+</style></head><body>
+<h1>Weak scan-ceiling support — committed oblique roof surfaces</h1>
+<div class="meta">66 surfaces flagged weak. Thresholds: |median Δy| &gt; 0.5 m OR normal·normal &lt; 0.8. Filter: exposed_rooms_only = True. Sort: |median Δy| desc. Row shading: orange = normal mismatch, red = large Δy.</div>
+<table id="t"><thead><tr>
+<th class="num" onclick="sortBy(this)">#</th>
+<th class="" onclick="sortBy(this)">Building</th>
+<th class="" onclick="sortBy(this)">Element</th>
+<th class="num" onclick="sortBy(this)">incl°</th>
+<th class="num" onclick="sortBy(this)">azi°</th>
+<th class="num" onclick="sortBy(this)">median Δy (m)</th>
+<th class="num" onclick="sortBy(this)">p95 |Δy|</th>
+<th class="num" onclick="sortBy(this)">normal·dot</th>
+<th class="num" onclick="sortBy(this)">XZ cov</th>
+<th class="num" onclick="sortBy(this)">area m²</th>
+<th class="num" onclick="sortBy(this)">matches</th>
+<th class="" onclick="sortBy(this)">ceiling-raw IDs</th>
+<th class="" onclick="sortBy(this)">open</th>
+</tr></thead><tbody>
+<tr class="flag-dy">
+<td class="num">1</td>
+<td><div class="mono">e9f0631f…</div><div class="addr">S vangsvej 16, 5300 Kerteminde</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">44.8</td>
+<td class="num">335.6</td>
+<td class="num neg">-1.63</td>
+<td class="num">1.75</td>
+<td class="num">0.619</td>
+<td class="num">0.89</td>
+<td class="num">6.4</td>
+<td class="num">6</td>
+<td>
+<details><summary>6 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A12%3A0">ceiling-raw::1:12:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A12%3A1">ceiling-raw::1:12:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A16%3A0">ceiling-raw::1:16:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A16%3A1">ceiling-raw::1:16:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A16%3A2">ceiling-raw::1:16:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A16%3A3">ceiling-raw::1:16:3</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">2</td>
+<td><div class="mono">d8308bfc…</div><div class="addr">Nyga rdsvej 17, 7100 Vejle</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">45.0</td>
+<td class="num">131.9</td>
+<td class="num neg">-1.31</td>
+<td class="num">2.62</td>
+<td class="num">0.707</td>
+<td class="num">0.89</td>
+<td class="num">47.2</td>
+<td class="num">13</td>
+<td>
+<details><summary>13 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d8308bfc-c2c1-42bd-8503-282571708b8c&eid=d8308bfc-c2c1-42bd-8503-282571708b8c%3A%3Aceiling-raw%3A%3A0%3A1%3A0">ceiling-raw::0:1:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d8308bfc-c2c1-42bd-8503-282571708b8c&eid=d8308bfc-c2c1-42bd-8503-282571708b8c%3A%3Aceiling-raw%3A%3A0%3A2%3A0">ceiling-raw::0:2:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d8308bfc-c2c1-42bd-8503-282571708b8c&eid=d8308bfc-c2c1-42bd-8503-282571708b8c%3A%3Aceiling-raw%3A%3A0%3A2%3A1">ceiling-raw::0:2:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d8308bfc-c2c1-42bd-8503-282571708b8c&eid=d8308bfc-c2c1-42bd-8503-282571708b8c%3A%3Aceiling-raw%3A%3A0%3A2%3A2">ceiling-raw::0:2:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d8308bfc-c2c1-42bd-8503-282571708b8c&eid=d8308bfc-c2c1-42bd-8503-282571708b8c%3A%3Aceiling-raw%3A%3A0%3A2%3A3">ceiling-raw::0:2:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d8308bfc-c2c1-42bd-8503-282571708b8c&eid=d8308bfc-c2c1-42bd-8503-282571708b8c%3A%3Aceiling-raw%3A%3A0%3A2%3A4">ceiling-raw::0:2:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d8308bfc-c2c1-42bd-8503-282571708b8c&eid=d8308bfc-c2c1-42bd-8503-282571708b8c%3A%3Aceiling-raw%3A%3A0%3A2%3A5">ceiling-raw::0:2:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d8308bfc-c2c1-42bd-8503-282571708b8c&eid=d8308bfc-c2c1-42bd-8503-282571708b8c%3A%3Aceiling-raw%3A%3A0%3A3%3A0">ceiling-raw::0:3:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d8308bfc-c2c1-42bd-8503-282571708b8c&eid=d8308bfc-c2c1-42bd-8503-282571708b8c%3A%3Aceiling-raw%3A%3A0%3A4%3A0">ceiling-raw::0:4:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d8308bfc-c2c1-42bd-8503-282571708b8c&eid=d8308bfc-c2c1-42bd-8503-282571708b8c%3A%3Aceiling-raw%3A%3A0%3A9%3A0">ceiling-raw::0:9:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d8308bfc-c2c1-42bd-8503-282571708b8c&eid=d8308bfc-c2c1-42bd-8503-282571708b8c%3A%3Aceiling-raw%3A%3A0%3A9%3A2">ceiling-raw::0:9:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d8308bfc-c2c1-42bd-8503-282571708b8c&eid=d8308bfc-c2c1-42bd-8503-282571708b8c%3A%3Aceiling-raw%3A%3A0%3A13%3A0">ceiling-raw::0:13:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d8308bfc-c2c1-42bd-8503-282571708b8c&eid=d8308bfc-c2c1-42bd-8503-282571708b8c%3A%3Aceiling-raw%3A%3A0%3A13%3A7">ceiling-raw::0:13:7</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=d8308bfc-c2c1-42bd-8503-282571708b8c&eid=d8308bfc-c2c1-42bd-8503-282571708b8c%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">3</td>
+<td><div class="mono">146ecf8b…</div><div class="addr">Mesterr kken 44, 5350 Rynkeby</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">17.8</td>
+<td class="num">190.4</td>
+<td class="num neg">-1.29</td>
+<td class="num">2.01</td>
+<td class="num">0.952</td>
+<td class="num">0.42</td>
+<td class="num">51.5</td>
+<td class="num">8</td>
+<td>
+<details><summary>8 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A0%3A0%3A0">ceiling-raw::0:0:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A0%3A0%3A2">ceiling-raw::0:0:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A0%3A0%3A3">ceiling-raw::0:0:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A0%3A1%3A0">ceiling-raw::0:1:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A0%3A1%3A1">ceiling-raw::0:1:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A0%3A1%3A2">ceiling-raw::0:1:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A0%3A1%3A3">ceiling-raw::0:1:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A0%3A2%3A0">ceiling-raw::0:2:0</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">4</td>
+<td><div class="mono">60f2f02b…</div><div class="addr">Clausens Alle, 50, 5250 Odense SV</div></td>
+<td><div class="mono">roof-oblique::oblique:2</div></td>
+<td class="num">47.1</td>
+<td class="num">148.3</td>
+<td class="num pos">1.21</td>
+<td class="num">1.28</td>
+<td class="num">0.680</td>
+<td class="num">0.89</td>
+<td class="num">29.4</td>
+<td class="num">6</td>
+<td>
+<details><summary>6 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=60f2f02b-8910-461c-879a-75925d256989&eid=60f2f02b-8910-461c-879a-75925d256989%3A%3Aceiling-raw%3A%3A1%3A8%3A0">ceiling-raw::1:8:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=60f2f02b-8910-461c-879a-75925d256989&eid=60f2f02b-8910-461c-879a-75925d256989%3A%3Aceiling-raw%3A%3A1%3A9%3A0">ceiling-raw::1:9:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=60f2f02b-8910-461c-879a-75925d256989&eid=60f2f02b-8910-461c-879a-75925d256989%3A%3Aceiling-raw%3A%3A1%3A10%3A0">ceiling-raw::1:10:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=60f2f02b-8910-461c-879a-75925d256989&eid=60f2f02b-8910-461c-879a-75925d256989%3A%3Aceiling-raw%3A%3A1%3A11%3A0">ceiling-raw::1:11:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=60f2f02b-8910-461c-879a-75925d256989&eid=60f2f02b-8910-461c-879a-75925d256989%3A%3Aceiling-raw%3A%3A1%3A12%3A0">ceiling-raw::1:12:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=60f2f02b-8910-461c-879a-75925d256989&eid=60f2f02b-8910-461c-879a-75925d256989%3A%3Aceiling-raw%3A%3A1%3A12%3A1">ceiling-raw::1:12:1</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=60f2f02b-8910-461c-879a-75925d256989&eid=60f2f02b-8910-461c-879a-75925d256989%3A%3Aroof-oblique%3A%3Aoblique%3A2">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">5</td>
+<td><div class="mono">72122129…</div><div class="addr">Degnemarken 5, 5750 Ringe</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">50.6</td>
+<td class="num">205.4</td>
+<td class="num pos">1.09</td>
+<td class="num">2.16</td>
+<td class="num">0.974</td>
+<td class="num">0.82</td>
+<td class="num">19.7</td>
+<td class="num">6</td>
+<td>
+<details><summary>6 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=72122129-7ee2-4a14-a645-23d44df3d2b5&eid=72122129-7ee2-4a14-a645-23d44df3d2b5%3A%3Aceiling-raw%3A%3A2%3A0%3A0">ceiling-raw::2:0:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=72122129-7ee2-4a14-a645-23d44df3d2b5&eid=72122129-7ee2-4a14-a645-23d44df3d2b5%3A%3Aceiling-raw%3A%3A2%3A1%3A0">ceiling-raw::2:1:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=72122129-7ee2-4a14-a645-23d44df3d2b5&eid=72122129-7ee2-4a14-a645-23d44df3d2b5%3A%3Aceiling-raw%3A%3A2%3A1%3A1">ceiling-raw::2:1:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=72122129-7ee2-4a14-a645-23d44df3d2b5&eid=72122129-7ee2-4a14-a645-23d44df3d2b5%3A%3Aceiling-raw%3A%3A2%3A2%3A4">ceiling-raw::2:2:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=72122129-7ee2-4a14-a645-23d44df3d2b5&eid=72122129-7ee2-4a14-a645-23d44df3d2b5%3A%3Aceiling-raw%3A%3A2%3A3%3A0">ceiling-raw::2:3:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=72122129-7ee2-4a14-a645-23d44df3d2b5&eid=72122129-7ee2-4a14-a645-23d44df3d2b5%3A%3Aceiling-raw%3A%3A2%3A3%3A1">ceiling-raw::2:3:1</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=72122129-7ee2-4a14-a645-23d44df3d2b5&eid=72122129-7ee2-4a14-a645-23d44df3d2b5%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">6</td>
+<td><div class="mono">90683bb0…</div><div class="addr">Ny Havnegade 1B, 8700 Horsens</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">42.0</td>
+<td class="num">72.1</td>
+<td class="num neg">-0.96</td>
+<td class="num">1.87</td>
+<td class="num">0.759</td>
+<td class="num">0.88</td>
+<td class="num">17.4</td>
+<td class="num">10</td>
+<td>
+<details><summary>10 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=90683bb0-28ca-42a8-82b8-09d82cd434d5&eid=90683bb0-28ca-42a8-82b8-09d82cd434d5%3A%3Aceiling-raw%3A%3A2%3A3%3A0">ceiling-raw::2:3:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=90683bb0-28ca-42a8-82b8-09d82cd434d5&eid=90683bb0-28ca-42a8-82b8-09d82cd434d5%3A%3Aceiling-raw%3A%3A2%3A3%3A1">ceiling-raw::2:3:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=90683bb0-28ca-42a8-82b8-09d82cd434d5&eid=90683bb0-28ca-42a8-82b8-09d82cd434d5%3A%3Aceiling-raw%3A%3A2%3A3%3A4">ceiling-raw::2:3:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=90683bb0-28ca-42a8-82b8-09d82cd434d5&eid=90683bb0-28ca-42a8-82b8-09d82cd434d5%3A%3Aceiling-raw%3A%3A2%3A3%3A6">ceiling-raw::2:3:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=90683bb0-28ca-42a8-82b8-09d82cd434d5&eid=90683bb0-28ca-42a8-82b8-09d82cd434d5%3A%3Aceiling-raw%3A%3A2%3A3%3A8">ceiling-raw::2:3:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=90683bb0-28ca-42a8-82b8-09d82cd434d5&eid=90683bb0-28ca-42a8-82b8-09d82cd434d5%3A%3Aceiling-raw%3A%3A2%3A3%3A12">ceiling-raw::2:3:12</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=90683bb0-28ca-42a8-82b8-09d82cd434d5&eid=90683bb0-28ca-42a8-82b8-09d82cd434d5%3A%3Aceiling-raw%3A%3A2%3A3%3A13">ceiling-raw::2:3:13</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=90683bb0-28ca-42a8-82b8-09d82cd434d5&eid=90683bb0-28ca-42a8-82b8-09d82cd434d5%3A%3Aceiling-raw%3A%3A2%3A3%3A14">ceiling-raw::2:3:14</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=90683bb0-28ca-42a8-82b8-09d82cd434d5&eid=90683bb0-28ca-42a8-82b8-09d82cd434d5%3A%3Aceiling-raw%3A%3A2%3A3%3A15">ceiling-raw::2:3:15</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=90683bb0-28ca-42a8-82b8-09d82cd434d5&eid=90683bb0-28ca-42a8-82b8-09d82cd434d5%3A%3Aceiling-raw%3A%3A2%3A3%3A16">ceiling-raw::2:3:16</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=90683bb0-28ca-42a8-82b8-09d82cd434d5&eid=90683bb0-28ca-42a8-82b8-09d82cd434d5%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">7</td>
+<td><div class="mono">b65126ae…</div><div class="addr">Skovgade 2, 5500 Middelfart</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">46.9</td>
+<td class="num">261.8</td>
+<td class="num neg">-0.95</td>
+<td class="num">1.52</td>
+<td class="num">0.758</td>
+<td class="num">0.59</td>
+<td class="num">18.2</td>
+<td class="num">10</td>
+<td>
+<details><summary>10 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A10%3A2">ceiling-raw::2:10:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A11%3A0">ceiling-raw::2:11:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A11%3A1">ceiling-raw::2:11:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A11%3A2">ceiling-raw::2:11:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A11%3A3">ceiling-raw::2:11:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A11%3A4">ceiling-raw::2:11:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A11%3A5">ceiling-raw::2:11:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A11%3A6">ceiling-raw::2:11:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A12%3A0">ceiling-raw::2:12:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A12%3A1">ceiling-raw::2:12:1</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">8</td>
+<td><div class="mono">6203a969…</div><div class="addr">Skovstrupvej 63, 5690 Tommerup</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">49.6</td>
+<td class="num">6.6</td>
+<td class="num pos">0.89</td>
+<td class="num">2.33</td>
+<td class="num">0.649</td>
+<td class="num">0.99</td>
+<td class="num">46.9</td>
+<td class="num">5</td>
+<td>
+<details><summary>5 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=6203a969-742b-4935-bc4d-8eae644b8f73&eid=6203a969-742b-4935-bc4d-8eae644b8f73%3A%3Aceiling-raw%3A%3A0%3A3%3A0">ceiling-raw::0:3:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=6203a969-742b-4935-bc4d-8eae644b8f73&eid=6203a969-742b-4935-bc4d-8eae644b8f73%3A%3Aceiling-raw%3A%3A0%3A3%3A1">ceiling-raw::0:3:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=6203a969-742b-4935-bc4d-8eae644b8f73&eid=6203a969-742b-4935-bc4d-8eae644b8f73%3A%3Aceiling-raw%3A%3A0%3A6%3A0">ceiling-raw::0:6:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=6203a969-742b-4935-bc4d-8eae644b8f73&eid=6203a969-742b-4935-bc4d-8eae644b8f73%3A%3Aceiling-raw%3A%3A0%3A7%3A0">ceiling-raw::0:7:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=6203a969-742b-4935-bc4d-8eae644b8f73&eid=6203a969-742b-4935-bc4d-8eae644b8f73%3A%3Aceiling-raw%3A%3A0%3A8%3A0">ceiling-raw::0:8:0</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=6203a969-742b-4935-bc4d-8eae644b8f73&eid=6203a969-742b-4935-bc4d-8eae644b8f73%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">9</td>
+<td><div class="mono">c7898e89…</div><div class="addr">Skovvej 13, 5300 Kerteminde</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">34.4</td>
+<td class="num">247.1</td>
+<td class="num neg">-0.82</td>
+<td class="num">1.61</td>
+<td class="num">0.898</td>
+<td class="num">0.68</td>
+<td class="num">19.3</td>
+<td class="num">17</td>
+<td>
+<details><summary>17 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A2">ceiling-raw::1:5:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A5">ceiling-raw::1:5:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A6">ceiling-raw::1:5:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A7">ceiling-raw::1:5:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A8">ceiling-raw::1:5:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A9">ceiling-raw::1:5:9</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A10">ceiling-raw::1:5:10</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A11">ceiling-raw::1:5:11</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A12">ceiling-raw::1:5:12</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A13">ceiling-raw::1:5:13</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A16">ceiling-raw::1:5:16</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A17">ceiling-raw::1:5:17</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A18">ceiling-raw::1:5:18</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A19">ceiling-raw::1:5:19</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A21">ceiling-raw::1:5:21</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A22">ceiling-raw::1:5:22</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A24">ceiling-raw::1:5:24</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">10</td>
+<td><div class="mono">a8aca518…</div><div class="addr">Skyttegade 3, 5300 Kerteminde</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">45.9</td>
+<td class="num">119.0</td>
+<td class="num pos">0.81</td>
+<td class="num">1.61</td>
+<td class="num">0.696</td>
+<td class="num">0.63</td>
+<td class="num">23.8</td>
+<td class="num">3</td>
+<td>
+<details><summary>3 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=a8aca518-ee19-4cef-8df9-1b574c2d43d1&eid=a8aca518-ee19-4cef-8df9-1b574c2d43d1%3A%3Aceiling-raw%3A%3A2%3A11%3A0">ceiling-raw::2:11:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=a8aca518-ee19-4cef-8df9-1b574c2d43d1&eid=a8aca518-ee19-4cef-8df9-1b574c2d43d1%3A%3Aceiling-raw%3A%3A2%3A11%3A1">ceiling-raw::2:11:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=a8aca518-ee19-4cef-8df9-1b574c2d43d1&eid=a8aca518-ee19-4cef-8df9-1b574c2d43d1%3A%3Aceiling-raw%3A%3A2%3A14%3A0">ceiling-raw::2:14:0</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=a8aca518-ee19-4cef-8df9-1b574c2d43d1&eid=a8aca518-ee19-4cef-8df9-1b574c2d43d1%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">11</td>
+<td><div class="mono">59b505e7…</div><div class="addr">Sundeved 6, 6000 Kolding</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">47.2</td>
+<td class="num">141.9</td>
+<td class="num neg">-0.80</td>
+<td class="num">1.21</td>
+<td class="num">0.434</td>
+<td class="num">0.99</td>
+<td class="num">2.0</td>
+<td class="num">10</td>
+<td>
+<details><summary>10 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A6%3A1">ceiling-raw::2:6:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A7%3A0">ceiling-raw::2:7:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A7%3A1">ceiling-raw::2:7:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A7%3A2">ceiling-raw::2:7:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A7%3A3">ceiling-raw::2:7:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A7%3A4">ceiling-raw::2:7:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A7%3A5">ceiling-raw::2:7:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A7%3A6">ceiling-raw::2:7:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A7%3A7">ceiling-raw::2:7:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A7%3A8">ceiling-raw::2:7:8</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">12</td>
+<td><div class="mono">0b75d30e…</div><div class="addr"> sterbrogade 63, 5600 Faaborg</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">43.3</td>
+<td class="num">22.3</td>
+<td class="num neg">-0.80</td>
+<td class="num">0.84</td>
+<td class="num">0.689</td>
+<td class="num">0.95</td>
+<td class="num">19.9</td>
+<td class="num">10</td>
+<td>
+<details><summary>10 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A0">ceiling-raw::1:0:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A1">ceiling-raw::1:0:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A8">ceiling-raw::1:0:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A14">ceiling-raw::1:0:14</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A17">ceiling-raw::1:0:17</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A18">ceiling-raw::1:0:18</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A19">ceiling-raw::1:0:19</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A22">ceiling-raw::1:0:22</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A24">ceiling-raw::1:0:24</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A25">ceiling-raw::1:0:25</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">13</td>
+<td><div class="mono">0b75d30e…</div><div class="addr"> sterbrogade 63, 5600 Faaborg</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">41.1</td>
+<td class="num">202.3</td>
+<td class="num neg">-0.77</td>
+<td class="num">1.48</td>
+<td class="num">0.762</td>
+<td class="num">0.77</td>
+<td class="num">24.1</td>
+<td class="num">23</td>
+<td>
+<details><summary>23 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A0">ceiling-raw::1:0:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A1">ceiling-raw::1:0:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A2">ceiling-raw::1:0:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A3">ceiling-raw::1:0:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A4">ceiling-raw::1:0:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A5">ceiling-raw::1:0:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A6">ceiling-raw::1:0:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A7">ceiling-raw::1:0:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A8">ceiling-raw::1:0:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A9">ceiling-raw::1:0:9</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A10">ceiling-raw::1:0:10</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A11">ceiling-raw::1:0:11</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A12">ceiling-raw::1:0:12</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A13">ceiling-raw::1:0:13</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A14">ceiling-raw::1:0:14</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A15">ceiling-raw::1:0:15</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A16">ceiling-raw::1:0:16</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A17">ceiling-raw::1:0:17</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A18">ceiling-raw::1:0:18</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A20">ceiling-raw::1:0:20</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A21">ceiling-raw::1:0:21</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A23">ceiling-raw::1:0:23</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aceiling-raw%3A%3A1%3A0%3A25">ceiling-raw::1:0:25</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=0b75d30e-c50c-4fc6-88ff-fce983078aa4&eid=0b75d30e-c50c-4fc6-88ff-fce983078aa4%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">14</td>
+<td><div class="mono">71ee522c…</div><div class="addr">Reventlowsvej 90, 5600 Faaborg</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">47.9</td>
+<td class="num">188.3</td>
+<td class="num pos">0.75</td>
+<td class="num">1.96</td>
+<td class="num">0.670</td>
+<td class="num">0.97</td>
+<td class="num">45.0</td>
+<td class="num">5</td>
+<td>
+<details><summary>5 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=71ee522c-1e78-411f-b3ce-33d59516038f&eid=71ee522c-1e78-411f-b3ce-33d59516038f%3A%3Aceiling-raw%3A%3A0%3A4%3A1">ceiling-raw::0:4:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=71ee522c-1e78-411f-b3ce-33d59516038f&eid=71ee522c-1e78-411f-b3ce-33d59516038f%3A%3Aceiling-raw%3A%3A0%3A5%3A0">ceiling-raw::0:5:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=71ee522c-1e78-411f-b3ce-33d59516038f&eid=71ee522c-1e78-411f-b3ce-33d59516038f%3A%3Aceiling-raw%3A%3A0%3A6%3A0">ceiling-raw::0:6:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=71ee522c-1e78-411f-b3ce-33d59516038f&eid=71ee522c-1e78-411f-b3ce-33d59516038f%3A%3Aceiling-raw%3A%3A0%3A6%3A1">ceiling-raw::0:6:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=71ee522c-1e78-411f-b3ce-33d59516038f&eid=71ee522c-1e78-411f-b3ce-33d59516038f%3A%3Aceiling-raw%3A%3A0%3A7%3A0">ceiling-raw::0:7:0</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=71ee522c-1e78-411f-b3ce-33d59516038f&eid=71ee522c-1e78-411f-b3ce-33d59516038f%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">15</td>
+<td><div class="mono">c7898e89…</div><div class="addr">Skovvej 13, 5300 Kerteminde</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">34.5</td>
+<td class="num">67.1</td>
+<td class="num neg">-0.75</td>
+<td class="num">1.07</td>
+<td class="num">0.893</td>
+<td class="num">0.51</td>
+<td class="num">25.6</td>
+<td class="num">18</td>
+<td>
+<details><summary>18 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A0">ceiling-raw::1:5:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A1">ceiling-raw::1:5:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A2">ceiling-raw::1:5:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A3">ceiling-raw::1:5:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A4">ceiling-raw::1:5:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A6">ceiling-raw::1:5:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A10">ceiling-raw::1:5:10</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A11">ceiling-raw::1:5:11</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A12">ceiling-raw::1:5:12</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A13">ceiling-raw::1:5:13</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A14">ceiling-raw::1:5:14</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A15">ceiling-raw::1:5:15</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A16">ceiling-raw::1:5:16</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A17">ceiling-raw::1:5:17</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A20">ceiling-raw::1:5:20</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A22">ceiling-raw::1:5:22</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A23">ceiling-raw::1:5:23</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aceiling-raw%3A%3A1%3A5%3A24">ceiling-raw::1:5:24</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd&eid=c7898e89-b45b-47f3-96b7-8c1fa96ef9fd%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">16</td>
+<td><div class="mono">e028bcc5…</div><div class="addr">Firehusevej 1, 7100 Vejle</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">44.5</td>
+<td class="num">51.3</td>
+<td class="num pos">0.67</td>
+<td class="num">1.21</td>
+<td class="num">0.713</td>
+<td class="num">0.97</td>
+<td class="num">33.6</td>
+<td class="num">13</td>
+<td>
+<details><summary>13 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A10%3A0">ceiling-raw::1:10:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A10%3A1">ceiling-raw::1:10:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A11%3A0">ceiling-raw::1:11:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A11%3A1">ceiling-raw::1:11:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A12%3A0">ceiling-raw::1:12:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A13%3A1">ceiling-raw::1:13:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A13%3A2">ceiling-raw::1:13:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A13%3A5">ceiling-raw::1:13:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A13%3A6">ceiling-raw::1:13:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A13%3A8">ceiling-raw::1:13:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A13%3A9">ceiling-raw::1:13:9</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A13%3A11">ceiling-raw::1:13:11</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A13%3A13">ceiling-raw::1:13:13</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">17</td>
+<td><div class="mono">b8def755…</div><div class="addr">H C, Andersens Gade 2, 5000 Odense C</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">49.7</td>
+<td class="num">319.0</td>
+<td class="num neg">-0.65</td>
+<td class="num">1.46</td>
+<td class="num">0.835</td>
+<td class="num">0.82</td>
+<td class="num">16.9</td>
+<td class="num">12</td>
+<td>
+<details><summary>12 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8def755-9829-4141-8ecb-3e71ef446d0d&eid=b8def755-9829-4141-8ecb-3e71ef446d0d%3A%3Aceiling-raw%3A%3A2%3A10%3A0">ceiling-raw::2:10:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8def755-9829-4141-8ecb-3e71ef446d0d&eid=b8def755-9829-4141-8ecb-3e71ef446d0d%3A%3Aceiling-raw%3A%3A2%3A10%3A1">ceiling-raw::2:10:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8def755-9829-4141-8ecb-3e71ef446d0d&eid=b8def755-9829-4141-8ecb-3e71ef446d0d%3A%3Aceiling-raw%3A%3A2%3A10%3A2">ceiling-raw::2:10:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8def755-9829-4141-8ecb-3e71ef446d0d&eid=b8def755-9829-4141-8ecb-3e71ef446d0d%3A%3Aceiling-raw%3A%3A2%3A10%3A3">ceiling-raw::2:10:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8def755-9829-4141-8ecb-3e71ef446d0d&eid=b8def755-9829-4141-8ecb-3e71ef446d0d%3A%3Aceiling-raw%3A%3A2%3A10%3A4">ceiling-raw::2:10:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8def755-9829-4141-8ecb-3e71ef446d0d&eid=b8def755-9829-4141-8ecb-3e71ef446d0d%3A%3Aceiling-raw%3A%3A2%3A10%3A5">ceiling-raw::2:10:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8def755-9829-4141-8ecb-3e71ef446d0d&eid=b8def755-9829-4141-8ecb-3e71ef446d0d%3A%3Aceiling-raw%3A%3A2%3A10%3A7">ceiling-raw::2:10:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8def755-9829-4141-8ecb-3e71ef446d0d&eid=b8def755-9829-4141-8ecb-3e71ef446d0d%3A%3Aceiling-raw%3A%3A2%3A10%3A8">ceiling-raw::2:10:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8def755-9829-4141-8ecb-3e71ef446d0d&eid=b8def755-9829-4141-8ecb-3e71ef446d0d%3A%3Aceiling-raw%3A%3A2%3A10%3A9">ceiling-raw::2:10:9</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8def755-9829-4141-8ecb-3e71ef446d0d&eid=b8def755-9829-4141-8ecb-3e71ef446d0d%3A%3Aceiling-raw%3A%3A2%3A10%3A10">ceiling-raw::2:10:10</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8def755-9829-4141-8ecb-3e71ef446d0d&eid=b8def755-9829-4141-8ecb-3e71ef446d0d%3A%3Aceiling-raw%3A%3A2%3A10%3A11">ceiling-raw::2:10:11</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8def755-9829-4141-8ecb-3e71ef446d0d&eid=b8def755-9829-4141-8ecb-3e71ef446d0d%3A%3Aceiling-raw%3A%3A2%3A10%3A12">ceiling-raw::2:10:12</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=b8def755-9829-4141-8ecb-3e71ef446d0d&eid=b8def755-9829-4141-8ecb-3e71ef446d0d%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">18</td>
+<td><div class="mono">7153d532…</div><div class="addr">Engdalen 8, 5210 Odense NV</div></td>
+<td><div class="mono">roof-oblique::oblique:3</div></td>
+<td class="num">32.6</td>
+<td class="num">154.5</td>
+<td class="num neg">-0.65</td>
+<td class="num">1.77</td>
+<td class="num">0.500</td>
+<td class="num">0.87</td>
+<td class="num">21.8</td>
+<td class="num">16</td>
+<td>
+<details><summary>16 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A8%3A0">ceiling-raw::1:8:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A8%3A2">ceiling-raw::1:8:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A8%3A3">ceiling-raw::1:8:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A8%3A4">ceiling-raw::1:8:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A8%3A5">ceiling-raw::1:8:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A8%3A6">ceiling-raw::1:8:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A8%3A7">ceiling-raw::1:8:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A8%3A8">ceiling-raw::1:8:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A8%3A9">ceiling-raw::1:8:9</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A13%3A0">ceiling-raw::1:13:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A13%3A2">ceiling-raw::1:13:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A14%3A0">ceiling-raw::1:14:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A14%3A2">ceiling-raw::1:14:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A14%3A3">ceiling-raw::1:14:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A14%3A5">ceiling-raw::1:14:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A14%3A6">ceiling-raw::1:14:6</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aroof-oblique%3A%3Aoblique%3A3">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">19</td>
+<td><div class="mono">b65126ae…</div><div class="addr">Skovgade 2, 5500 Middelfart</div></td>
+<td><div class="mono">roof-oblique::oblique:3</div></td>
+<td class="num">20.4</td>
+<td class="num">351.8</td>
+<td class="num neg">-0.63</td>
+<td class="num">1.46</td>
+<td class="num">0.678</td>
+<td class="num">0.92</td>
+<td class="num">10.4</td>
+<td class="num">10</td>
+<td>
+<details><summary>10 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A9%3A0">ceiling-raw::2:9:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A10%3A0">ceiling-raw::2:10:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A10%3A1">ceiling-raw::2:10:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A10%3A2">ceiling-raw::2:10:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A10%3A3">ceiling-raw::2:10:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A10%3A4">ceiling-raw::2:10:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A10%3A5">ceiling-raw::2:10:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A11%3A0">ceiling-raw::2:11:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A11%3A1">ceiling-raw::2:11:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A11%3A5">ceiling-raw::2:11:5</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aroof-oblique%3A%3Aoblique%3A3">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">20</td>
+<td><div class="mono">016980bc…</div><div class="addr">Rouseh jvej 5, 5250 Odense SV</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">42.6</td>
+<td class="num">35.2</td>
+<td class="num pos">0.62</td>
+<td class="num">1.30</td>
+<td class="num">0.868</td>
+<td class="num">0.75</td>
+<td class="num">20.6</td>
+<td class="num">5</td>
+<td>
+<details><summary>5 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=016980bc-6762-4022-bfbf-17df4112e10c&eid=016980bc-6762-4022-bfbf-17df4112e10c%3A%3Aceiling-raw%3A%3A2%3A9%3A0">ceiling-raw::2:9:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=016980bc-6762-4022-bfbf-17df4112e10c&eid=016980bc-6762-4022-bfbf-17df4112e10c%3A%3Aceiling-raw%3A%3A2%3A10%3A0">ceiling-raw::2:10:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=016980bc-6762-4022-bfbf-17df4112e10c&eid=016980bc-6762-4022-bfbf-17df4112e10c%3A%3Aceiling-raw%3A%3A2%3A10%3A1">ceiling-raw::2:10:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=016980bc-6762-4022-bfbf-17df4112e10c&eid=016980bc-6762-4022-bfbf-17df4112e10c%3A%3Aceiling-raw%3A%3A2%3A10%3A2">ceiling-raw::2:10:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=016980bc-6762-4022-bfbf-17df4112e10c&eid=016980bc-6762-4022-bfbf-17df4112e10c%3A%3Aceiling-raw%3A%3A2%3A11%3A0">ceiling-raw::2:11:0</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=016980bc-6762-4022-bfbf-17df4112e10c&eid=016980bc-6762-4022-bfbf-17df4112e10c%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">21</td>
+<td><div class="mono">7153d532…</div><div class="addr">Engdalen 8, 5210 Odense NV</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">17.5</td>
+<td class="num">334.3</td>
+<td class="num neg">-0.61</td>
+<td class="num">1.08</td>
+<td class="num">0.954</td>
+<td class="num">1.00</td>
+<td class="num">12.4</td>
+<td class="num">3</td>
+<td>
+<details><summary>3 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A13%3A0">ceiling-raw::1:13:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A13%3A1">ceiling-raw::1:13:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aceiling-raw%3A%3A1%3A13%3A2">ceiling-raw::1:13:2</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85&eid=7153d532-16c1-45e8-b7c9-f5cd1ba5cc85%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">22</td>
+<td><div class="mono">e9f0631f…</div><div class="addr">S vangsvej 16, 5300 Kerteminde</div></td>
+<td><div class="mono">roof-oblique::oblique:2</div></td>
+<td class="num">44.2</td>
+<td class="num">245.6</td>
+<td class="num pos">0.60</td>
+<td class="num">3.49</td>
+<td class="num">0.717</td>
+<td class="num">0.98</td>
+<td class="num">50.3</td>
+<td class="num">20</td>
+<td>
+<details><summary>20 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A17%3A0">ceiling-raw::1:17:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A17%3A1">ceiling-raw::1:17:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A17%3A2">ceiling-raw::1:17:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A17%3A3">ceiling-raw::1:17:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A17%3A4">ceiling-raw::1:17:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A18%3A0">ceiling-raw::1:18:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A18%3A1">ceiling-raw::1:18:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A18%3A2">ceiling-raw::1:18:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A18%3A3">ceiling-raw::1:18:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A18%3A4">ceiling-raw::1:18:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A18%3A5">ceiling-raw::1:18:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A18%3A6">ceiling-raw::1:18:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A18%3A7">ceiling-raw::1:18:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A19%3A0">ceiling-raw::1:19:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A19%3A1">ceiling-raw::1:19:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A19%3A2">ceiling-raw::1:19:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A19%3A3">ceiling-raw::1:19:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A19%3A4">ceiling-raw::1:19:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A19%3A5">ceiling-raw::1:19:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aceiling-raw%3A%3A1%3A19%3A6">ceiling-raw::1:19:6</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=e9f0631f-ae34-4d30-af21-d3369327755f&eid=e9f0631f-ae34-4d30-af21-d3369327755f%3A%3Aroof-oblique%3A%3Aoblique%3A2">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">23</td>
+<td><div class="mono">2388d90c…</div><div class="addr">Vestergade 32, 5672 Broby</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">49.4</td>
+<td class="num">247.0</td>
+<td class="num pos">0.60</td>
+<td class="num">1.18</td>
+<td class="num">0.825</td>
+<td class="num">0.72</td>
+<td class="num">21.8</td>
+<td class="num">5</td>
+<td>
+<details><summary>5 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=2388d90c-8cc9-4cca-b232-d658e184074d&eid=2388d90c-8cc9-4cca-b232-d658e184074d%3A%3Aceiling-raw%3A%3A1%3A0%3A0">ceiling-raw::1:0:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=2388d90c-8cc9-4cca-b232-d658e184074d&eid=2388d90c-8cc9-4cca-b232-d658e184074d%3A%3Aceiling-raw%3A%3A1%3A2%3A0">ceiling-raw::1:2:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=2388d90c-8cc9-4cca-b232-d658e184074d&eid=2388d90c-8cc9-4cca-b232-d658e184074d%3A%3Aceiling-raw%3A%3A1%3A2%3A1">ceiling-raw::1:2:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=2388d90c-8cc9-4cca-b232-d658e184074d&eid=2388d90c-8cc9-4cca-b232-d658e184074d%3A%3Aceiling-raw%3A%3A1%3A3%3A0">ceiling-raw::1:3:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=2388d90c-8cc9-4cca-b232-d658e184074d&eid=2388d90c-8cc9-4cca-b232-d658e184074d%3A%3Aceiling-raw%3A%3A1%3A3%3A1">ceiling-raw::1:3:1</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=2388d90c-8cc9-4cca-b232-d658e184074d&eid=2388d90c-8cc9-4cca-b232-d658e184074d%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">24</td>
+<td><div class="mono">d683f65d…</div><div class="addr">Lundsga rds Have 31, 5210 Odense NV</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">19.4</td>
+<td class="num">50.9</td>
+<td class="num pos">0.58</td>
+<td class="num">0.73</td>
+<td class="num">0.943</td>
+<td class="num">0.97</td>
+<td class="num">108.3</td>
+<td class="num">12</td>
+<td>
+<details><summary>12 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed&eid=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed%3A%3Aceiling-raw%3A%3A0%3A0%3A0">ceiling-raw::0:0:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed&eid=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed%3A%3Aceiling-raw%3A%3A0%3A0%3A1">ceiling-raw::0:0:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed&eid=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed%3A%3Aceiling-raw%3A%3A0%3A0%3A3">ceiling-raw::0:0:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed&eid=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed%3A%3Aceiling-raw%3A%3A0%3A0%3A4">ceiling-raw::0:0:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed&eid=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed%3A%3Aceiling-raw%3A%3A0%3A2%3A0">ceiling-raw::0:2:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed&eid=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed%3A%3Aceiling-raw%3A%3A0%3A4%3A0">ceiling-raw::0:4:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed&eid=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed%3A%3Aceiling-raw%3A%3A0%3A4%3A3">ceiling-raw::0:4:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed&eid=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed%3A%3Aceiling-raw%3A%3A0%3A5%3A0">ceiling-raw::0:5:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed&eid=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed%3A%3Aceiling-raw%3A%3A0%3A6%3A0">ceiling-raw::0:6:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed&eid=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed%3A%3Aceiling-raw%3A%3A0%3A7%3A0">ceiling-raw::0:7:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed&eid=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed%3A%3Aceiling-raw%3A%3A0%3A8%3A0">ceiling-raw::0:8:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed&eid=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed%3A%3Aceiling-raw%3A%3A0%3A9%3A0">ceiling-raw::0:9:0</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed&eid=d683f65d-ad08-4f69-ab23-dbd7ec1bcaed%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">25</td>
+<td><div class="mono">38158927…</div><div class="addr">Fundersvej 3, 7100 Vejle</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">42.7</td>
+<td class="num">321.5</td>
+<td class="num neg">-0.55</td>
+<td class="num">1.11</td>
+<td class="num">0.867</td>
+<td class="num">0.93</td>
+<td class="num">25.3</td>
+<td class="num">6</td>
+<td>
+<details><summary>6 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=38158927-652c-4d01-9aa3-770956648d85&eid=38158927-652c-4d01-9aa3-770956648d85%3A%3Aceiling-raw%3A%3A1%3A5%3A0">ceiling-raw::1:5:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=38158927-652c-4d01-9aa3-770956648d85&eid=38158927-652c-4d01-9aa3-770956648d85%3A%3Aceiling-raw%3A%3A1%3A6%3A0">ceiling-raw::1:6:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=38158927-652c-4d01-9aa3-770956648d85&eid=38158927-652c-4d01-9aa3-770956648d85%3A%3Aceiling-raw%3A%3A1%3A7%3A0">ceiling-raw::1:7:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=38158927-652c-4d01-9aa3-770956648d85&eid=38158927-652c-4d01-9aa3-770956648d85%3A%3Aceiling-raw%3A%3A1%3A7%3A1">ceiling-raw::1:7:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=38158927-652c-4d01-9aa3-770956648d85&eid=38158927-652c-4d01-9aa3-770956648d85%3A%3Aceiling-raw%3A%3A1%3A9%3A0">ceiling-raw::1:9:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=38158927-652c-4d01-9aa3-770956648d85&eid=38158927-652c-4d01-9aa3-770956648d85%3A%3Aceiling-raw%3A%3A1%3A9%3A1">ceiling-raw::1:9:1</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=38158927-652c-4d01-9aa3-770956648d85&eid=38158927-652c-4d01-9aa3-770956648d85%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">26</td>
+<td><div class="mono">fe829d59…</div><div class="addr">R jrupvej 13B, 5550 Langeskov</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">43.6</td>
+<td class="num">348.9</td>
+<td class="num pos">0.54</td>
+<td class="num">1.38</td>
+<td class="num">0.861</td>
+<td class="num">0.80</td>
+<td class="num">28.5</td>
+<td class="num">4</td>
+<td>
+<details><summary>4 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=fe829d59-c9f1-4194-a40b-39600a4f27b6&eid=fe829d59-c9f1-4194-a40b-39600a4f27b6%3A%3Aceiling-raw%3A%3A2%3A10%3A0">ceiling-raw::2:10:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=fe829d59-c9f1-4194-a40b-39600a4f27b6&eid=fe829d59-c9f1-4194-a40b-39600a4f27b6%3A%3Aceiling-raw%3A%3A2%3A10%3A1">ceiling-raw::2:10:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=fe829d59-c9f1-4194-a40b-39600a4f27b6&eid=fe829d59-c9f1-4194-a40b-39600a4f27b6%3A%3Aceiling-raw%3A%3A2%3A13%3A0">ceiling-raw::2:13:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=fe829d59-c9f1-4194-a40b-39600a4f27b6&eid=fe829d59-c9f1-4194-a40b-39600a4f27b6%3A%3Aceiling-raw%3A%3A2%3A13%3A1">ceiling-raw::2:13:1</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=fe829d59-c9f1-4194-a40b-39600a4f27b6&eid=fe829d59-c9f1-4194-a40b-39600a4f27b6%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">27</td>
+<td><div class="mono">e5adc187…</div><div class="addr">Rostrupvej 99, 5471 S nders </div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">47.0</td>
+<td class="num">37.7</td>
+<td class="num pos">0.52</td>
+<td class="num">1.00</td>
+<td class="num">0.841</td>
+<td class="num">1.00</td>
+<td class="num">6.2</td>
+<td class="num">2</td>
+<td>
+<details><summary>2 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e5adc187-70eb-4828-aa90-5fe3c46dfbce&eid=e5adc187-70eb-4828-aa90-5fe3c46dfbce%3A%3Aceiling-raw%3A%3A1%3A8%3A0">ceiling-raw::1:8:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e5adc187-70eb-4828-aa90-5fe3c46dfbce&eid=e5adc187-70eb-4828-aa90-5fe3c46dfbce%3A%3Aceiling-raw%3A%3A1%3A8%3A1">ceiling-raw::1:8:1</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=e5adc187-70eb-4828-aa90-5fe3c46dfbce&eid=e5adc187-70eb-4828-aa90-5fe3c46dfbce%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">28</td>
+<td><div class="mono">5a97cb51…</div><div class="addr">N rre Landevej 23, 6470 Sydals</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">14.1</td>
+<td class="num">76.8</td>
+<td class="num neg">-0.52</td>
+<td class="num">0.79</td>
+<td class="num">0.970</td>
+<td class="num">0.96</td>
+<td class="num">121.7</td>
+<td class="num">11</td>
+<td>
+<details><summary>11 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=5a97cb51-78cd-40c7-9dd5-423bdea306a6&eid=5a97cb51-78cd-40c7-9dd5-423bdea306a6%3A%3Aceiling-raw%3A%3A0%3A0%3A0">ceiling-raw::0:0:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=5a97cb51-78cd-40c7-9dd5-423bdea306a6&eid=5a97cb51-78cd-40c7-9dd5-423bdea306a6%3A%3Aceiling-raw%3A%3A0%3A1%3A0">ceiling-raw::0:1:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=5a97cb51-78cd-40c7-9dd5-423bdea306a6&eid=5a97cb51-78cd-40c7-9dd5-423bdea306a6%3A%3Aceiling-raw%3A%3A0%3A2%3A0">ceiling-raw::0:2:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=5a97cb51-78cd-40c7-9dd5-423bdea306a6&eid=5a97cb51-78cd-40c7-9dd5-423bdea306a6%3A%3Aceiling-raw%3A%3A0%3A3%3A0">ceiling-raw::0:3:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=5a97cb51-78cd-40c7-9dd5-423bdea306a6&eid=5a97cb51-78cd-40c7-9dd5-423bdea306a6%3A%3Aceiling-raw%3A%3A0%3A4%3A0">ceiling-raw::0:4:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=5a97cb51-78cd-40c7-9dd5-423bdea306a6&eid=5a97cb51-78cd-40c7-9dd5-423bdea306a6%3A%3Aceiling-raw%3A%3A0%3A5%3A0">ceiling-raw::0:5:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=5a97cb51-78cd-40c7-9dd5-423bdea306a6&eid=5a97cb51-78cd-40c7-9dd5-423bdea306a6%3A%3Aceiling-raw%3A%3A0%3A6%3A0">ceiling-raw::0:6:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=5a97cb51-78cd-40c7-9dd5-423bdea306a6&eid=5a97cb51-78cd-40c7-9dd5-423bdea306a6%3A%3Aceiling-raw%3A%3A0%3A7%3A0">ceiling-raw::0:7:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=5a97cb51-78cd-40c7-9dd5-423bdea306a6&eid=5a97cb51-78cd-40c7-9dd5-423bdea306a6%3A%3Aceiling-raw%3A%3A0%3A8%3A0">ceiling-raw::0:8:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=5a97cb51-78cd-40c7-9dd5-423bdea306a6&eid=5a97cb51-78cd-40c7-9dd5-423bdea306a6%3A%3Aceiling-raw%3A%3A0%3A8%3A2">ceiling-raw::0:8:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=5a97cb51-78cd-40c7-9dd5-423bdea306a6&eid=5a97cb51-78cd-40c7-9dd5-423bdea306a6%3A%3Aceiling-raw%3A%3A0%3A8%3A3">ceiling-raw::0:8:3</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=5a97cb51-78cd-40c7-9dd5-423bdea306a6&eid=5a97cb51-78cd-40c7-9dd5-423bdea306a6%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">29</td>
+<td><div class="mono">287808db…</div><div class="addr">Gr nvej 99, 5260 Odense S</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">42.6</td>
+<td class="num">326.4</td>
+<td class="num pos">0.52</td>
+<td class="num">1.06</td>
+<td class="num">0.868</td>
+<td class="num">0.55</td>
+<td class="num">16.0</td>
+<td class="num">2</td>
+<td>
+<details><summary>2 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=287808db-3826-4351-b9a1-6f9831bdc870&eid=287808db-3826-4351-b9a1-6f9831bdc870%3A%3Aceiling-raw%3A%3A2%3A7%3A0">ceiling-raw::2:7:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=287808db-3826-4351-b9a1-6f9831bdc870&eid=287808db-3826-4351-b9a1-6f9831bdc870%3A%3Aceiling-raw%3A%3A2%3A7%3A1">ceiling-raw::2:7:1</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=287808db-3826-4351-b9a1-6f9831bdc870&eid=287808db-3826-4351-b9a1-6f9831bdc870%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-dy">
+<td class="num">30</td>
+<td><div class="mono">0fe789ce…</div><div class="addr">Reventlowsvej 50, 5600 Faaborg</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">43.1</td>
+<td class="num">103.6</td>
+<td class="num neg">-0.50</td>
+<td class="num">1.80</td>
+<td class="num">0.726</td>
+<td class="num">0.84</td>
+<td class="num">25.8</td>
+<td class="num">15</td>
+<td>
+<details><summary>15 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0fe789ce-e653-4828-863c-0f6ce7fee21d&eid=0fe789ce-e653-4828-863c-0f6ce7fee21d%3A%3Aceiling-raw%3A%3A1%3A0%3A0">ceiling-raw::1:0:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0fe789ce-e653-4828-863c-0f6ce7fee21d&eid=0fe789ce-e653-4828-863c-0f6ce7fee21d%3A%3Aceiling-raw%3A%3A1%3A0%3A2">ceiling-raw::1:0:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0fe789ce-e653-4828-863c-0f6ce7fee21d&eid=0fe789ce-e653-4828-863c-0f6ce7fee21d%3A%3Aceiling-raw%3A%3A1%3A1%3A0">ceiling-raw::1:1:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0fe789ce-e653-4828-863c-0f6ce7fee21d&eid=0fe789ce-e653-4828-863c-0f6ce7fee21d%3A%3Aceiling-raw%3A%3A1%3A3%3A1">ceiling-raw::1:3:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0fe789ce-e653-4828-863c-0f6ce7fee21d&eid=0fe789ce-e653-4828-863c-0f6ce7fee21d%3A%3Aceiling-raw%3A%3A1%3A3%3A2">ceiling-raw::1:3:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0fe789ce-e653-4828-863c-0f6ce7fee21d&eid=0fe789ce-e653-4828-863c-0f6ce7fee21d%3A%3Aceiling-raw%3A%3A1%3A3%3A3">ceiling-raw::1:3:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0fe789ce-e653-4828-863c-0f6ce7fee21d&eid=0fe789ce-e653-4828-863c-0f6ce7fee21d%3A%3Aceiling-raw%3A%3A1%3A3%3A4">ceiling-raw::1:3:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0fe789ce-e653-4828-863c-0f6ce7fee21d&eid=0fe789ce-e653-4828-863c-0f6ce7fee21d%3A%3Aceiling-raw%3A%3A1%3A3%3A5">ceiling-raw::1:3:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0fe789ce-e653-4828-863c-0f6ce7fee21d&eid=0fe789ce-e653-4828-863c-0f6ce7fee21d%3A%3Aceiling-raw%3A%3A1%3A3%3A6">ceiling-raw::1:3:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0fe789ce-e653-4828-863c-0f6ce7fee21d&eid=0fe789ce-e653-4828-863c-0f6ce7fee21d%3A%3Aceiling-raw%3A%3A1%3A3%3A7">ceiling-raw::1:3:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0fe789ce-e653-4828-863c-0f6ce7fee21d&eid=0fe789ce-e653-4828-863c-0f6ce7fee21d%3A%3Aceiling-raw%3A%3A1%3A3%3A10">ceiling-raw::1:3:10</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0fe789ce-e653-4828-863c-0f6ce7fee21d&eid=0fe789ce-e653-4828-863c-0f6ce7fee21d%3A%3Aceiling-raw%3A%3A1%3A3%3A11">ceiling-raw::1:3:11</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0fe789ce-e653-4828-863c-0f6ce7fee21d&eid=0fe789ce-e653-4828-863c-0f6ce7fee21d%3A%3Aceiling-raw%3A%3A1%3A3%3A13">ceiling-raw::1:3:13</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0fe789ce-e653-4828-863c-0f6ce7fee21d&eid=0fe789ce-e653-4828-863c-0f6ce7fee21d%3A%3Aceiling-raw%3A%3A1%3A3%3A14">ceiling-raw::1:3:14</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0fe789ce-e653-4828-863c-0f6ce7fee21d&eid=0fe789ce-e653-4828-863c-0f6ce7fee21d%3A%3Aceiling-raw%3A%3A1%3A3%3A16">ceiling-raw::1:3:16</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=0fe789ce-e653-4828-863c-0f6ce7fee21d&eid=0fe789ce-e653-4828-863c-0f6ce7fee21d%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">31</td>
+<td><div class="mono">1f03f6e0…</div><div class="addr">Bredballe Byvej 63, 7120 Vejle, st</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">49.6</td>
+<td class="num">149.8</td>
+<td class="num neg">-0.49</td>
+<td class="num">2.72</td>
+<td class="num">0.549</td>
+<td class="num">0.96</td>
+<td class="num">25.2</td>
+<td class="num">38</td>
+<td>
+<details><summary>38 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A3%3A0">ceiling-raw::1:3:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A3%3A1">ceiling-raw::1:3:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A3%3A2">ceiling-raw::1:3:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A3%3A4">ceiling-raw::1:3:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A4%3A0">ceiling-raw::1:4:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A0">ceiling-raw::1:6:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A1">ceiling-raw::1:6:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A2">ceiling-raw::1:6:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A3">ceiling-raw::1:6:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A4">ceiling-raw::1:6:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A5">ceiling-raw::1:6:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A6">ceiling-raw::1:6:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A7">ceiling-raw::1:6:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A8">ceiling-raw::1:6:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A9">ceiling-raw::1:6:9</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A10">ceiling-raw::1:6:10</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A11">ceiling-raw::1:6:11</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A12">ceiling-raw::1:6:12</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A13">ceiling-raw::1:6:13</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A14">ceiling-raw::1:6:14</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A15">ceiling-raw::1:6:15</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A16">ceiling-raw::1:6:16</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A17">ceiling-raw::1:6:17</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A18">ceiling-raw::1:6:18</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A19">ceiling-raw::1:6:19</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A20">ceiling-raw::1:6:20</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A21">ceiling-raw::1:6:21</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A22">ceiling-raw::1:6:22</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A23">ceiling-raw::1:6:23</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A24">ceiling-raw::1:6:24</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A6%3A25">ceiling-raw::1:6:25</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A7%3A0">ceiling-raw::1:7:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A7%3A1">ceiling-raw::1:7:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A7%3A2">ceiling-raw::1:7:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A7%3A3">ceiling-raw::1:7:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A7%3A4">ceiling-raw::1:7:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A7%3A5">ceiling-raw::1:7:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aceiling-raw%3A%3A1%3A7%3A6">ceiling-raw::1:7:6</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3&eid=1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">32</td>
+<td><div class="mono">e496ca55…</div><div class="addr">Nymarksgyden 67, 5474 Veflinge</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">42.3</td>
+<td class="num">31.7</td>
+<td class="num pos">0.45</td>
+<td class="num">1.08</td>
+<td class="num">0.788</td>
+<td class="num">0.57</td>
+<td class="num">52.1</td>
+<td class="num">6</td>
+<td>
+<details><summary>6 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e496ca55-bafb-4b8b-b3f1-5f6fb5ae8c7e&eid=e496ca55-bafb-4b8b-b3f1-5f6fb5ae8c7e%3A%3Aceiling-raw%3A%3A2%3A5%3A0">ceiling-raw::2:5:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e496ca55-bafb-4b8b-b3f1-5f6fb5ae8c7e&eid=e496ca55-bafb-4b8b-b3f1-5f6fb5ae8c7e%3A%3Aceiling-raw%3A%3A2%3A5%3A2">ceiling-raw::2:5:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e496ca55-bafb-4b8b-b3f1-5f6fb5ae8c7e&eid=e496ca55-bafb-4b8b-b3f1-5f6fb5ae8c7e%3A%3Aceiling-raw%3A%3A2%3A8%3A0">ceiling-raw::2:8:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e496ca55-bafb-4b8b-b3f1-5f6fb5ae8c7e&eid=e496ca55-bafb-4b8b-b3f1-5f6fb5ae8c7e%3A%3Aceiling-raw%3A%3A2%3A8%3A1">ceiling-raw::2:8:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e496ca55-bafb-4b8b-b3f1-5f6fb5ae8c7e&eid=e496ca55-bafb-4b8b-b3f1-5f6fb5ae8c7e%3A%3Aceiling-raw%3A%3A2%3A10%3A0">ceiling-raw::2:10:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e496ca55-bafb-4b8b-b3f1-5f6fb5ae8c7e&eid=e496ca55-bafb-4b8b-b3f1-5f6fb5ae8c7e%3A%3Aceiling-raw%3A%3A2%3A10%3A1">ceiling-raw::2:10:1</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=e496ca55-bafb-4b8b-b3f1-5f6fb5ae8c7e&eid=e496ca55-bafb-4b8b-b3f1-5f6fb5ae8c7e%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">33</td>
+<td><div class="mono">66a72e63…</div><div class="addr">Torpvej 2, 5260 Odense S</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">41.3</td>
+<td class="num">172.0</td>
+<td class="num neg">-0.44</td>
+<td class="num">1.20</td>
+<td class="num">0.751</td>
+<td class="num">0.90</td>
+<td class="num">38.0</td>
+<td class="num">16</td>
+<td>
+<details><summary>16 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aceiling-raw%3A%3A2%3A0%3A2">ceiling-raw::2:0:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aceiling-raw%3A%3A2%3A0%3A3">ceiling-raw::2:0:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aceiling-raw%3A%3A2%3A1%3A0">ceiling-raw::2:1:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aceiling-raw%3A%3A2%3A2%3A0">ceiling-raw::2:2:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aceiling-raw%3A%3A2%3A4%3A0">ceiling-raw::2:4:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aceiling-raw%3A%3A2%3A4%3A1">ceiling-raw::2:4:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aceiling-raw%3A%3A2%3A4%3A2">ceiling-raw::2:4:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aceiling-raw%3A%3A2%3A4%3A3">ceiling-raw::2:4:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aceiling-raw%3A%3A2%3A4%3A5">ceiling-raw::2:4:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aceiling-raw%3A%3A2%3A4%3A6">ceiling-raw::2:4:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aceiling-raw%3A%3A2%3A4%3A7">ceiling-raw::2:4:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aceiling-raw%3A%3A2%3A4%3A11">ceiling-raw::2:4:11</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aceiling-raw%3A%3A2%3A4%3A12">ceiling-raw::2:4:12</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aceiling-raw%3A%3A2%3A4%3A14">ceiling-raw::2:4:14</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aceiling-raw%3A%3A2%3A4%3A15">ceiling-raw::2:4:15</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aceiling-raw%3A%3A2%3A4%3A18">ceiling-raw::2:4:18</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=66a72e63-8b3c-4e57-977b-32f5119a9d09&eid=66a72e63-8b3c-4e57-977b-32f5119a9d09%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">34</td>
+<td><div class="mono">3a034c99…</div><div class="addr">K rparken 5, 5450 Otterup</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">43.4</td>
+<td class="num">127.0</td>
+<td class="num pos">0.40</td>
+<td class="num">1.65</td>
+<td class="num">0.727</td>
+<td class="num">0.97</td>
+<td class="num">26.3</td>
+<td class="num">6</td>
+<td>
+<details><summary>6 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3a034c99-8986-4749-aedb-0a5a04ea803f&eid=3a034c99-8986-4749-aedb-0a5a04ea803f%3A%3Aceiling-raw%3A%3A1%3A0%3A0">ceiling-raw::1:0:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3a034c99-8986-4749-aedb-0a5a04ea803f&eid=3a034c99-8986-4749-aedb-0a5a04ea803f%3A%3Aceiling-raw%3A%3A1%3A2%3A0">ceiling-raw::1:2:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3a034c99-8986-4749-aedb-0a5a04ea803f&eid=3a034c99-8986-4749-aedb-0a5a04ea803f%3A%3Aceiling-raw%3A%3A1%3A2%3A1">ceiling-raw::1:2:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3a034c99-8986-4749-aedb-0a5a04ea803f&eid=3a034c99-8986-4749-aedb-0a5a04ea803f%3A%3Aceiling-raw%3A%3A1%3A3%3A0">ceiling-raw::1:3:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3a034c99-8986-4749-aedb-0a5a04ea803f&eid=3a034c99-8986-4749-aedb-0a5a04ea803f%3A%3Aceiling-raw%3A%3A1%3A3%3A1">ceiling-raw::1:3:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3a034c99-8986-4749-aedb-0a5a04ea803f&eid=3a034c99-8986-4749-aedb-0a5a04ea803f%3A%3Aceiling-raw%3A%3A1%3A4%3A0">ceiling-raw::1:4:0</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=3a034c99-8986-4749-aedb-0a5a04ea803f&eid=3a034c99-8986-4749-aedb-0a5a04ea803f%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">35</td>
+<td><div class="mono">b8cefbc4…</div><div class="addr">Brydevej 14, 5700 Svendborg</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">47.7</td>
+<td class="num">167.7</td>
+<td class="num pos">0.39</td>
+<td class="num">1.89</td>
+<td class="num">0.673</td>
+<td class="num">0.90</td>
+<td class="num">30.1</td>
+<td class="num">14</td>
+<td>
+<details><summary>14 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A13%3A0">ceiling-raw::2:13:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A13%3A1">ceiling-raw::2:13:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A13%3A2">ceiling-raw::2:13:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A13%3A3">ceiling-raw::2:13:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A13%3A4">ceiling-raw::2:13:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A13%3A5">ceiling-raw::2:13:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A13%3A8">ceiling-raw::2:13:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A14%3A0">ceiling-raw::2:14:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A14%3A1">ceiling-raw::2:14:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A14%3A2">ceiling-raw::2:14:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A14%3A3">ceiling-raw::2:14:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A14%3A4">ceiling-raw::2:14:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A14%3A5">ceiling-raw::2:14:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A14%3A6">ceiling-raw::2:14:6</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">36</td>
+<td><div class="mono">16784bad…</div><div class="addr">Bottrupvej 5, 8723 L sning</div></td>
+<td><div class="mono">roof-oblique::oblique:3</div></td>
+<td class="num">45.2</td>
+<td class="num">354.6</td>
+<td class="num neg">-0.38</td>
+<td class="num">0.92</td>
+<td class="num">0.592</td>
+<td class="num">0.98</td>
+<td class="num">3.7</td>
+<td class="num">6</td>
+<td>
+<details><summary>6 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A3%3A0">ceiling-raw::1:3:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A3%3A1">ceiling-raw::1:3:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A3%3A2">ceiling-raw::1:3:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A3%3A4">ceiling-raw::1:3:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A3%3A5">ceiling-raw::1:3:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A5%3A1">ceiling-raw::1:5:1</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aroof-oblique%3A%3Aoblique%3A3">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">37</td>
+<td><div class="mono">16784bad…</div><div class="addr">Bottrupvej 5, 8723 L sning</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">46.1</td>
+<td class="num">264.7</td>
+<td class="num neg">-0.37</td>
+<td class="num">2.04</td>
+<td class="num">0.693</td>
+<td class="num">0.96</td>
+<td class="num">27.1</td>
+<td class="num">15</td>
+<td>
+<details><summary>15 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A0%3A0">ceiling-raw::1:0:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A0%3A1">ceiling-raw::1:0:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A0%3A3">ceiling-raw::1:0:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A0%3A5">ceiling-raw::1:0:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A0%3A6">ceiling-raw::1:0:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A0%3A8">ceiling-raw::1:0:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A0%3A9">ceiling-raw::1:0:9</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A1%3A0">ceiling-raw::1:1:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A2%3A0">ceiling-raw::1:2:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A2%3A1">ceiling-raw::1:2:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A3%3A0">ceiling-raw::1:3:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A3%3A2">ceiling-raw::1:3:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A3%3A5">ceiling-raw::1:3:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A5%3A0">ceiling-raw::1:5:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aceiling-raw%3A%3A1%3A5%3A1">ceiling-raw::1:5:1</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=16784bad-2cd9-4f4c-bb26-60355981cfe2&eid=16784bad-2cd9-4f4c-bb26-60355981cfe2%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">38</td>
+<td><div class="mono">873952bc…</div><div class="addr">Kirkestr de 17, 5400 Bogense</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">50.2</td>
+<td class="num">133.5</td>
+<td class="num pos">0.37</td>
+<td class="num">1.14</td>
+<td class="num">0.639</td>
+<td class="num">0.82</td>
+<td class="num">19.0</td>
+<td class="num">9</td>
+<td>
+<details><summary>9 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=873952bc-1159-43dd-b4bd-6535a55c57cf&eid=873952bc-1159-43dd-b4bd-6535a55c57cf%3A%3Aceiling-raw%3A%3A1%3A0%3A0">ceiling-raw::1:0:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=873952bc-1159-43dd-b4bd-6535a55c57cf&eid=873952bc-1159-43dd-b4bd-6535a55c57cf%3A%3Aceiling-raw%3A%3A1%3A0%3A1">ceiling-raw::1:0:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=873952bc-1159-43dd-b4bd-6535a55c57cf&eid=873952bc-1159-43dd-b4bd-6535a55c57cf%3A%3Aceiling-raw%3A%3A1%3A0%3A3">ceiling-raw::1:0:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=873952bc-1159-43dd-b4bd-6535a55c57cf&eid=873952bc-1159-43dd-b4bd-6535a55c57cf%3A%3Aceiling-raw%3A%3A1%3A0%3A4">ceiling-raw::1:0:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=873952bc-1159-43dd-b4bd-6535a55c57cf&eid=873952bc-1159-43dd-b4bd-6535a55c57cf%3A%3Aceiling-raw%3A%3A1%3A1%3A0">ceiling-raw::1:1:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=873952bc-1159-43dd-b4bd-6535a55c57cf&eid=873952bc-1159-43dd-b4bd-6535a55c57cf%3A%3Aceiling-raw%3A%3A1%3A1%3A2">ceiling-raw::1:1:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=873952bc-1159-43dd-b4bd-6535a55c57cf&eid=873952bc-1159-43dd-b4bd-6535a55c57cf%3A%3Aceiling-raw%3A%3A1%3A2%3A0">ceiling-raw::1:2:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=873952bc-1159-43dd-b4bd-6535a55c57cf&eid=873952bc-1159-43dd-b4bd-6535a55c57cf%3A%3Aceiling-raw%3A%3A1%3A2%3A1">ceiling-raw::1:2:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=873952bc-1159-43dd-b4bd-6535a55c57cf&eid=873952bc-1159-43dd-b4bd-6535a55c57cf%3A%3Aceiling-raw%3A%3A1%3A2%3A2">ceiling-raw::1:2:2</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=873952bc-1159-43dd-b4bd-6535a55c57cf&eid=873952bc-1159-43dd-b4bd-6535a55c57cf%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">39</td>
+<td><div class="mono">59b505e7…</div><div class="addr">Sundeved 6, 6000 Kolding</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">49.8</td>
+<td class="num">231.9</td>
+<td class="num neg">-0.36</td>
+<td class="num">0.47</td>
+<td class="num">0.668</td>
+<td class="num">0.88</td>
+<td class="num">14.3</td>
+<td class="num">14</td>
+<td>
+<details><summary>14 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A7%3A0">ceiling-raw::2:7:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A7%3A1">ceiling-raw::2:7:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A7%3A5">ceiling-raw::2:7:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A7%3A6">ceiling-raw::2:7:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A7%3A7">ceiling-raw::2:7:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A8%3A0">ceiling-raw::2:8:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A8%3A1">ceiling-raw::2:8:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A9%3A0">ceiling-raw::2:9:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A9%3A1">ceiling-raw::2:9:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A10%3A0">ceiling-raw::2:10:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A10%3A2">ceiling-raw::2:10:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A10%3A7">ceiling-raw::2:10:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A10%3A10">ceiling-raw::2:10:10</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A11%3A0">ceiling-raw::2:11:0</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">40</td>
+<td><div class="mono">e028bcc5…</div><div class="addr">Firehusevej 1, 7100 Vejle</div></td>
+<td><div class="mono">roof-oblique::oblique:2</div></td>
+<td class="num">41.3</td>
+<td class="num">321.1</td>
+<td class="num neg">-0.36</td>
+<td class="num">0.73</td>
+<td class="num">0.542</td>
+<td class="num">0.96</td>
+<td class="num">8.7</td>
+<td class="num">10</td>
+<td>
+<details><summary>10 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A13%3A3">ceiling-raw::1:13:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A13%3A10">ceiling-raw::1:13:10</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A13%3A12">ceiling-raw::1:13:12</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A13%3A14">ceiling-raw::1:13:14</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A14%3A0">ceiling-raw::1:14:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A14%3A1">ceiling-raw::1:14:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A15%3A0">ceiling-raw::1:15:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A15%3A1">ceiling-raw::1:15:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A15%3A7">ceiling-raw::1:15:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aceiling-raw%3A%3A1%3A15%3A8">ceiling-raw::1:15:8</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=e028bcc5-73ee-45f9-924b-d7badbc66caf&eid=e028bcc5-73ee-45f9-924b-d7badbc66caf%3A%3Aroof-oblique%3A%3Aoblique%3A2">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">41</td>
+<td><div class="mono">bc2779a4…</div><div class="addr">Nr, Bjertvej 154, 6000 Kolding</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">47.5</td>
+<td class="num">171.0</td>
+<td class="num neg">-0.35</td>
+<td class="num">1.33</td>
+<td class="num">0.675</td>
+<td class="num">0.99</td>
+<td class="num">4.7</td>
+<td class="num">11</td>
+<td>
+<details><summary>11 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=bc2779a4-d0a2-4ba8-abbf-10129d3f82de&eid=bc2779a4-d0a2-4ba8-abbf-10129d3f82de%3A%3Aceiling-raw%3A%3A2%3A7%3A0">ceiling-raw::2:7:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=bc2779a4-d0a2-4ba8-abbf-10129d3f82de&eid=bc2779a4-d0a2-4ba8-abbf-10129d3f82de%3A%3Aceiling-raw%3A%3A2%3A7%3A1">ceiling-raw::2:7:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=bc2779a4-d0a2-4ba8-abbf-10129d3f82de&eid=bc2779a4-d0a2-4ba8-abbf-10129d3f82de%3A%3Aceiling-raw%3A%3A2%3A10%3A0">ceiling-raw::2:10:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=bc2779a4-d0a2-4ba8-abbf-10129d3f82de&eid=bc2779a4-d0a2-4ba8-abbf-10129d3f82de%3A%3Aceiling-raw%3A%3A2%3A10%3A1">ceiling-raw::2:10:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=bc2779a4-d0a2-4ba8-abbf-10129d3f82de&eid=bc2779a4-d0a2-4ba8-abbf-10129d3f82de%3A%3Aceiling-raw%3A%3A2%3A10%3A2">ceiling-raw::2:10:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=bc2779a4-d0a2-4ba8-abbf-10129d3f82de&eid=bc2779a4-d0a2-4ba8-abbf-10129d3f82de%3A%3Aceiling-raw%3A%3A2%3A10%3A3">ceiling-raw::2:10:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=bc2779a4-d0a2-4ba8-abbf-10129d3f82de&eid=bc2779a4-d0a2-4ba8-abbf-10129d3f82de%3A%3Aceiling-raw%3A%3A2%3A10%3A5">ceiling-raw::2:10:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=bc2779a4-d0a2-4ba8-abbf-10129d3f82de&eid=bc2779a4-d0a2-4ba8-abbf-10129d3f82de%3A%3Aceiling-raw%3A%3A2%3A10%3A6">ceiling-raw::2:10:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=bc2779a4-d0a2-4ba8-abbf-10129d3f82de&eid=bc2779a4-d0a2-4ba8-abbf-10129d3f82de%3A%3Aceiling-raw%3A%3A2%3A10%3A7">ceiling-raw::2:10:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=bc2779a4-d0a2-4ba8-abbf-10129d3f82de&eid=bc2779a4-d0a2-4ba8-abbf-10129d3f82de%3A%3Aceiling-raw%3A%3A2%3A10%3A8">ceiling-raw::2:10:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=bc2779a4-d0a2-4ba8-abbf-10129d3f82de&eid=bc2779a4-d0a2-4ba8-abbf-10129d3f82de%3A%3Aceiling-raw%3A%3A2%3A11%3A0">ceiling-raw::2:11:0</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=bc2779a4-d0a2-4ba8-abbf-10129d3f82de&eid=bc2779a4-d0a2-4ba8-abbf-10129d3f82de%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">42</td>
+<td><div class="mono">6203a969…</div><div class="addr">Skovstrupvej 63, 5690 Tommerup</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">50.7</td>
+<td class="num">186.6</td>
+<td class="num pos">0.33</td>
+<td class="num">2.43</td>
+<td class="num">0.634</td>
+<td class="num">0.95</td>
+<td class="num">45.5</td>
+<td class="num">7</td>
+<td>
+<details><summary>7 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=6203a969-742b-4935-bc4d-8eae644b8f73&eid=6203a969-742b-4935-bc4d-8eae644b8f73%3A%3Aceiling-raw%3A%3A0%3A1%3A0">ceiling-raw::0:1:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=6203a969-742b-4935-bc4d-8eae644b8f73&eid=6203a969-742b-4935-bc4d-8eae644b8f73%3A%3Aceiling-raw%3A%3A0%3A2%3A0">ceiling-raw::0:2:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=6203a969-742b-4935-bc4d-8eae644b8f73&eid=6203a969-742b-4935-bc4d-8eae644b8f73%3A%3Aceiling-raw%3A%3A0%3A3%3A0">ceiling-raw::0:3:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=6203a969-742b-4935-bc4d-8eae644b8f73&eid=6203a969-742b-4935-bc4d-8eae644b8f73%3A%3Aceiling-raw%3A%3A0%3A3%3A2">ceiling-raw::0:3:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=6203a969-742b-4935-bc4d-8eae644b8f73&eid=6203a969-742b-4935-bc4d-8eae644b8f73%3A%3Aceiling-raw%3A%3A0%3A4%3A0">ceiling-raw::0:4:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=6203a969-742b-4935-bc4d-8eae644b8f73&eid=6203a969-742b-4935-bc4d-8eae644b8f73%3A%3Aceiling-raw%3A%3A0%3A5%3A0">ceiling-raw::0:5:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=6203a969-742b-4935-bc4d-8eae644b8f73&eid=6203a969-742b-4935-bc4d-8eae644b8f73%3A%3Aceiling-raw%3A%3A0%3A6%3A0">ceiling-raw::0:6:0</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=6203a969-742b-4935-bc4d-8eae644b8f73&eid=6203a969-742b-4935-bc4d-8eae644b8f73%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">43</td>
+<td><div class="mono">21af2a12…</div><div class="addr">Tangvej 20, 7120 Vejle, st</div></td>
+<td><div class="mono">roof-oblique::oblique:2</div></td>
+<td class="num">49.1</td>
+<td class="num">280.0</td>
+<td class="num neg">-0.32</td>
+<td class="num">0.50</td>
+<td class="num">0.655</td>
+<td class="num">0.98</td>
+<td class="num">15.1</td>
+<td class="num">5</td>
+<td>
+<details><summary>5 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=21af2a12-2a29-44b5-b703-fbaa208996e9&eid=21af2a12-2a29-44b5-b703-fbaa208996e9%3A%3Aceiling-raw%3A%3A1%3A8%3A0">ceiling-raw::1:8:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=21af2a12-2a29-44b5-b703-fbaa208996e9&eid=21af2a12-2a29-44b5-b703-fbaa208996e9%3A%3Aceiling-raw%3A%3A1%3A8%3A4">ceiling-raw::1:8:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=21af2a12-2a29-44b5-b703-fbaa208996e9&eid=21af2a12-2a29-44b5-b703-fbaa208996e9%3A%3Aceiling-raw%3A%3A1%3A9%3A0">ceiling-raw::1:9:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=21af2a12-2a29-44b5-b703-fbaa208996e9&eid=21af2a12-2a29-44b5-b703-fbaa208996e9%3A%3Aceiling-raw%3A%3A1%3A9%3A5">ceiling-raw::1:9:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=21af2a12-2a29-44b5-b703-fbaa208996e9&eid=21af2a12-2a29-44b5-b703-fbaa208996e9%3A%3Aceiling-raw%3A%3A1%3A9%3A9">ceiling-raw::1:9:9</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=21af2a12-2a29-44b5-b703-fbaa208996e9&eid=21af2a12-2a29-44b5-b703-fbaa208996e9%3A%3Aroof-oblique%3A%3Aoblique%3A2">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">44</td>
+<td><div class="mono">e9dddee6…</div><div class="addr">Strandvejen 7, 5450 Otterup</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">45.1</td>
+<td class="num">53.0</td>
+<td class="num neg">-0.31</td>
+<td class="num">1.02</td>
+<td class="num">0.706</td>
+<td class="num">0.41</td>
+<td class="num">28.7</td>
+<td class="num">6</td>
+<td>
+<details><summary>6 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9dddee6-297a-43f5-b862-90091889ea39&eid=e9dddee6-297a-43f5-b862-90091889ea39%3A%3Aceiling-raw%3A%3A2%3A11%3A0">ceiling-raw::2:11:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9dddee6-297a-43f5-b862-90091889ea39&eid=e9dddee6-297a-43f5-b862-90091889ea39%3A%3Aceiling-raw%3A%3A2%3A11%3A1">ceiling-raw::2:11:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9dddee6-297a-43f5-b862-90091889ea39&eid=e9dddee6-297a-43f5-b862-90091889ea39%3A%3Aceiling-raw%3A%3A2%3A11%3A2">ceiling-raw::2:11:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9dddee6-297a-43f5-b862-90091889ea39&eid=e9dddee6-297a-43f5-b862-90091889ea39%3A%3Aceiling-raw%3A%3A2%3A11%3A3">ceiling-raw::2:11:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9dddee6-297a-43f5-b862-90091889ea39&eid=e9dddee6-297a-43f5-b862-90091889ea39%3A%3Aceiling-raw%3A%3A2%3A11%3A4">ceiling-raw::2:11:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e9dddee6-297a-43f5-b862-90091889ea39&eid=e9dddee6-297a-43f5-b862-90091889ea39%3A%3Aceiling-raw%3A%3A2%3A12%3A0">ceiling-raw::2:12:0</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=e9dddee6-297a-43f5-b862-90091889ea39&eid=e9dddee6-297a-43f5-b862-90091889ea39%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">45</td>
+<td><div class="mono">b65126ae…</div><div class="addr">Skovgade 2, 5500 Middelfart</div></td>
+<td><div class="mono">roof-oblique::oblique:2</div></td>
+<td class="num">21.5</td>
+<td class="num">171.8</td>
+<td class="num neg">-0.31</td>
+<td class="num">0.31</td>
+<td class="num">0.618</td>
+<td class="num">1.00</td>
+<td class="num">4.4</td>
+<td class="num">3</td>
+<td>
+<details><summary>3 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A8%3A0">ceiling-raw::2:8:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A8%3A1">ceiling-raw::2:8:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aceiling-raw%3A%3A2%3A9%3A0">ceiling-raw::2:9:0</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=b65126ae-ccca-4032-876f-e9c1c059862c&eid=b65126ae-ccca-4032-876f-e9c1c059862c%3A%3Aroof-oblique%3A%3Aoblique%3A2">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">46</td>
+<td><div class="mono">dfb88995…</div><div class="addr">Svendborgvej 51, 5750 Ringe</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">50.5</td>
+<td class="num">296.9</td>
+<td class="num pos">0.30</td>
+<td class="num">1.55</td>
+<td class="num">0.636</td>
+<td class="num">0.60</td>
+<td class="num">32.0</td>
+<td class="num">5</td>
+<td>
+<details><summary>5 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=dfb88995-ff0a-4025-878b-b544364f8e92&eid=dfb88995-ff0a-4025-878b-b544364f8e92%3A%3Aceiling-raw%3A%3A1%3A4%3A0">ceiling-raw::1:4:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=dfb88995-ff0a-4025-878b-b544364f8e92&eid=dfb88995-ff0a-4025-878b-b544364f8e92%3A%3Aceiling-raw%3A%3A1%3A4%3A1">ceiling-raw::1:4:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=dfb88995-ff0a-4025-878b-b544364f8e92&eid=dfb88995-ff0a-4025-878b-b544364f8e92%3A%3Aceiling-raw%3A%3A1%3A5%3A0">ceiling-raw::1:5:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=dfb88995-ff0a-4025-878b-b544364f8e92&eid=dfb88995-ff0a-4025-878b-b544364f8e92%3A%3Aceiling-raw%3A%3A1%3A5%3A1">ceiling-raw::1:5:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=dfb88995-ff0a-4025-878b-b544364f8e92&eid=dfb88995-ff0a-4025-878b-b544364f8e92%3A%3Aceiling-raw%3A%3A1%3A6%3A0">ceiling-raw::1:6:0</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=dfb88995-ff0a-4025-878b-b544364f8e92&eid=dfb88995-ff0a-4025-878b-b544364f8e92%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">47</td>
+<td><div class="mono">a4d6eef3…</div><div class="addr">Skovvej 32, 5462 Morud</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">65.2</td>
+<td class="num">165.7</td>
+<td class="num pos">0.25</td>
+<td class="num">0.47</td>
+<td class="num">0.710</td>
+<td class="num">0.79</td>
+<td class="num">9.0</td>
+<td class="num">5</td>
+<td>
+<details><summary>5 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=a4d6eef3-6107-45a3-bd37-3cf2ef4e9efb&eid=a4d6eef3-6107-45a3-bd37-3cf2ef4e9efb%3A%3Aceiling-raw%3A%3A0%3A8%3A0">ceiling-raw::0:8:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=a4d6eef3-6107-45a3-bd37-3cf2ef4e9efb&eid=a4d6eef3-6107-45a3-bd37-3cf2ef4e9efb%3A%3Aceiling-raw%3A%3A0%3A9%3A0">ceiling-raw::0:9:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=a4d6eef3-6107-45a3-bd37-3cf2ef4e9efb&eid=a4d6eef3-6107-45a3-bd37-3cf2ef4e9efb%3A%3Aceiling-raw%3A%3A0%3A9%3A1">ceiling-raw::0:9:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=a4d6eef3-6107-45a3-bd37-3cf2ef4e9efb&eid=a4d6eef3-6107-45a3-bd37-3cf2ef4e9efb%3A%3Aceiling-raw%3A%3A0%3A9%3A2">ceiling-raw::0:9:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=a4d6eef3-6107-45a3-bd37-3cf2ef4e9efb&eid=a4d6eef3-6107-45a3-bd37-3cf2ef4e9efb%3A%3Aceiling-raw%3A%3A0%3A9%3A3">ceiling-raw::0:9:3</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=a4d6eef3-6107-45a3-bd37-3cf2ef4e9efb&eid=a4d6eef3-6107-45a3-bd37-3cf2ef4e9efb%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">48</td>
+<td><div class="mono">59b505e7…</div><div class="addr">Sundeved 6, 6000 Kolding</div></td>
+<td><div class="mono">roof-oblique::oblique:2</div></td>
+<td class="num">50.1</td>
+<td class="num">51.9</td>
+<td class="num neg">-0.17</td>
+<td class="num">1.01</td>
+<td class="num">0.641</td>
+<td class="num">0.92</td>
+<td class="num">10.9</td>
+<td class="num">14</td>
+<td>
+<details><summary>14 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A6%3A0">ceiling-raw::2:6:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A7%3A0">ceiling-raw::2:7:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A10%3A0">ceiling-raw::2:10:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A10%3A1">ceiling-raw::2:10:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A10%3A3">ceiling-raw::2:10:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A10%3A5">ceiling-raw::2:10:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A10%3A6">ceiling-raw::2:10:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A10%3A7">ceiling-raw::2:10:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A10%3A8">ceiling-raw::2:10:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A10%3A9">ceiling-raw::2:10:9</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A10%3A11">ceiling-raw::2:10:11</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A11%3A0">ceiling-raw::2:11:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A11%3A1">ceiling-raw::2:11:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aceiling-raw%3A%3A2%3A11%3A2">ceiling-raw::2:11:2</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=59b505e7-b384-451b-90b1-80f2654dd10d&eid=59b505e7-b384-451b-90b1-80f2654dd10d%3A%3Aroof-oblique%3A%3Aoblique%3A2">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">49</td>
+<td><div class="mono">0d3f2993…</div><div class="addr">Ladega rdsgade 19, 5610 Assens</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">47.7</td>
+<td class="num">273.3</td>
+<td class="num neg">-0.15</td>
+<td class="num">0.63</td>
+<td class="num">0.738</td>
+<td class="num">0.94</td>
+<td class="num">12.0</td>
+<td class="num">10</td>
+<td>
+<details><summary>10 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0d3f2993-8386-4130-8f1c-b2938c410828&eid=0d3f2993-8386-4130-8f1c-b2938c410828%3A%3Aceiling-raw%3A%3A1%3A1%3A0">ceiling-raw::1:1:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0d3f2993-8386-4130-8f1c-b2938c410828&eid=0d3f2993-8386-4130-8f1c-b2938c410828%3A%3Aceiling-raw%3A%3A1%3A1%3A2">ceiling-raw::1:1:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0d3f2993-8386-4130-8f1c-b2938c410828&eid=0d3f2993-8386-4130-8f1c-b2938c410828%3A%3Aceiling-raw%3A%3A1%3A1%3A3">ceiling-raw::1:1:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0d3f2993-8386-4130-8f1c-b2938c410828&eid=0d3f2993-8386-4130-8f1c-b2938c410828%3A%3Aceiling-raw%3A%3A1%3A1%3A4">ceiling-raw::1:1:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0d3f2993-8386-4130-8f1c-b2938c410828&eid=0d3f2993-8386-4130-8f1c-b2938c410828%3A%3Aceiling-raw%3A%3A1%3A1%3A5">ceiling-raw::1:1:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0d3f2993-8386-4130-8f1c-b2938c410828&eid=0d3f2993-8386-4130-8f1c-b2938c410828%3A%3Aceiling-raw%3A%3A1%3A1%3A7">ceiling-raw::1:1:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0d3f2993-8386-4130-8f1c-b2938c410828&eid=0d3f2993-8386-4130-8f1c-b2938c410828%3A%3Aceiling-raw%3A%3A1%3A1%3A8">ceiling-raw::1:1:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0d3f2993-8386-4130-8f1c-b2938c410828&eid=0d3f2993-8386-4130-8f1c-b2938c410828%3A%3Aceiling-raw%3A%3A1%3A3%3A0">ceiling-raw::1:3:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0d3f2993-8386-4130-8f1c-b2938c410828&eid=0d3f2993-8386-4130-8f1c-b2938c410828%3A%3Aceiling-raw%3A%3A1%3A3%3A1">ceiling-raw::1:3:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=0d3f2993-8386-4130-8f1c-b2938c410828&eid=0d3f2993-8386-4130-8f1c-b2938c410828%3A%3Aceiling-raw%3A%3A1%3A4%3A1">ceiling-raw::1:4:1</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=0d3f2993-8386-4130-8f1c-b2938c410828&eid=0d3f2993-8386-4130-8f1c-b2938c410828%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">50</td>
+<td><div class="mono">3c74f488…</div><div class="addr">Skovm rkevej 5, st,  5220 Odense S </div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">48.4</td>
+<td class="num">316.0</td>
+<td class="num pos">0.14</td>
+<td class="num">2.57</td>
+<td class="num">0.663</td>
+<td class="num">0.89</td>
+<td class="num">34.3</td>
+<td class="num">10</td>
+<td>
+<details><summary>10 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3c74f488-a562-4bc4-9d7a-3f707fe85133&eid=3c74f488-a562-4bc4-9d7a-3f707fe85133%3A%3Aceiling-raw%3A%3A2%3A7%3A0">ceiling-raw::2:7:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3c74f488-a562-4bc4-9d7a-3f707fe85133&eid=3c74f488-a562-4bc4-9d7a-3f707fe85133%3A%3Aceiling-raw%3A%3A2%3A7%3A1">ceiling-raw::2:7:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3c74f488-a562-4bc4-9d7a-3f707fe85133&eid=3c74f488-a562-4bc4-9d7a-3f707fe85133%3A%3Aceiling-raw%3A%3A2%3A8%3A0">ceiling-raw::2:8:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3c74f488-a562-4bc4-9d7a-3f707fe85133&eid=3c74f488-a562-4bc4-9d7a-3f707fe85133%3A%3Aceiling-raw%3A%3A2%3A9%3A0">ceiling-raw::2:9:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3c74f488-a562-4bc4-9d7a-3f707fe85133&eid=3c74f488-a562-4bc4-9d7a-3f707fe85133%3A%3Aceiling-raw%3A%3A2%3A9%3A1">ceiling-raw::2:9:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3c74f488-a562-4bc4-9d7a-3f707fe85133&eid=3c74f488-a562-4bc4-9d7a-3f707fe85133%3A%3Aceiling-raw%3A%3A2%3A9%3A2">ceiling-raw::2:9:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3c74f488-a562-4bc4-9d7a-3f707fe85133&eid=3c74f488-a562-4bc4-9d7a-3f707fe85133%3A%3Aceiling-raw%3A%3A2%3A10%3A0">ceiling-raw::2:10:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3c74f488-a562-4bc4-9d7a-3f707fe85133&eid=3c74f488-a562-4bc4-9d7a-3f707fe85133%3A%3Aceiling-raw%3A%3A2%3A10%3A1">ceiling-raw::2:10:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3c74f488-a562-4bc4-9d7a-3f707fe85133&eid=3c74f488-a562-4bc4-9d7a-3f707fe85133%3A%3Aceiling-raw%3A%3A2%3A11%3A0">ceiling-raw::2:11:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3c74f488-a562-4bc4-9d7a-3f707fe85133&eid=3c74f488-a562-4bc4-9d7a-3f707fe85133%3A%3Aceiling-raw%3A%3A2%3A12%3A0">ceiling-raw::2:12:0</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=3c74f488-a562-4bc4-9d7a-3f707fe85133&eid=3c74f488-a562-4bc4-9d7a-3f707fe85133%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">51</td>
+<td><div class="mono">3297bc28…</div><div class="addr">Sophie Breums V nge 2, 5000 Odense C</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">54.8</td>
+<td class="num">87.2</td>
+<td class="num pos">0.12</td>
+<td class="num">2.48</td>
+<td class="num">0.759</td>
+<td class="num">0.64</td>
+<td class="num">24.2</td>
+<td class="num">10</td>
+<td>
+<details><summary>10 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A9%3A0">ceiling-raw::2:9:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A9%3A1">ceiling-raw::2:9:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A9%3A2">ceiling-raw::2:9:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A12%3A1">ceiling-raw::2:12:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A12%3A3">ceiling-raw::2:12:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A12%3A4">ceiling-raw::2:12:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A13%3A0">ceiling-raw::2:13:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A13%3A1">ceiling-raw::2:13:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A13%3A2">ceiling-raw::2:13:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A13%3A3">ceiling-raw::2:13:3</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">52</td>
+<td><div class="mono">3297bc28…</div><div class="addr">Sophie Breums V nge 2, 5000 Odense C</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">53.8</td>
+<td class="num">267.2</td>
+<td class="num neg">-0.11</td>
+<td class="num">0.76</td>
+<td class="num">0.591</td>
+<td class="num">0.67</td>
+<td class="num">26.5</td>
+<td class="num">11</td>
+<td>
+<details><summary>11 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A9%3A0">ceiling-raw::2:9:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A9%3A1">ceiling-raw::2:9:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A11%3A0">ceiling-raw::2:11:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A11%3A1">ceiling-raw::2:11:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A11%3A2">ceiling-raw::2:11:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A11%3A3">ceiling-raw::2:11:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A11%3A4">ceiling-raw::2:11:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A12%3A0">ceiling-raw::2:12:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A12%3A1">ceiling-raw::2:12:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A12%3A2">ceiling-raw::2:12:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aceiling-raw%3A%3A2%3A12%3A5">ceiling-raw::2:12:5</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=3297bc28-5d39-4358-bd2e-0f1183cae489&eid=3297bc28-5d39-4358-bd2e-0f1183cae489%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">53</td>
+<td><div class="mono">7dbc53a6…</div><div class="addr">Gultvedgyden 6, 5772 Kv rndrup</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">40.5</td>
+<td class="num">302.5</td>
+<td class="num pos">0.11</td>
+<td class="num">0.60</td>
+<td class="num">0.761</td>
+<td class="num">0.54</td>
+<td class="num">63.4</td>
+<td class="num">4</td>
+<td>
+<details><summary>4 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7dbc53a6-17e8-4806-83de-42286b95726c&eid=7dbc53a6-17e8-4806-83de-42286b95726c%3A%3Aceiling-raw%3A%3A2%3A7%3A0">ceiling-raw::2:7:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7dbc53a6-17e8-4806-83de-42286b95726c&eid=7dbc53a6-17e8-4806-83de-42286b95726c%3A%3Aceiling-raw%3A%3A2%3A7%3A4">ceiling-raw::2:7:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7dbc53a6-17e8-4806-83de-42286b95726c&eid=7dbc53a6-17e8-4806-83de-42286b95726c%3A%3Aceiling-raw%3A%3A2%3A10%3A0">ceiling-raw::2:10:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=7dbc53a6-17e8-4806-83de-42286b95726c&eid=7dbc53a6-17e8-4806-83de-42286b95726c%3A%3Aceiling-raw%3A%3A2%3A10%3A1">ceiling-raw::2:10:1</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=7dbc53a6-17e8-4806-83de-42286b95726c&eid=7dbc53a6-17e8-4806-83de-42286b95726c%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">54</td>
+<td><div class="mono">b8cefbc4…</div><div class="addr">Brydevej 14, 5700 Svendborg</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">48.7</td>
+<td class="num">347.7</td>
+<td class="num neg">-0.10</td>
+<td class="num">1.43</td>
+<td class="num">0.661</td>
+<td class="num">0.86</td>
+<td class="num">28.9</td>
+<td class="num">17</td>
+<td>
+<details><summary>17 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A12%3A0">ceiling-raw::2:12:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A12%3A1">ceiling-raw::2:12:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A13%3A0">ceiling-raw::2:13:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A13%3A8">ceiling-raw::2:13:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A15%3A0">ceiling-raw::2:15:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A15%3A1">ceiling-raw::2:15:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A16%3A0">ceiling-raw::2:16:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A16%3A1">ceiling-raw::2:16:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A16%3A2">ceiling-raw::2:16:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A16%3A3">ceiling-raw::2:16:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A16%3A4">ceiling-raw::2:16:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A16%3A5">ceiling-raw::2:16:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A16%3A6">ceiling-raw::2:16:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A16%3A8">ceiling-raw::2:16:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A16%3A9">ceiling-raw::2:16:9</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A16%3A13">ceiling-raw::2:16:13</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aceiling-raw%3A%3A2%3A16%3A14">ceiling-raw::2:16:14</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=b8cefbc4-bb4e-4d53-be56-990780166cae&eid=b8cefbc4-bb4e-4d53-be56-990780166cae%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">55</td>
+<td><div class="mono">fe829d59…</div><div class="addr">R jrupvej 13B, 5550 Langeskov</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">44.0</td>
+<td class="num">168.7</td>
+<td class="num pos">0.09</td>
+<td class="num">1.49</td>
+<td class="num">0.719</td>
+<td class="num">0.85</td>
+<td class="num">30.2</td>
+<td class="num">10</td>
+<td>
+<details><summary>10 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=fe829d59-c9f1-4194-a40b-39600a4f27b6&eid=fe829d59-c9f1-4194-a40b-39600a4f27b6%3A%3Aceiling-raw%3A%3A2%3A9%3A0">ceiling-raw::2:9:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=fe829d59-c9f1-4194-a40b-39600a4f27b6&eid=fe829d59-c9f1-4194-a40b-39600a4f27b6%3A%3Aceiling-raw%3A%3A2%3A9%3A1">ceiling-raw::2:9:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=fe829d59-c9f1-4194-a40b-39600a4f27b6&eid=fe829d59-c9f1-4194-a40b-39600a4f27b6%3A%3Aceiling-raw%3A%3A2%3A9%3A2">ceiling-raw::2:9:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=fe829d59-c9f1-4194-a40b-39600a4f27b6&eid=fe829d59-c9f1-4194-a40b-39600a4f27b6%3A%3Aceiling-raw%3A%3A2%3A10%3A0">ceiling-raw::2:10:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=fe829d59-c9f1-4194-a40b-39600a4f27b6&eid=fe829d59-c9f1-4194-a40b-39600a4f27b6%3A%3Aceiling-raw%3A%3A2%3A11%3A0">ceiling-raw::2:11:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=fe829d59-c9f1-4194-a40b-39600a4f27b6&eid=fe829d59-c9f1-4194-a40b-39600a4f27b6%3A%3Aceiling-raw%3A%3A2%3A11%3A1">ceiling-raw::2:11:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=fe829d59-c9f1-4194-a40b-39600a4f27b6&eid=fe829d59-c9f1-4194-a40b-39600a4f27b6%3A%3Aceiling-raw%3A%3A2%3A12%3A0">ceiling-raw::2:12:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=fe829d59-c9f1-4194-a40b-39600a4f27b6&eid=fe829d59-c9f1-4194-a40b-39600a4f27b6%3A%3Aceiling-raw%3A%3A2%3A12%3A1">ceiling-raw::2:12:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=fe829d59-c9f1-4194-a40b-39600a4f27b6&eid=fe829d59-c9f1-4194-a40b-39600a4f27b6%3A%3Aceiling-raw%3A%3A2%3A12%3A2">ceiling-raw::2:12:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=fe829d59-c9f1-4194-a40b-39600a4f27b6&eid=fe829d59-c9f1-4194-a40b-39600a4f27b6%3A%3Aceiling-raw%3A%3A2%3A12%3A3">ceiling-raw::2:12:3</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=fe829d59-c9f1-4194-a40b-39600a4f27b6&eid=fe829d59-c9f1-4194-a40b-39600a4f27b6%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">56</td>
+<td><div class="mono">e0155eef…</div><div class="addr">Bj rnevej 4, 7000 Fredericia</div></td>
+<td><div class="mono">roof-oblique::oblique:3</div></td>
+<td class="num">44.5</td>
+<td class="num">206.1</td>
+<td class="num neg">-0.08</td>
+<td class="num">0.65</td>
+<td class="num">0.710</td>
+<td class="num">0.35</td>
+<td class="num">24.0</td>
+<td class="num">7</td>
+<td>
+<details><summary>7 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e0155eef-34a5-4642-bca6-39b83ee42af1&eid=e0155eef-34a5-4642-bca6-39b83ee42af1%3A%3Aceiling-raw%3A%3A2%3A3%3A0">ceiling-raw::2:3:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e0155eef-34a5-4642-bca6-39b83ee42af1&eid=e0155eef-34a5-4642-bca6-39b83ee42af1%3A%3Aceiling-raw%3A%3A2%3A3%3A1">ceiling-raw::2:3:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e0155eef-34a5-4642-bca6-39b83ee42af1&eid=e0155eef-34a5-4642-bca6-39b83ee42af1%3A%3Aceiling-raw%3A%3A2%3A3%3A2">ceiling-raw::2:3:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e0155eef-34a5-4642-bca6-39b83ee42af1&eid=e0155eef-34a5-4642-bca6-39b83ee42af1%3A%3Aceiling-raw%3A%3A2%3A3%3A3">ceiling-raw::2:3:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e0155eef-34a5-4642-bca6-39b83ee42af1&eid=e0155eef-34a5-4642-bca6-39b83ee42af1%3A%3Aceiling-raw%3A%3A2%3A3%3A4">ceiling-raw::2:3:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e0155eef-34a5-4642-bca6-39b83ee42af1&eid=e0155eef-34a5-4642-bca6-39b83ee42af1%3A%3Aceiling-raw%3A%3A2%3A3%3A5">ceiling-raw::2:3:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=e0155eef-34a5-4642-bca6-39b83ee42af1&eid=e0155eef-34a5-4642-bca6-39b83ee42af1%3A%3Aceiling-raw%3A%3A2%3A3%3A8">ceiling-raw::2:3:8</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=e0155eef-34a5-4642-bca6-39b83ee42af1&eid=e0155eef-34a5-4642-bca6-39b83ee42af1%3A%3Aroof-oblique%3A%3Aoblique%3A3">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">57</td>
+<td><div class="mono">f46b4d89…</div><div class="addr">Kancellivej 15, 5200 Odense V</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">39.5</td>
+<td class="num">260.1</td>
+<td class="num neg">-0.08</td>
+<td class="num">1.09</td>
+<td class="num">0.771</td>
+<td class="num">0.98</td>
+<td class="num">19.4</td>
+<td class="num">17</td>
+<td>
+<details><summary>17 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A6%3A0">ceiling-raw::1:6:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A6%3A1">ceiling-raw::1:6:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A6%3A2">ceiling-raw::1:6:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A6%3A3">ceiling-raw::1:6:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A6%3A4">ceiling-raw::1:6:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A6%3A5">ceiling-raw::1:6:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A6%3A6">ceiling-raw::1:6:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A6%3A7">ceiling-raw::1:6:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A6%3A8">ceiling-raw::1:6:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A6%3A9">ceiling-raw::1:6:9</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A6%3A10">ceiling-raw::1:6:10</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A6%3A11">ceiling-raw::1:6:11</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A6%3A12">ceiling-raw::1:6:12</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A7%3A0">ceiling-raw::1:7:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A8%3A0">ceiling-raw::1:8:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A8%3A1">ceiling-raw::1:8:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A9%3A0">ceiling-raw::1:9:0</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">58</td>
+<td><div class="mono">f46b4d89…</div><div class="addr">Kancellivej 15, 5200 Odense V</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">40.6</td>
+<td class="num">80.1</td>
+<td class="num neg">-0.08</td>
+<td class="num">0.98</td>
+<td class="num">0.759</td>
+<td class="num">1.00</td>
+<td class="num">16.8</td>
+<td class="num">8</td>
+<td>
+<details><summary>8 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A7%3A0">ceiling-raw::1:7:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A7%3A1">ceiling-raw::1:7:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A9%3A0">ceiling-raw::1:9:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A9%3A1">ceiling-raw::1:9:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A9%3A2">ceiling-raw::1:9:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A9%3A3">ceiling-raw::1:9:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A9%3A4">ceiling-raw::1:9:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aceiling-raw%3A%3A1%3A9%3A5">ceiling-raw::1:9:5</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=f46b4d89-ae67-405c-af8b-eb7396b06ef8&eid=f46b4d89-ae67-405c-af8b-eb7396b06ef8%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">59</td>
+<td><div class="mono">670a8030…</div><div class="addr">Teglv rksvej 15, 7100 Vejle</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">44.0</td>
+<td class="num">232.8</td>
+<td class="num pos">0.06</td>
+<td class="num">1.03</td>
+<td class="num">0.719</td>
+<td class="num">0.74</td>
+<td class="num">26.0</td>
+<td class="num">7</td>
+<td>
+<details><summary>7 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=670a8030-c451-4e80-badd-6702cef02a03&eid=670a8030-c451-4e80-badd-6702cef02a03%3A%3Aceiling-raw%3A%3A2%3A8%3A0">ceiling-raw::2:8:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=670a8030-c451-4e80-badd-6702cef02a03&eid=670a8030-c451-4e80-badd-6702cef02a03%3A%3Aceiling-raw%3A%3A2%3A8%3A1">ceiling-raw::2:8:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=670a8030-c451-4e80-badd-6702cef02a03&eid=670a8030-c451-4e80-badd-6702cef02a03%3A%3Aceiling-raw%3A%3A2%3A9%3A0">ceiling-raw::2:9:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=670a8030-c451-4e80-badd-6702cef02a03&eid=670a8030-c451-4e80-badd-6702cef02a03%3A%3Aceiling-raw%3A%3A2%3A9%3A1">ceiling-raw::2:9:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=670a8030-c451-4e80-badd-6702cef02a03&eid=670a8030-c451-4e80-badd-6702cef02a03%3A%3Aceiling-raw%3A%3A2%3A9%3A2">ceiling-raw::2:9:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=670a8030-c451-4e80-badd-6702cef02a03&eid=670a8030-c451-4e80-badd-6702cef02a03%3A%3Aceiling-raw%3A%3A2%3A9%3A3">ceiling-raw::2:9:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=670a8030-c451-4e80-badd-6702cef02a03&eid=670a8030-c451-4e80-badd-6702cef02a03%3A%3Aceiling-raw%3A%3A2%3A9%3A4">ceiling-raw::2:9:4</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=670a8030-c451-4e80-badd-6702cef02a03&eid=670a8030-c451-4e80-badd-6702cef02a03%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">60</td>
+<td><div class="mono">146ecf8b…</div><div class="addr">Mesterr kken 44, 5350 Rynkeby</div></td>
+<td><div class="mono">roof-oblique::oblique:3</div></td>
+<td class="num">50.6</td>
+<td class="num">189.8</td>
+<td class="num neg">-0.05</td>
+<td class="num">1.58</td>
+<td class="num">0.635</td>
+<td class="num">0.90</td>
+<td class="num">25.0</td>
+<td class="num">3</td>
+<td>
+<details><summary>3 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A5%3A0">ceiling-raw::1:5:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A6%3A0">ceiling-raw::1:6:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A6%3A3">ceiling-raw::1:6:3</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aroof-oblique%3A%3Aoblique%3A3">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">61</td>
+<td><div class="mono">a430ffa9…</div><div class="addr">Odensevej 50, 5853, rb k</div></td>
+<td><div class="mono">roof-oblique::oblique:1</div></td>
+<td class="num">42.8</td>
+<td class="num">112.9</td>
+<td class="num pos">0.04</td>
+<td class="num">0.79</td>
+<td class="num">0.734</td>
+<td class="num">0.99</td>
+<td class="num">31.7</td>
+<td class="num">5</td>
+<td>
+<details><summary>5 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=a430ffa9-a314-4352-8b54-dfbd04634861&eid=a430ffa9-a314-4352-8b54-dfbd04634861%3A%3Aceiling-raw%3A%3A1%3A1%3A0">ceiling-raw::1:1:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=a430ffa9-a314-4352-8b54-dfbd04634861&eid=a430ffa9-a314-4352-8b54-dfbd04634861%3A%3Aceiling-raw%3A%3A1%3A1%3A1">ceiling-raw::1:1:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=a430ffa9-a314-4352-8b54-dfbd04634861&eid=a430ffa9-a314-4352-8b54-dfbd04634861%3A%3Aceiling-raw%3A%3A1%3A2%3A0">ceiling-raw::1:2:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=a430ffa9-a314-4352-8b54-dfbd04634861&eid=a430ffa9-a314-4352-8b54-dfbd04634861%3A%3Aceiling-raw%3A%3A1%3A3%3A0">ceiling-raw::1:3:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=a430ffa9-a314-4352-8b54-dfbd04634861&eid=a430ffa9-a314-4352-8b54-dfbd04634861%3A%3Aceiling-raw%3A%3A1%3A3%3A1">ceiling-raw::1:3:1</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=a430ffa9-a314-4352-8b54-dfbd04634861&eid=a430ffa9-a314-4352-8b54-dfbd04634861%3A%3Aroof-oblique%3A%3Aoblique%3A1">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">62</td>
+<td><div class="mono">146ecf8b…</div><div class="addr">Mesterr kken 44, 5350 Rynkeby</div></td>
+<td><div class="mono">roof-oblique::oblique:2</div></td>
+<td class="num">51.5</td>
+<td class="num">9.4</td>
+<td class="num neg">-0.04</td>
+<td class="num">0.99</td>
+<td class="num">0.740</td>
+<td class="num">0.91</td>
+<td class="num">16.4</td>
+<td class="num">14</td>
+<td>
+<details><summary>14 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A4%3A0">ceiling-raw::1:4:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A4%3A1">ceiling-raw::1:4:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A4%3A2">ceiling-raw::1:4:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A4%3A3">ceiling-raw::1:4:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A4%3A4">ceiling-raw::1:4:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A4%3A5">ceiling-raw::1:4:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A4%3A6">ceiling-raw::1:4:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A4%3A7">ceiling-raw::1:4:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A4%3A8">ceiling-raw::1:4:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A4%3A9">ceiling-raw::1:4:9</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A5%3A0">ceiling-raw::1:5:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A6%3A0">ceiling-raw::1:6:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A6%3A1">ceiling-raw::1:6:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aceiling-raw%3A%3A1%3A6%3A2">ceiling-raw::1:6:2</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=146ecf8b-ffa1-4239-ba58-040b61861fd9&eid=146ecf8b-ffa1-4239-ba58-040b61861fd9%3A%3Aroof-oblique%3A%3Aoblique%3A2">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">63</td>
+<td><div class="mono">720c2f50…</div><div class="addr">Lodskovvej 2, 5863 Ferritslev Fyn</div></td>
+<td><div class="mono">roof-oblique::oblique:2</div></td>
+<td class="num">39.3</td>
+<td class="num">322.2</td>
+<td class="num pos">0.04</td>
+<td class="num">1.05</td>
+<td class="num">0.774</td>
+<td class="num">0.80</td>
+<td class="num">44.5</td>
+<td class="num">7</td>
+<td>
+<details><summary>7 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=720c2f50-9586-47b5-b27c-130214cd8b5d&eid=720c2f50-9586-47b5-b27c-130214cd8b5d%3A%3Aceiling-raw%3A%3A2%3A8%3A0">ceiling-raw::2:8:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=720c2f50-9586-47b5-b27c-130214cd8b5d&eid=720c2f50-9586-47b5-b27c-130214cd8b5d%3A%3Aceiling-raw%3A%3A2%3A8%3A1">ceiling-raw::2:8:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=720c2f50-9586-47b5-b27c-130214cd8b5d&eid=720c2f50-9586-47b5-b27c-130214cd8b5d%3A%3Aceiling-raw%3A%3A2%3A11%3A0">ceiling-raw::2:11:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=720c2f50-9586-47b5-b27c-130214cd8b5d&eid=720c2f50-9586-47b5-b27c-130214cd8b5d%3A%3Aceiling-raw%3A%3A2%3A11%3A1">ceiling-raw::2:11:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=720c2f50-9586-47b5-b27c-130214cd8b5d&eid=720c2f50-9586-47b5-b27c-130214cd8b5d%3A%3Aceiling-raw%3A%3A2%3A11%3A2">ceiling-raw::2:11:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=720c2f50-9586-47b5-b27c-130214cd8b5d&eid=720c2f50-9586-47b5-b27c-130214cd8b5d%3A%3Aceiling-raw%3A%3A2%3A11%3A3">ceiling-raw::2:11:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=720c2f50-9586-47b5-b27c-130214cd8b5d&eid=720c2f50-9586-47b5-b27c-130214cd8b5d%3A%3Aceiling-raw%3A%3A2%3A12%3A0">ceiling-raw::2:12:0</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=720c2f50-9586-47b5-b27c-130214cd8b5d&eid=720c2f50-9586-47b5-b27c-130214cd8b5d%3A%3Aroof-oblique%3A%3Aoblique%3A2">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">64</td>
+<td><div class="mono">c87c1e25…</div><div class="addr">B gevej 5, 7100 Vejle</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">46.8</td>
+<td class="num">45.8</td>
+<td class="num pos">0.03</td>
+<td class="num">0.89</td>
+<td class="num">0.684</td>
+<td class="num">0.82</td>
+<td class="num">19.6</td>
+<td class="num">7</td>
+<td>
+<details><summary>7 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c87c1e25-ff00-44ec-b823-b0966c81af70&eid=c87c1e25-ff00-44ec-b823-b0966c81af70%3A%3Aceiling-raw%3A%3A1%3A7%3A0">ceiling-raw::1:7:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c87c1e25-ff00-44ec-b823-b0966c81af70&eid=c87c1e25-ff00-44ec-b823-b0966c81af70%3A%3Aceiling-raw%3A%3A1%3A9%3A0">ceiling-raw::1:9:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c87c1e25-ff00-44ec-b823-b0966c81af70&eid=c87c1e25-ff00-44ec-b823-b0966c81af70%3A%3Aceiling-raw%3A%3A1%3A9%3A2">ceiling-raw::1:9:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c87c1e25-ff00-44ec-b823-b0966c81af70&eid=c87c1e25-ff00-44ec-b823-b0966c81af70%3A%3Aceiling-raw%3A%3A1%3A9%3A3">ceiling-raw::1:9:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c87c1e25-ff00-44ec-b823-b0966c81af70&eid=c87c1e25-ff00-44ec-b823-b0966c81af70%3A%3Aceiling-raw%3A%3A1%3A9%3A4">ceiling-raw::1:9:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c87c1e25-ff00-44ec-b823-b0966c81af70&eid=c87c1e25-ff00-44ec-b823-b0966c81af70%3A%3Aceiling-raw%3A%3A1%3A10%3A0">ceiling-raw::1:10:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=c87c1e25-ff00-44ec-b823-b0966c81af70&eid=c87c1e25-ff00-44ec-b823-b0966c81af70%3A%3Aceiling-raw%3A%3A1%3A10%3A2">ceiling-raw::1:10:2</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=c87c1e25-ff00-44ec-b823-b0966c81af70&eid=c87c1e25-ff00-44ec-b823-b0966c81af70%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">65</td>
+<td><div class="mono">d28b528a…</div><div class="addr">Egensega rdsvej 4, 5450 Otterup</div></td>
+<td><div class="mono">roof-oblique::oblique:0</div></td>
+<td class="num">45.1</td>
+<td class="num">192.7</td>
+<td class="num neg">-0.02</td>
+<td class="num">1.43</td>
+<td class="num">0.706</td>
+<td class="num">0.51</td>
+<td class="num">58.0</td>
+<td class="num">21</td>
+<td>
+<details><summary>21 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A0">ceiling-raw::1:11:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A1">ceiling-raw::1:11:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A2">ceiling-raw::1:11:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A3">ceiling-raw::1:11:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A4">ceiling-raw::1:11:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A5">ceiling-raw::1:11:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A6">ceiling-raw::1:11:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A7">ceiling-raw::1:11:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A8">ceiling-raw::1:11:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A9">ceiling-raw::1:11:9</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A10">ceiling-raw::1:11:10</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A11">ceiling-raw::1:11:11</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A12">ceiling-raw::1:11:12</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A13">ceiling-raw::1:11:13</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A14">ceiling-raw::1:11:14</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A15">ceiling-raw::1:11:15</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A16">ceiling-raw::1:11:16</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A17">ceiling-raw::1:11:17</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A18">ceiling-raw::1:11:18</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A19">ceiling-raw::1:11:19</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aceiling-raw%3A%3A1%3A11%3A20">ceiling-raw::1:11:20</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=d28b528a-475b-4ac0-a38d-ee992cd877db&eid=d28b528a-475b-4ac0-a38d-ee992cd877db%3A%3Aroof-oblique%3A%3Aoblique%3A0">open</a></td>
+</tr>
+<tr class="flag-normal">
+<td class="num">66</td>
+<td><div class="mono">1d26eda3…</div><div class="addr">Gerskov Bygade 24, 5450 Otterup</div></td>
+<td><div class="mono">roof-oblique::oblique:2</div></td>
+<td class="num">51.7</td>
+<td class="num">210.6</td>
+<td class="num neg">-0.02</td>
+<td class="num">0.44</td>
+<td class="num">0.709</td>
+<td class="num">0.99</td>
+<td class="num">12.2</td>
+<td class="num">17</td>
+<td>
+<details><summary>17 raw</summary>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A1%3A4">ceiling-raw::1:1:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A2%3A0">ceiling-raw::1:2:0</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A2%3A1">ceiling-raw::1:2:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A2%3A2">ceiling-raw::1:2:2</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A2%3A3">ceiling-raw::1:2:3</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A2%3A4">ceiling-raw::1:2:4</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A2%3A5">ceiling-raw::1:2:5</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A2%3A6">ceiling-raw::1:2:6</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A2%3A7">ceiling-raw::1:2:7</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A2%3A8">ceiling-raw::1:2:8</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A2%3A9">ceiling-raw::1:2:9</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A2%3A10">ceiling-raw::1:2:10</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A2%3A11">ceiling-raw::1:2:11</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A2%3A12">ceiling-raw::1:2:12</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A2%3A13">ceiling-raw::1:2:13</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A3%3A1">ceiling-raw::1:3:1</a>
+<a class="raw" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aceiling-raw%3A%3A1%3A3%3A3">ceiling-raw::1:3:3</a>
+</details>
+</td>
+<td><a class="open" target="viewer" href="http://localhost:8080/viewer.html#b=1d26eda3-c927-4cdf-a3b0-218036828a55&eid=1d26eda3-c927-4cdf-a3b0-218036828a55%3A%3Aroof-oblique%3A%3Aoblique%3A2">open</a></td>
+</tr>
+</tbody></table>
+<script>
+function sortBy(th){
+  const table = th.closest('table');
+  const tbody = table.tBodies[0];
+  const idx = [...th.parentNode.children].indexOf(th);
+  const numeric = th.classList.contains('num');
+  const rows = [...tbody.rows];
+  const dir = th.dataset.dir === 'asc' ? 'desc' : 'asc';
+  th.dataset.dir = dir;
+  rows.sort((a,b)=>{
+    let av = a.cells[idx].innerText.trim();
+    let bv = b.cells[idx].innerText.trim();
+    if (numeric){ av = parseFloat(av.replace(/[^-\d.]/g,''))||0; bv = parseFloat(bv.replace(/[^-\d.]/g,''))||0; return (dir==='asc'?1:-1)*(av-bv); }
+    return (dir==='asc'?1:-1)*av.localeCompare(bv);
+  });
+  rows.forEach(r=>tbody.appendChild(r));
+}
+</script></body></html>

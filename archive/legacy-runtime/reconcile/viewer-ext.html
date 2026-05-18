@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>reconcile_ext — extension seams</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#111; color:#ddd; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; overflow:hidden; display:flex; }
+
+#sidebar {
+  width:300px; min-width:300px; height:100vh; background:#0d0d1a;
+  border-right:1px solid #222; display:flex; flex-direction:column; z-index:20;
+}
+#sidebar-header { padding:12px; border-bottom:1px solid #222; }
+#sidebar-header h1 { font-size:14px; font-weight:600; margin-bottom:8px; }
+#search { width:100%; padding:6px 10px; border-radius:6px; border:1px solid #333; background:#1a1a2e; color:#ddd; font-size:12px; outline:none; }
+#search:focus { border-color:#3a3aff; }
+#sidebar-stats { padding:6px 12px; font-size:10px; color:#666; border-bottom:1px solid #1a1a2a; }
+#building-list { flex:1; overflow-y:auto; }
+#building-list::-webkit-scrollbar { width:6px; }
+#building-list::-webkit-scrollbar-track { background:#0d0d1a; }
+#building-list::-webkit-scrollbar-thumb { background:#333; border-radius:3px; }
+
+.bldg-item {
+  padding:8px 12px; cursor:pointer; border-bottom:1px solid #1a1a2a;
+}
+.bldg-item:hover { background:#1a1a2e; }
+.bldg-item.active { background:#1a1a3e; border-left:3px solid #3a3aff; }
+.bldg-addr { font-size:12px; font-weight:500; line-height:1.3; color:#ccc; }
+.bldg-meta { font-size:10px; color:#666; margin-top:3px; display:flex; gap:6px; flex-wrap:wrap; }
+.bldg-meta .pill { padding:1px 5px; border-radius:3px; font-size:9px; font-weight:600; }
+.pill.reflex { background:#2a1a3a; color:#c8a8ff; }
+.pill.disc { background:#3a2a1a; color:#ffc888; }
+.pill.step { background:#1a3a2a; color:#88ffc8; }
+.pill.delta { background:#3a1a2a; color:#ff88a8; }
+.pill.seam-strong { background:#3a1a1a; color:#ff8888; }
+.pill.seam-med { background:#3a2a1a; color:#ffbb88; }
+.pill.seam-weak { background:#2a2a1a; color:#bbbb88; }
+
+#viewport { flex:1; position:relative; }
+
+#controls-bar {
+  position:absolute; top:0; left:0; right:0; z-index:10;
+  padding:10px 14px;
+  background:linear-gradient(to bottom, rgba(0,0,0,.85) 0%, transparent 100%);
+  pointer-events:none;
+}
+#controls-bar > * { pointer-events:auto; }
+.toggle-row { display:flex; flex-wrap:wrap; gap:6px 14px; font-size:11px; }
+.toggle-row label { cursor:pointer; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+.toggle-row input { accent-color:#3a3aff; }
+
+#legend {
+  position:absolute; top:48px; left:14px; z-index:10;
+  background:rgba(13,13,26,0.9); border:1px solid #222; border-radius:6px;
+  padding:8px 12px; font-size:10px; line-height:1.7;
+  pointer-events:none; max-width:240px;
+}
+#legend .sw { display:inline-block; width:10px; height:10px; border-radius:2px; vertical-align:middle; margin-right:4px; }
+#legend .key { color:#888; }
+
+#hud {
+  position:absolute; bottom:10px; left:10px; z-index:10;
+  font-size:11px; color:#aaa; background:rgba(13,13,26,0.85);
+  padding:8px 12px; border:1px solid #222; border-radius:6px; max-width:520px;
+  line-height:1.5;
+}
+#hud .addr { color:#fff; font-weight:600; margin-bottom:4px; }
+#hud .stats { color:#888; font-variant-numeric:tabular-nums; }
+
+#info {
+  position:absolute; bottom:10px; right:10px; z-index:10;
+  font-size:10px; color:#666; background:rgba(13,13,26,0.85);
+  padding:4px 10px; border:1px solid #222; border-radius:6px;
+}
+
+canvas { display:block; width:100%; height:100%; }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <div id="sidebar-header">
+    <h1>reconcile_ext — seams</h1>
+    <input type="text" id="search" placeholder="Search address or UUID...">
+  </div>
+  <div id="sidebar-stats">Loading...</div>
+  <div id="building-list"></div>
+</div>
+
+<div id="viewport">
+  <div id="controls-bar">
+    <div class="toggle-row">
+      <label><input type="checkbox" id="t-rooms" checked> Rooms</label>
+      <label><input type="checkbox" id="t-walls" checked> Walls</label>
+      <label><input type="checkbox" id="t-footprint" checked> Footprint</label>
+      <label><input type="checkbox" id="t-parts"> Parts</label>
+      <label><input type="checkbox" id="t-reflex" checked> Reflex vertices</label>
+      <label><input type="checkbox" id="t-disc" checked> Roof discontinuities</label>
+      <label><input type="checkbox" id="t-steps" checked> Wall plane steps</label>
+      <label><input type="checkbox" id="t-delta" checked> Height deltas</label>
+      <label><input type="checkbox" id="t-seam-strong" checked> Seams (strong)</label>
+      <label><input type="checkbox" id="t-seam-med" checked> Seams (medium)</label>
+      <label><input type="checkbox" id="t-seam-weak"> Seams (weak)</label>
+      <label><input type="checkbox" id="t-units" checked> Colour walls by unit</label>
+      <label><input type="checkbox" id="t-cuts" checked> Seam cut lines</label>
+    </div>
+  </div>
+  <div id="legend">
+    <div><span class="sw" style="background:#c8a8ff"></span>reflex vertex</div>
+    <div><span class="sw" style="background:#ffc888"></span>roof discontinuity (ridge/eave/az/incl)</div>
+    <div><span class="sw" style="background:#88ffc8"></span>parallel wall plane step</div>
+    <div><span class="sw" style="background:#ff88a8"></span>floor/ceiling delta</div>
+    <div><span class="sw" style="background:#ff4444"></span>seam — strong</div>
+    <div><span class="sw" style="background:#ff9944"></span>seam — medium</div>
+    <div><span class="sw" style="background:#dddd44"></span>seam — weak</div>
+    <div style="margin-top:6px;border-top:1px solid #222;padding-top:6px">
+      <div><span class="sw" style="background:#6cd0a8"></span>unit — main</div>
+      <div><span class="sw" style="background:#e0b356"></span>unit — extension 1</div>
+      <div><span class="sw" style="background:#8bb8ff"></span>unit — extension 2</div>
+      <div><span class="sw" style="background:#e06eb6"></span>unit — extension 3+</div>
+      <div><span class="sw" style="background:#ffffff"></span>seam cut line</div>
+    </div>
+    <div class="key" style="margin-top:4px">click a hypothesis anchor → copy to clipboard</div>
+  </div>
+  <div id="hud"></div>
+  <div id="info">orbit: drag · pan: shift+drag · zoom: scroll</div>
+  <canvas id="c"></canvas>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+  }
+}
+</script>
+<script type="module" src="viewer-ext-main.js?v=20260420e"></script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trace-Fixed Envelope Buildings</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./viewer-polyhedron-buildings.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <aside>
+    <header>
+      <h1>Trace-Fixed Buildings</h1>
+      <input id="search" placeholder="UUID, source, or part" autocomplete="off">
+      <div id="sidebar-stats">Loading...</div>
+    </header>
+    <div id="building-list"></div>
+  </aside>
+  <main>
+    <div id="top-bar">
+      <button class="icon-btn" id="prev-building" title="Previous building">↑</button>
+      <button class="icon-btn" id="next-building" title="Next building">↓</button>
+      <div id="current">
+        <div id="current-title">Loading trace-fixed buildings...</div>
+        <div id="current-meta"></div>
+      </div>
+      <a id="open-original" class="link-btn" href="#" target="_blank" rel="noreferrer">Original</a>
+      <div id="pill">-</div>
+    </div>
+    <div id="view-controls">
+      <div class="control-row">
+        <label class="check-row"><input id="edges-toggle" type="checkbox" checked> Edges</label>
+        <label class="check-row"><input id="ghost-toggle" type="checkbox"> Initial ghost</label>
+        <label class="check-row"><input id="sloped-toggle" type="checkbox"> Sloped only</label>
+        <label class="check-row"><input id="base-building-toggle" type="checkbox"> Full building</label>
+        <label class="check-row"><input id="emitted-only-toggle" type="checkbox"> Assembled only</label>
+        <label class="check-row"><input id="rooms-toggle" type="checkbox" checked> Room footprints</label>
+        <label class="check-row"><input id="room-audit-toggle" type="checkbox" checked> Room audit</label>
+        <label class="check-row"><input id="cells-toggle" type="checkbox" checked> Plan cells</label>
+        <label class="check-row"><input id="dropped-toggle" type="checkbox" checked> Dropped rooms</label>
+        <label class="check-row"><input id="top-candidates-toggle" type="checkbox"> Top candidates</label>
+        <label class="check-row"><input id="part-planes-toggle" type="checkbox" checked> Part planes</label>
+      </div>
+      <div id="legend">
+        <span><i class="swatch sloped"></i>sloped</span>
+        <span><i class="swatch flat"></i>flat</span>
+        <span><i class="swatch wall"></i>walls</span>
+        <span><i class="swatch rooms"></i>rooms</span>
+        <span><i class="swatch cells"></i>cells</span>
+        <span><i class="swatch dropped"></i>dropped</span>
+      </div>
+    </div>
+    <div id="viewport">
+      <canvas id="view"></canvas>
+      <section id="part-panel">
+        <header>
+          <span>Fixed envelope parts</span>
+          <span id="part-counts"></span>
+        </header>
+        <div id="part-body"></div>
+      </section>
+      <div id="status">Loading...</div>
+    </div>
+  </main>
+  <script type="module" src="./viewer-polyhedron-buildings-main.js"></script>
+</body>
+</html>

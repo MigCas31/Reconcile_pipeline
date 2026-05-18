@@ -1,0 +1,3686 @@
+{
+  "results": [
+    {
+      "uuid": "016980bc-6762-4022-bfbf-17df4112e10c",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 69,
+      "wall_count_raw": 116,
+      "wall_reduction_pct": 40.51724137931034,
+      "mean_width_delta_cm": 3.8518756911764704,
+      "mean_height_delta_cm": 7.953516521739123,
+      "floor_gap_count": 17,
+      "floor_gap_median_cm": 9.871459269247062,
+      "flagged_count": 22,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "019e1376-9762-42d6-8520-b664b8c752df",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 38,
+      "wall_count_raw": 60,
+      "wall_reduction_pct": 36.66666666666667,
+      "mean_width_delta_cm": 5.19482760526316,
+      "mean_height_delta_cm": 17.638382368421063,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 10.265840377765059,
+      "flagged_count": 17,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "0430ebc2-236b-4b5d-991f-3e97ad246b78",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 37,
+      "wall_count_raw": 58,
+      "wall_reduction_pct": 36.206896551724135,
+      "mean_width_delta_cm": 4.481480270270277,
+      "mean_height_delta_cm": 4.67538108108109,
+      "floor_gap_count": 12,
+      "floor_gap_median_cm": 7.479316205478469,
+      "flagged_count": 1,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "05cecad4-119e-4dd2-beaf-d4af36973644",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 41,
+      "wall_count_raw": 64,
+      "wall_reduction_pct": 35.9375,
+      "mean_width_delta_cm": 5.268373317073164,
+      "mean_height_delta_cm": 4.586716829268281,
+      "floor_gap_count": 14,
+      "floor_gap_median_cm": 8.798546982457294,
+      "flagged_count": 3,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "0a5032e9-85a0-4970-9143-c430bbdaa0f5",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 61,
+      "wall_count_raw": 99,
+      "wall_reduction_pct": 38.38383838383839,
+      "mean_width_delta_cm": 4.258906360655742,
+      "mean_height_delta_cm": 4.943742786885255,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 6.287060129925877,
+      "flagged_count": 2,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "0b75d30e-c50c-4fc6-88ff-fce983078aa4",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 45,
+      "wall_count_raw": 78,
+      "wall_reduction_pct": 42.307692307692314,
+      "mean_width_delta_cm": 2.9449230243902447,
+      "mean_height_delta_cm": 23.038166285714283,
+      "floor_gap_count": 5,
+      "floor_gap_median_cm": 9.078196834525322,
+      "flagged_count": 25,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "0ce3ac3a-93ce-4ac0-9704-3cf7d31a636d",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 31,
+      "wall_count_raw": 51,
+      "wall_reduction_pct": 39.21568627450981,
+      "mean_width_delta_cm": 6.238294709677422,
+      "mean_height_delta_cm": 17.930716774193545,
+      "floor_gap_count": 9,
+      "floor_gap_median_cm": 9.562478905548549,
+      "flagged_count": 18,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "0d3f2993-8386-4130-8f1c-b2938c410828",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 101,
+      "wall_count_raw": 169,
+      "wall_reduction_pct": 40.23668639053254,
+      "mean_width_delta_cm": 4.998299404040403,
+      "mean_height_delta_cm": 15.042197504950503,
+      "floor_gap_count": 18,
+      "floor_gap_median_cm": 9.095645577689629,
+      "flagged_count": 51,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "0f911051-6084-4f0d-8f9a-24fc5b20f6ff",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 76,
+      "wall_count_raw": 118,
+      "wall_reduction_pct": 35.59322033898306,
+      "mean_width_delta_cm": 6.080178855263159,
+      "mean_height_delta_cm": 4.280134868421046,
+      "floor_gap_count": 29,
+      "floor_gap_median_cm": 11.824520993071486,
+      "flagged_count": 27,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "0fe789ce-e653-4828-863c-0f6ce7fee21d",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 51,
+      "wall_count_raw": 87,
+      "wall_reduction_pct": 41.379310344827594,
+      "mean_width_delta_cm": 4.457663579999998,
+      "mean_height_delta_cm": 5.66072255319148,
+      "floor_gap_count": 12,
+      "floor_gap_median_cm": 6.752858929777182,
+      "flagged_count": 18,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "107e8496-9bff-42bb-b776-720f44b70e55",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 41,
+      "wall_count_raw": 60,
+      "wall_reduction_pct": 31.666666666666664,
+      "mean_width_delta_cm": 4.965250365853653,
+      "mean_height_delta_cm": 14.623825609756087,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 8.430279626822031,
+      "flagged_count": 5,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "10d27382-8fce-456b-897d-3d5194ff5de5",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 49,
+      "wall_count_raw": 81,
+      "wall_reduction_pct": 39.50617283950617,
+      "mean_width_delta_cm": 8.908985277551022,
+      "mean_height_delta_cm": 50.93721326530615,
+      "floor_gap_count": 14,
+      "floor_gap_median_cm": 9.088276837535316,
+      "flagged_count": 49,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "117d172e-00d6-436e-8df2-050f25977602",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 57,
+      "wall_count_raw": 96,
+      "wall_reduction_pct": 40.625,
+      "mean_width_delta_cm": 2.8205697719298315,
+      "mean_height_delta_cm": 7.2029643684210525,
+      "floor_gap_count": 12,
+      "floor_gap_median_cm": 5.246173710910213,
+      "flagged_count": 15,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "121ff4c2-ec13-46b8-b557-b31775259e5d",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 38,
+      "wall_count_raw": 57,
+      "wall_reduction_pct": 33.333333333333336,
+      "mean_width_delta_cm": 4.189592868421052,
+      "mean_height_delta_cm": 14.999570789473681,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 6.591532361009008,
+      "flagged_count": 5,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "146ecf8b-ffa1-4239-ba58-040b61861fd9",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 45,
+      "wall_count_raw": 82,
+      "wall_reduction_pct": 45.12195121951219,
+      "mean_width_delta_cm": 2.92597675,
+      "mean_height_delta_cm": 15.774981333333352,
+      "floor_gap_count": 6,
+      "floor_gap_median_cm": 8.513513935930373,
+      "flagged_count": 16,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "16784bad-2cd9-4f4c-bb26-60355981cfe2",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 64,
+      "wall_count_raw": 102,
+      "wall_reduction_pct": 37.254901960784316,
+      "mean_width_delta_cm": 6.120590062500003,
+      "mean_height_delta_cm": 16.888322812499993,
+      "floor_gap_count": 17,
+      "floor_gap_median_cm": 8.462794000185134,
+      "flagged_count": 44,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "1825a812-09d0-4407-9265-182a07053cfc",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 59,
+      "wall_count_raw": 88,
+      "wall_reduction_pct": 32.95454545454546,
+      "mean_width_delta_cm": 6.300317232203392,
+      "mean_height_delta_cm": 3.403955344827593,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 9.858062247841705,
+      "flagged_count": 11,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "1900be91-8684-4316-98e2-c4fef6e6296f",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 83,
+      "wall_count_raw": 140,
+      "wall_reduction_pct": 40.714285714285715,
+      "mean_width_delta_cm": 5.955989317073174,
+      "mean_height_delta_cm": 15.699605682926833,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 7.960737429641784,
+      "flagged_count": 30,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "191e11c0-fd47-489c-9e3d-c8072713a761",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 42,
+      "wall_count_raw": 65,
+      "wall_reduction_pct": 35.38461538461538,
+      "mean_width_delta_cm": 6.153323666666667,
+      "mean_height_delta_cm": 2.0013414285714335,
+      "floor_gap_count": 9,
+      "floor_gap_median_cm": 11.187029501979561,
+      "flagged_count": 22,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "193c3c70-2271-4c42-ab2c-586e1d64d4cb",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 38,
+      "wall_count_raw": 57,
+      "wall_reduction_pct": 33.333333333333336,
+      "mean_width_delta_cm": 4.232420131578948,
+      "mean_height_delta_cm": 1.2854178947368495,
+      "floor_gap_count": 11,
+      "floor_gap_median_cm": 6.427564567880893,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "19459014-f39b-4bf6-945e-c5b50930dea3",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 68,
+      "wall_count_raw": 107,
+      "wall_reduction_pct": 36.44859813084113,
+      "mean_width_delta_cm": 4.461980630769226,
+      "mean_height_delta_cm": 6.870963910447767,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 11.149998358147112,
+      "flagged_count": 12,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "19bf6498-09eb-4c62-8fc8-8623942351ba",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 45,
+      "wall_count_raw": 69,
+      "wall_reduction_pct": 34.78260869565217,
+      "mean_width_delta_cm": 3.394137177777775,
+      "mean_height_delta_cm": 2.813342954545468,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 4.91951385644663,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "1a453338-ca2e-49d0-9bd2-da33c07fd348",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 54,
+      "wall_count_raw": 79,
+      "wall_reduction_pct": 31.645569620253166,
+      "mean_width_delta_cm": 4.652321259259263,
+      "mean_height_delta_cm": 5.0139020370370355,
+      "floor_gap_count": 19,
+      "floor_gap_median_cm": 7.323320565706405,
+      "flagged_count": 8,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "1d26eda3-c927-4cdf-a3b0-218036828a55",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 74,
+      "wall_count_raw": 134,
+      "wall_reduction_pct": 44.776119402985074,
+      "mean_width_delta_cm": 1.897331536231879,
+      "mean_height_delta_cm": 8.425000479452056,
+      "floor_gap_count": 8,
+      "floor_gap_median_cm": 4.721710878962713,
+      "flagged_count": 4,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 203,
+      "wall_count_raw": 340,
+      "wall_reduction_pct": 40.294117647058826,
+      "mean_width_delta_cm": 5.382183772864325,
+      "mean_height_delta_cm": 9.05439705247525,
+      "floor_gap_count": 46,
+      "floor_gap_median_cm": 7.944722427665864,
+      "flagged_count": 57,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "20fa9e17-7264-48c7-9ceb-2140d9cbc86e",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 39,
+      "wall_count_raw": 60,
+      "wall_reduction_pct": 35.0,
+      "mean_width_delta_cm": 2.9154769743589757,
+      "mean_height_delta_cm": 1.6967464102564134,
+      "floor_gap_count": 7,
+      "floor_gap_median_cm": 4.495742789632149,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "21af2a12-2a29-44b5-b703-fbaa208996e9",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 69,
+      "wall_count_raw": 113,
+      "wall_reduction_pct": 38.93805309734514,
+      "mean_width_delta_cm": 4.085695173913044,
+      "mean_height_delta_cm": 6.528878434782612,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 8.42744252097043,
+      "flagged_count": 18,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "2388d90c-8cc9-4cca-b232-d658e184074d",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 89,
+      "wall_count_raw": 144,
+      "wall_reduction_pct": 38.19444444444444,
+      "mean_width_delta_cm": 6.506983235955059,
+      "mean_height_delta_cm": 2.8521040449438213,
+      "floor_gap_count": 21,
+      "floor_gap_median_cm": 8.930269316507308,
+      "flagged_count": 17,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "23cbb422-ada0-454d-8f91-30888256960d",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 40,
+      "wall_count_raw": 64,
+      "wall_reduction_pct": 37.5,
+      "mean_width_delta_cm": 5.3341520000000004,
+      "mean_height_delta_cm": 55.487986000000014,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 8.513939382980992,
+      "flagged_count": 40,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "24e8aaa7-ec15-4a72-be5f-c67b95a53411",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 47,
+      "wall_count_raw": 75,
+      "wall_reduction_pct": 37.33333333333333,
+      "mean_width_delta_cm": 4.005329511111111,
+      "mean_height_delta_cm": 5.7179053191489375,
+      "floor_gap_count": 18,
+      "floor_gap_median_cm": 6.800904192090465,
+      "flagged_count": 2,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "287808db-3826-4351-b9a1-6f9831bdc870",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 65,
+      "wall_count_raw": 117,
+      "wall_reduction_pct": 44.44444444444444,
+      "mean_width_delta_cm": 7.123013353846155,
+      "mean_height_delta_cm": 241.82237984375,
+      "floor_gap_count": 26,
+      "floor_gap_median_cm": 8.77927335605855,
+      "flagged_count": 64,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "294c5209-06ff-47ae-841b-e7e973b3699e",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 40,
+      "wall_count_raw": 59,
+      "wall_reduction_pct": 32.20338983050848,
+      "mean_width_delta_cm": 2.9471667820512812,
+      "mean_height_delta_cm": 2.8391437499999923,
+      "floor_gap_count": 11,
+      "floor_gap_median_cm": 6.151667027618259,
+      "flagged_count": 1,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "29865ccb-e7e8-4ad6-a01c-d632f20761b7",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 57,
+      "wall_count_raw": 98,
+      "wall_reduction_pct": 41.83673469387755,
+      "mean_width_delta_cm": 2.8484738156862717,
+      "mean_height_delta_cm": 5.1174518571428615,
+      "floor_gap_count": 9,
+      "floor_gap_median_cm": 5.159679154625972,
+      "flagged_count": 7,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "29a9cb5c-e7e7-4a01-b8ed-b2a2dd0edd2a",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 43,
+      "wall_count_raw": 67,
+      "wall_reduction_pct": 35.820895522388064,
+      "mean_width_delta_cm": 3.4857178809523854,
+      "mean_height_delta_cm": 16.182939999999995,
+      "floor_gap_count": 8,
+      "floor_gap_median_cm": 6.643739483301475,
+      "flagged_count": 15,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "2d80b27f-ca29-4b3e-9197-ad3c4af7cbfb",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 44,
+      "wall_count_raw": 67,
+      "wall_reduction_pct": 34.32835820895522,
+      "mean_width_delta_cm": 6.162644090909095,
+      "mean_height_delta_cm": 6.348987954545468,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 7.149982162959037,
+      "flagged_count": 3,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "2de0ff98-b554-446b-a501-b9fab4577f5a",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 55,
+      "wall_count_raw": 87,
+      "wall_reduction_pct": 36.7816091954023,
+      "mean_width_delta_cm": 6.297749345454545,
+      "mean_height_delta_cm": 1.8030012727272928,
+      "floor_gap_count": 17,
+      "floor_gap_median_cm": 9.401124853253599,
+      "flagged_count": 9,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "2df1d2ed-54c9-41e9-9ed8-c4110e3868e0",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 45,
+      "wall_count_raw": 67,
+      "wall_reduction_pct": 32.83582089552238,
+      "mean_width_delta_cm": 5.02659128888889,
+      "mean_height_delta_cm": 3.410299333333324,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 8.178206715195184,
+      "flagged_count": 2,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "2ea3b759-e047-424c-8034-f8ee5b811fb4",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 63,
+      "wall_count_raw": 93,
+      "wall_reduction_pct": 32.25806451612904,
+      "mean_width_delta_cm": 3.672459999999997,
+      "mean_height_delta_cm": 1.4143261904761986,
+      "floor_gap_count": 19,
+      "floor_gap_median_cm": 5.126217067219074,
+      "flagged_count": 1,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "2f382701-addb-48a5-8749-0e8e7f988a10",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 89,
+      "wall_count_raw": 156,
+      "wall_reduction_pct": 42.94871794871795,
+      "mean_width_delta_cm": 3.866807792857145,
+      "mean_height_delta_cm": 23.018673598522724,
+      "floor_gap_count": 17,
+      "floor_gap_median_cm": 6.938825743732825,
+      "flagged_count": 54,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "3297bc28-5d39-4358-bd2e-0f1183cae489",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 88,
+      "wall_count_raw": 146,
+      "wall_reduction_pct": 39.726027397260275,
+      "mean_width_delta_cm": 4.042891102272728,
+      "mean_height_delta_cm": 144.26307090909089,
+      "floor_gap_count": 33,
+      "floor_gap_median_cm": 7.509354762891536,
+      "flagged_count": 53,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "36f034dc-17ec-4e9d-9ec0-e8b0139201c8",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 67,
+      "wall_count_raw": 108,
+      "wall_reduction_pct": 37.96296296296296,
+      "mean_width_delta_cm": 6.235034044776119,
+      "mean_height_delta_cm": 11.219450895522384,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 9.178658092271416,
+      "flagged_count": 15,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "37e9355f-29a7-4303-abae-240c55df13e4",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 62,
+      "wall_count_raw": 94,
+      "wall_reduction_pct": 34.04255319148937,
+      "mean_width_delta_cm": 6.619725467741942,
+      "mean_height_delta_cm": 11.244556451612898,
+      "floor_gap_count": 20,
+      "floor_gap_median_cm": 13.038483686696711,
+      "flagged_count": 47,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "38158927-652c-4d01-9aa3-770956648d85",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 53,
+      "wall_count_raw": 85,
+      "wall_reduction_pct": 37.64705882352941,
+      "mean_width_delta_cm": 4.32259828076923,
+      "mean_height_delta_cm": 11.203521038461542,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 10.22772407391904,
+      "flagged_count": 27,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "38f71f1d-2c71-4fcd-9997-83b2914416b0",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 74,
+      "wall_count_raw": 115,
+      "wall_reduction_pct": 35.652173913043484,
+      "mean_width_delta_cm": 3.4042220540540566,
+      "mean_height_delta_cm": 5.898357567567567,
+      "floor_gap_count": 18,
+      "floor_gap_median_cm": 7.012691167368222,
+      "flagged_count": 4,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "3a034c99-8986-4749-aedb-0a5a04ea803f",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 46,
+      "wall_count_raw": 72,
+      "wall_reduction_pct": 36.111111111111114,
+      "mean_width_delta_cm": 4.140181499999996,
+      "mean_height_delta_cm": 4.835307043478265,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 8.358780964555255,
+      "flagged_count": 1,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "3a576e1b-4b3e-4f5d-8c20-b39b157fcf03",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 79,
+      "wall_count_raw": 129,
+      "wall_reduction_pct": 38.759689922480625,
+      "mean_width_delta_cm": 3.7552024788732417,
+      "mean_height_delta_cm": 3.8517201408450568,
+      "floor_gap_count": 23,
+      "floor_gap_median_cm": 7.304504367435434,
+      "flagged_count": 5,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "3c74f488-a562-4bc4-9d7a-3f707fe85133",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 132,
+      "wall_count_raw": 237,
+      "wall_reduction_pct": 44.30379746835443,
+      "mean_width_delta_cm": 6.2133190272727274,
+      "mean_height_delta_cm": 116.04321818939393,
+      "floor_gap_count": 20,
+      "floor_gap_median_cm": 8.137734734555966,
+      "flagged_count": 94,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "3e378d10-6d7f-451c-b5e8-705731e6f37e",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 45,
+      "wall_count_raw": 78,
+      "wall_reduction_pct": 42.307692307692314,
+      "mean_width_delta_cm": 3.1867274444444473,
+      "mean_height_delta_cm": 16.143042581395342,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 7.280758827235205,
+      "flagged_count": 7,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "3ee81b85-a21f-4f55-a100-5995f36f84f9",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 42,
+      "wall_count_raw": 65,
+      "wall_reduction_pct": 35.38461538461538,
+      "mean_width_delta_cm": 4.128546928571424,
+      "mean_height_delta_cm": 3.642936341463422,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 8.816877590056514,
+      "flagged_count": 1,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "401b303d-ceb4-4cb1-9f87-b897b8b5716e",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 48,
+      "wall_count_raw": 71,
+      "wall_reduction_pct": 32.3943661971831,
+      "mean_width_delta_cm": 2.8032535416666655,
+      "mean_height_delta_cm": 2.223656875000014,
+      "floor_gap_count": 14,
+      "floor_gap_median_cm": 3.422740008910295,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "42ea797a-5fc9-488e-8929-07431d5f3f29",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 67,
+      "wall_count_raw": 103,
+      "wall_reduction_pct": 34.95145631067961,
+      "mean_width_delta_cm": 7.874136787878788,
+      "mean_height_delta_cm": 2.78037417910448,
+      "floor_gap_count": 11,
+      "floor_gap_median_cm": 9.355088487596081,
+      "flagged_count": 19,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "43674d8e-302d-4915-878f-f50d2d9f8d1b",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 49,
+      "wall_count_raw": 73,
+      "wall_reduction_pct": 32.87671232876712,
+      "mean_width_delta_cm": 3.3457924285714284,
+      "mean_height_delta_cm": 1.8274112244898002,
+      "floor_gap_count": 11,
+      "floor_gap_median_cm": 6.705974429141598,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "45b933f5-4f12-488c-b77a-065cf3c2d719",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 55,
+      "wall_count_raw": 84,
+      "wall_reduction_pct": 34.523809523809526,
+      "mean_width_delta_cm": 3.333284181818177,
+      "mean_height_delta_cm": 2.2446898181818287,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 5.860749733280636,
+      "flagged_count": 5,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "466d0aa8-7021-4825-8f7b-b954c824c13a",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 104,
+      "wall_count_raw": 160,
+      "wall_reduction_pct": 35.0,
+      "mean_width_delta_cm": 3.7463428586538448,
+      "mean_height_delta_cm": 3.339590776699045,
+      "floor_gap_count": 30,
+      "floor_gap_median_cm": 7.998825694246934,
+      "flagged_count": 7,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "46ea557e-3151-43d2-b72b-f212290516cc",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 40,
+      "wall_count_raw": 67,
+      "wall_reduction_pct": 40.29850746268657,
+      "mean_width_delta_cm": 5.092567824999999,
+      "mean_height_delta_cm": 4.0810058974358965,
+      "floor_gap_count": 8,
+      "floor_gap_median_cm": 5.93337255309665,
+      "flagged_count": 10,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "494a97c4-ab7e-4021-9345-c46fecfd1d67",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 84,
+      "wall_count_raw": 127,
+      "wall_reduction_pct": 33.85826771653543,
+      "mean_width_delta_cm": 3.2005411190476187,
+      "mean_height_delta_cm": 6.966238192771086,
+      "floor_gap_count": 23,
+      "floor_gap_median_cm": 5.5563822944797145,
+      "flagged_count": 17,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "49762ea7-8131-4141-ad52-e8012b46f630",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 67,
+      "wall_count_raw": 110,
+      "wall_reduction_pct": 39.090909090909086,
+      "mean_width_delta_cm": 3.6990616969697,
+      "mean_height_delta_cm": 2.0389347761194028,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 7.470510808593977,
+      "flagged_count": 6,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "4fe068d2-f39e-47ed-8c15-35b6396862bf",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 66,
+      "wall_count_raw": 107,
+      "wall_reduction_pct": 38.3177570093458,
+      "mean_width_delta_cm": 5.979495696969694,
+      "mean_height_delta_cm": 209.28812590909087,
+      "floor_gap_count": 34,
+      "floor_gap_median_cm": 9.490211991075949,
+      "flagged_count": 59,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "513a4b03-cfb1-4221-99ff-d9b7d1e1d3f6",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 41,
+      "wall_count_raw": 71,
+      "wall_reduction_pct": 42.25352112676056,
+      "mean_width_delta_cm": 3.0730189250000053,
+      "mean_height_delta_cm": 5.520669230769233,
+      "floor_gap_count": 6,
+      "floor_gap_median_cm": 6.151829702570819,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "517846b1-d1f1-4faa-8407-e80dcdbcc003",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 86,
+      "wall_count_raw": 141,
+      "wall_reduction_pct": 39.00709219858156,
+      "mean_width_delta_cm": 3.3250590123456814,
+      "mean_height_delta_cm": 2.953178807228921,
+      "floor_gap_count": 14,
+      "floor_gap_median_cm": 6.795509853877585,
+      "flagged_count": 10,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "52f91e67-3891-4729-8bf3-be2c0a6a0d04",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 105,
+      "wall_count_raw": 193,
+      "wall_reduction_pct": 45.59585492227979,
+      "mean_width_delta_cm": 1.4479985377777764,
+      "mean_height_delta_cm": 13.625609259259258,
+      "floor_gap_count": 3,
+      "floor_gap_median_cm": 6.9977834677827575,
+      "flagged_count": 25,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "53ba9e35-1aeb-43e2-87d2-27be83b949f5",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 42,
+      "wall_count_raw": 62,
+      "wall_reduction_pct": 32.25806451612904,
+      "mean_width_delta_cm": 5.901783547619048,
+      "mean_height_delta_cm": 2.5091583333333283,
+      "floor_gap_count": 14,
+      "floor_gap_median_cm": 8.126188805978332,
+      "flagged_count": 5,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "53c380e7-407e-48f7-8c72-b449e2334798",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 50,
+      "wall_count_raw": 78,
+      "wall_reduction_pct": 35.89743589743589,
+      "mean_width_delta_cm": 4.805490179999997,
+      "mean_height_delta_cm": 5.305610000000001,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 5.490072999845809,
+      "flagged_count": 4,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "540774ef-5a9e-4500-b560-003aba920cd8",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 56,
+      "wall_count_raw": 87,
+      "wall_reduction_pct": 35.63218390804598,
+      "mean_width_delta_cm": 3.4930965499999935,
+      "mean_height_delta_cm": 4.299114000000008,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 5.900050522622063,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "56108837-05d5-4fe4-bfd5-aec6b649d825",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 45,
+      "wall_count_raw": 69,
+      "wall_reduction_pct": 34.78260869565217,
+      "mean_width_delta_cm": 6.254028911111113,
+      "mean_height_delta_cm": 7.7082828888888875,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 10.0979434320205,
+      "flagged_count": 30,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "573ee2ba-67b9-4bb0-b4ba-47015d09377c",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 31,
+      "wall_count_raw": 50,
+      "wall_reduction_pct": 38.0,
+      "mean_width_delta_cm": 3.564048677419359,
+      "mean_height_delta_cm": 4.117963870967747,
+      "floor_gap_count": 8,
+      "floor_gap_median_cm": 7.831868258874805,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "5831141f-829c-4adb-9bae-289c2140c72d",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 64,
+      "wall_count_raw": 107,
+      "wall_reduction_pct": 40.186915887850475,
+      "mean_width_delta_cm": 2.5814988951612885,
+      "mean_height_delta_cm": 4.206844859375,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 7.130373745246985,
+      "flagged_count": 11,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "59b505e7-b384-451b-90b1-80f2654dd10d",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 130,
+      "wall_count_raw": 211,
+      "wall_reduction_pct": 38.38862559241706,
+      "mean_width_delta_cm": 5.534897909230769,
+      "mean_height_delta_cm": 5.7277795234374995,
+      "floor_gap_count": 33,
+      "floor_gap_median_cm": 10.27283689846697,
+      "flagged_count": 25,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "5a97cb51-78cd-40c7-9dd5-423bdea306a6",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 46,
+      "wall_count_raw": 69,
+      "wall_reduction_pct": 33.333333333333336,
+      "mean_width_delta_cm": 5.258216108695658,
+      "mean_height_delta_cm": 13.926066086956514,
+      "floor_gap_count": 12,
+      "floor_gap_median_cm": 9.400168601714356,
+      "flagged_count": 13,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "5c557e06-393e-466e-a957-f7391b76b8ff",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 38,
+      "wall_count_raw": 63,
+      "wall_reduction_pct": 39.682539682539684,
+      "mean_width_delta_cm": 3.6734052631578957,
+      "mean_height_delta_cm": 7.060952105263163,
+      "floor_gap_count": 8,
+      "floor_gap_median_cm": 6.571809778129692,
+      "flagged_count": 12,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "5ecc6e8c-228b-4167-9331-de247c802320",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 87,
+      "wall_count_raw": 136,
+      "wall_reduction_pct": 36.029411764705884,
+      "mean_width_delta_cm": 3.9091627999999963,
+      "mean_height_delta_cm": 15.123130209302326,
+      "floor_gap_count": 22,
+      "floor_gap_median_cm": 7.049310364513263,
+      "flagged_count": 27,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "5fdc8f48-e5d6-4951-915d-52ebf282eedb",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 84,
+      "wall_count_raw": 139,
+      "wall_reduction_pct": 39.568345323741006,
+      "mean_width_delta_cm": 10.02709926506024,
+      "mean_height_delta_cm": 31.03343850000001,
+      "floor_gap_count": 18,
+      "floor_gap_median_cm": 9.76556179851888,
+      "flagged_count": 50,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "60f2f02b-8910-461c-879a-75925d256989",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 81,
+      "wall_count_raw": 124,
+      "wall_reduction_pct": 34.67741935483871,
+      "mean_width_delta_cm": 5.424892888888887,
+      "mean_height_delta_cm": 9.885949753086429,
+      "floor_gap_count": 23,
+      "floor_gap_median_cm": 7.143552011665847,
+      "flagged_count": 20,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "60fa343a-d19a-4d18-b939-33b80e790be6",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 61,
+      "wall_count_raw": 100,
+      "wall_reduction_pct": 39.0,
+      "mean_width_delta_cm": 4.916936901639343,
+      "mean_height_delta_cm": 4.944955901639346,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 10.796342830205761,
+      "flagged_count": 25,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "612d1bc8-dbed-47cb-aef5-3e64964ccc04",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 56,
+      "wall_count_raw": 89,
+      "wall_reduction_pct": 37.07865168539326,
+      "mean_width_delta_cm": 3.4975527857142814,
+      "mean_height_delta_cm": 7.850876785714277,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 6.241806392385504,
+      "flagged_count": 6,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "6203a969-742b-4935-bc4d-8eae644b8f73",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 60,
+      "wall_count_raw": 89,
+      "wall_reduction_pct": 32.58426966292135,
+      "mean_width_delta_cm": 4.9215496166666695,
+      "mean_height_delta_cm": 29.46618733333332,
+      "floor_gap_count": 14,
+      "floor_gap_median_cm": 6.7736826381765365,
+      "flagged_count": 13,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "66a72e63-8b3c-4e57-977b-32f5119a9d09",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 116,
+      "wall_count_raw": 190,
+      "wall_reduction_pct": 38.94736842105263,
+      "mean_width_delta_cm": 3.3624466798245614,
+      "mean_height_delta_cm": 7.143934521739129,
+      "floor_gap_count": 26,
+      "floor_gap_median_cm": 7.264277240886322,
+      "flagged_count": 13,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "670a8030-c451-4e80-badd-6702cef02a03",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 79,
+      "wall_count_raw": 132,
+      "wall_reduction_pct": 40.15151515151515,
+      "mean_width_delta_cm": 3.0471291688311677,
+      "mean_height_delta_cm": 3.3399465512820483,
+      "floor_gap_count": 17,
+      "floor_gap_median_cm": 6.9574270598812635,
+      "flagged_count": 16,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "6c29deb7-51e6-437d-bfe4-0eb83e559881",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 74,
+      "wall_count_raw": 134,
+      "wall_reduction_pct": 44.776119402985074,
+      "mean_width_delta_cm": 2.9860896756756756,
+      "mean_height_delta_cm": 5.102725607142867,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 9.519781779824605,
+      "flagged_count": 12,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "6e02bd11-bbb7-48c7-b3a0-629b0bc5669c",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 54,
+      "wall_count_raw": 82,
+      "wall_reduction_pct": 34.14634146341463,
+      "mean_width_delta_cm": 3.329600203703706,
+      "mean_height_delta_cm": 1.6559735185185238,
+      "floor_gap_count": 7,
+      "floor_gap_median_cm": 5.416829102995148,
+      "flagged_count": 2,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "6e8a252f-fc38-4ffa-8691-3f43938a0a16",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 56,
+      "wall_count_raw": 86,
+      "wall_reduction_pct": 34.883720930232556,
+      "mean_width_delta_cm": 3.8738087169811304,
+      "mean_height_delta_cm": 6.497429821428564,
+      "floor_gap_count": 18,
+      "floor_gap_median_cm": 7.92416921796081,
+      "flagged_count": 5,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "70f8e0fd-c931-42d6-bf9d-f10e59571b29",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 59,
+      "wall_count_raw": 93,
+      "wall_reduction_pct": 36.55913978494624,
+      "mean_width_delta_cm": 5.426289965517243,
+      "mean_height_delta_cm": 12.415472033898308,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 8.702763036069326,
+      "flagged_count": 18,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "7153d532-16c1-45e8-b7c9-f5cd1ba5cc85",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 94,
+      "wall_count_raw": 157,
+      "wall_reduction_pct": 40.12738853503185,
+      "mean_width_delta_cm": 9.010292487912093,
+      "mean_height_delta_cm": 149.35630714285716,
+      "floor_gap_count": 29,
+      "floor_gap_median_cm": 9.379632032030653,
+      "flagged_count": 91,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "71ea1755-003b-4f4b-8481-db2d5986a214",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 66,
+      "wall_count_raw": 104,
+      "wall_reduction_pct": 36.53846153846154,
+      "mean_width_delta_cm": 4.7365790952380955,
+      "mean_height_delta_cm": 3.1265375757575864,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 8.004878023664281,
+      "flagged_count": 18,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "71ee522c-1e78-411f-b3ce-33d59516038f",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 59,
+      "wall_count_raw": 94,
+      "wall_reduction_pct": 37.23404255319149,
+      "mean_width_delta_cm": 6.2997322568965535,
+      "mean_height_delta_cm": 7.774579491525408,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 10.249519287074454,
+      "flagged_count": 31,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "71f6d15a-37d3-4d23-b92b-1491cc9dcb52",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 47,
+      "wall_count_raw": 70,
+      "wall_reduction_pct": 32.85714285714286,
+      "mean_width_delta_cm": 3.5406685744680813,
+      "mean_height_delta_cm": 2.0894512765957494,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 5.32324178271918,
+      "flagged_count": 3,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "720c2f50-9586-47b5-b27c-130214cd8b5d",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 70,
+      "wall_count_raw": 119,
+      "wall_reduction_pct": 41.17647058823529,
+      "mean_width_delta_cm": 3.403839728571431,
+      "mean_height_delta_cm": 27.309425753623184,
+      "floor_gap_count": 17,
+      "floor_gap_median_cm": 7.655330269265483,
+      "flagged_count": 36,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "72122129-7ee2-4a14-a645-23d44df3d2b5",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 93,
+      "wall_count_raw": 155,
+      "wall_reduction_pct": 40.0,
+      "mean_width_delta_cm": 3.820459826373628,
+      "mean_height_delta_cm": 6.310552173913047,
+      "floor_gap_count": 21,
+      "floor_gap_median_cm": 7.526288841357019,
+      "flagged_count": 17,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "73465f84-d5f5-4b84-8509-0e818beb5ecd",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 82,
+      "wall_count_raw": 134,
+      "wall_reduction_pct": 38.80597014925373,
+      "mean_width_delta_cm": 4.166706450000001,
+      "mean_height_delta_cm": 35.17929914634146,
+      "floor_gap_count": 18,
+      "floor_gap_median_cm": 9.583896135551345,
+      "flagged_count": 47,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "73c1d779-2257-4e39-838a-5b026bca2401",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 65,
+      "wall_count_raw": 101,
+      "wall_reduction_pct": 35.64356435643564,
+      "mean_width_delta_cm": 7.513010296875002,
+      "mean_height_delta_cm": 3.0831495384615533,
+      "floor_gap_count": 19,
+      "floor_gap_median_cm": 10.911099971070957,
+      "flagged_count": 10,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "74e87bcd-3989-4d5c-8f16-f7782dc3afbd",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 87,
+      "wall_count_raw": 146,
+      "wall_reduction_pct": 40.410958904109584,
+      "mean_width_delta_cm": 3.3724706337209307,
+      "mean_height_delta_cm": 4.2020869425287435,
+      "floor_gap_count": 8,
+      "floor_gap_median_cm": 9.577722222090932,
+      "flagged_count": 12,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "777b25c6-42e6-40d3-a0a4-aaafdd23842e",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 38,
+      "wall_count_raw": 62,
+      "wall_reduction_pct": 38.70967741935484,
+      "mean_width_delta_cm": 5.540775381578945,
+      "mean_height_delta_cm": 5.322054324324325,
+      "floor_gap_count": 9,
+      "floor_gap_median_cm": 8.262902727020121,
+      "flagged_count": 4,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "7791ff1d-7641-4da1-8380-1773d30a7bcc",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 48,
+      "wall_count_raw": 69,
+      "wall_reduction_pct": 30.434782608695656,
+      "mean_width_delta_cm": 6.469824395833338,
+      "mean_height_delta_cm": 64.59829765957447,
+      "floor_gap_count": 14,
+      "floor_gap_median_cm": 9.886078955318197,
+      "flagged_count": 40,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "795ceae3-b6ef-42bc-bd48-9b69f06e9de6",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 52,
+      "wall_count_raw": 82,
+      "wall_reduction_pct": 36.58536585365854,
+      "mean_width_delta_cm": 5.153045384615386,
+      "mean_height_delta_cm": 12.220865192307688,
+      "floor_gap_count": 17,
+      "floor_gap_median_cm": 9.153525139265714,
+      "flagged_count": 11,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "7cabc39b-6328-4a6e-9491-822fa6b3c3fb",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 54,
+      "wall_count_raw": 85,
+      "wall_reduction_pct": 36.47058823529412,
+      "mean_width_delta_cm": 4.652268235294113,
+      "mean_height_delta_cm": 9.287352037037037,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 9.341340478105971,
+      "flagged_count": 7,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "7dbc53a6-17e8-4806-83de-42286b95726c",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 114,
+      "wall_count_raw": 200,
+      "wall_reduction_pct": 43.00000000000001,
+      "mean_width_delta_cm": 3.142464520408165,
+      "mean_height_delta_cm": 13.433020612612623,
+      "floor_gap_count": 17,
+      "floor_gap_median_cm": 9.33585071176929,
+      "flagged_count": 49,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "7e0ab073-01b3-49f0-915a-468c6561bf5c",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 126,
+      "wall_count_raw": 197,
+      "wall_reduction_pct": 36.04060913705583,
+      "mean_width_delta_cm": 5.087779342400001,
+      "mean_height_delta_cm": 4.4291051587301675,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 7.6105323727212815,
+      "flagged_count": 9,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "7e330c34-f1bb-4f5f-b651-73b5333e0cc4",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 57,
+      "wall_count_raw": 98,
+      "wall_reduction_pct": 41.83673469387755,
+      "mean_width_delta_cm": 3.4364637017543878,
+      "mean_height_delta_cm": 14.228420789473686,
+      "floor_gap_count": 11,
+      "floor_gap_median_cm": 10.48310730438746,
+      "flagged_count": 20,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "7e42a701-1f0a-451a-8229-05f581454979",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 71,
+      "wall_count_raw": 107,
+      "wall_reduction_pct": 33.64485981308412,
+      "mean_width_delta_cm": 6.200336295774648,
+      "mean_height_delta_cm": 4.181865070422536,
+      "floor_gap_count": 23,
+      "floor_gap_median_cm": 9.900018605620152,
+      "flagged_count": 7,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "81466aa3-accf-43bc-a7be-cba2fde66e86",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 66,
+      "wall_count_raw": 108,
+      "wall_reduction_pct": 38.888888888888886,
+      "mean_width_delta_cm": 4.0689792121212145,
+      "mean_height_delta_cm": 0.7513660606060886,
+      "floor_gap_count": 14,
+      "floor_gap_median_cm": 6.688616068592955,
+      "flagged_count": 3,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "81e48e8d-4cef-4b74-9906-6f524ed10f39",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 47,
+      "wall_count_raw": 69,
+      "wall_reduction_pct": 31.88405797101449,
+      "mean_width_delta_cm": 3.4992424468085095,
+      "mean_height_delta_cm": 1.8809221276595705,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 4.639013803245046,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "85b7d943-95c9-4937-af42-121f705ed3e0",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 45,
+      "wall_count_raw": 70,
+      "wall_reduction_pct": 35.71428571428571,
+      "mean_width_delta_cm": 6.077533155555557,
+      "mean_height_delta_cm": 2.513747777777758,
+      "floor_gap_count": 14,
+      "floor_gap_median_cm": 9.04175421133536,
+      "flagged_count": 3,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "85bc077a-8953-40e3-87b4-9c42f8727e6e",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 71,
+      "wall_count_raw": 106,
+      "wall_reduction_pct": 33.01886792452831,
+      "mean_width_delta_cm": 5.680576098591549,
+      "mean_height_delta_cm": 7.6743547887323995,
+      "floor_gap_count": 20,
+      "floor_gap_median_cm": 7.981086606045688,
+      "flagged_count": 8,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "873952bc-1159-43dd-b4bd-6535a55c57cf",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 43,
+      "wall_count_raw": 72,
+      "wall_reduction_pct": 40.27777777777778,
+      "mean_width_delta_cm": 3.732387829268291,
+      "mean_height_delta_cm": 9.644556534883717,
+      "floor_gap_count": 5,
+      "floor_gap_median_cm": 6.590419784190093,
+      "flagged_count": 13,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "893d4535-3169-4907-a93a-b3ab8f66ec1c",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 91,
+      "wall_count_raw": 136,
+      "wall_reduction_pct": 33.08823529411765,
+      "mean_width_delta_cm": 5.989813637362636,
+      "mean_height_delta_cm": 10.915629111111123,
+      "floor_gap_count": 30,
+      "floor_gap_median_cm": 9.053492479819425,
+      "flagged_count": 29,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "8ab161a4-c958-49c9-8ca8-7a997292d52f",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 28,
+      "wall_count_raw": 41,
+      "wall_reduction_pct": 31.707317073170728,
+      "mean_width_delta_cm": 7.3691933928571505,
+      "mean_height_delta_cm": 9.86596285714286,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 9.83795341290342,
+      "flagged_count": 4,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "8b723372-749f-4992-a044-d62bb99b84cc",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 49,
+      "wall_count_raw": 80,
+      "wall_reduction_pct": 38.74999999999999,
+      "mean_width_delta_cm": 3.96289189583333,
+      "mean_height_delta_cm": 8.18487142857143,
+      "floor_gap_count": 8,
+      "floor_gap_median_cm": 5.654161923509213,
+      "flagged_count": 8,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "8b919840-e31e-4f9e-92e7-cf76a5acf0e9",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 63,
+      "wall_count_raw": 92,
+      "wall_reduction_pct": 31.521739130434778,
+      "mean_width_delta_cm": 4.0348398225806505,
+      "mean_height_delta_cm": 19.661007301587283,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 5.813765051764321,
+      "flagged_count": 15,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "8c0ef0cf-51a7-4ac0-8bbf-735f88a799cc",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 86,
+      "wall_count_raw": 144,
+      "wall_reduction_pct": 40.27777777777778,
+      "mean_width_delta_cm": 3.5192499186046495,
+      "mean_height_delta_cm": 38.37485418604651,
+      "floor_gap_count": 11,
+      "floor_gap_median_cm": 6.361286078370807,
+      "flagged_count": 28,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "8e7e69b2-e1db-4482-8f21-93be6904a5f1",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 66,
+      "wall_count_raw": 114,
+      "wall_reduction_pct": 42.10526315789473,
+      "mean_width_delta_cm": 3.3401361864406756,
+      "mean_height_delta_cm": 10.872405303030309,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 7.495204369994801,
+      "flagged_count": 14,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "8fc0de5f-99be-4295-b529-d389a4670a8f",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 40,
+      "wall_count_raw": 61,
+      "wall_reduction_pct": 34.42622950819673,
+      "mean_width_delta_cm": 3.7983729499999996,
+      "mean_height_delta_cm": 2.643713076923077,
+      "floor_gap_count": 11,
+      "floor_gap_median_cm": 7.924875260657534,
+      "flagged_count": 1,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "90683bb0-28ca-42a8-82b8-09d82cd434d5",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 34,
+      "wall_count_raw": 63,
+      "wall_reduction_pct": 46.03174603174603,
+      "mean_width_delta_cm": 4.707789736842106,
+      "mean_height_delta_cm": 7.81534978260869,
+      "floor_gap_count": 4,
+      "floor_gap_median_cm": 5.250494955445243,
+      "flagged_count": 4,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "91f66e67-37e3-4cc9-9815-a4ce71c56a0a",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 46,
+      "wall_count_raw": 68,
+      "wall_reduction_pct": 32.35294117647059,
+      "mean_width_delta_cm": 3.758729065217392,
+      "mean_height_delta_cm": 3.1818608695652117,
+      "floor_gap_count": 11,
+      "floor_gap_median_cm": 7.732965382085469,
+      "flagged_count": 1,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "938d6ed6-d916-462b-ba37-f421feb2af21",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 145,
+      "wall_count_raw": 241,
+      "wall_reduction_pct": 39.83402489626556,
+      "mean_width_delta_cm": 12.10505489305556,
+      "mean_height_delta_cm": 150.48484075862066,
+      "floor_gap_count": 39,
+      "floor_gap_median_cm": 12.365866246084629,
+      "flagged_count": 145,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "940c5969-1037-4f02-810b-6d4c89b0582b",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 31,
+      "wall_count_raw": 54,
+      "wall_reduction_pct": 42.592592592592595,
+      "mean_width_delta_cm": 4.188526599999998,
+      "mean_height_delta_cm": 3.1108674193548547,
+      "floor_gap_count": 3,
+      "floor_gap_median_cm": 5.14111803344274,
+      "flagged_count": 4,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "9419424d-2dd9-4dd2-a9d9-e029e32c1f28",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 52,
+      "wall_count_raw": 83,
+      "wall_reduction_pct": 37.34939759036144,
+      "mean_width_delta_cm": 5.647922882352941,
+      "mean_height_delta_cm": 17.442700384615385,
+      "floor_gap_count": 12,
+      "floor_gap_median_cm": 7.233690015862354,
+      "flagged_count": 17,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "945b16b9-0ebf-409e-af08-aab7672801d2",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 46,
+      "wall_count_raw": 71,
+      "wall_reduction_pct": 35.2112676056338,
+      "mean_width_delta_cm": 2.937442565217392,
+      "mean_height_delta_cm": 3.80946434782609,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 4.317263106511307,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "964a40ac-d9df-44e1-b64b-84e02b909004",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 55,
+      "wall_count_raw": 83,
+      "wall_reduction_pct": 33.734939759036145,
+      "mean_width_delta_cm": 4.080995074074074,
+      "mean_height_delta_cm": 5.704803454545445,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 7.087483309635111,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "97571caa-1065-4ac5-a385-2ec9758026dd",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 72,
+      "wall_count_raw": 119,
+      "wall_reduction_pct": 39.49579831932773,
+      "mean_width_delta_cm": 4.667013972222223,
+      "mean_height_delta_cm": 17.807156111111112,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 9.027939647709877,
+      "flagged_count": 26,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "9829323a-4939-45bf-ae66-b950b18ddf52",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 38,
+      "wall_count_raw": 63,
+      "wall_reduction_pct": 39.682539682539684,
+      "mean_width_delta_cm": 4.88517583783784,
+      "mean_height_delta_cm": 7.138840810810808,
+      "floor_gap_count": 5,
+      "floor_gap_median_cm": 11.51688090492589,
+      "flagged_count": 19,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "98472f6b-45bc-4814-a4b8-914f8f6976dd",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 44,
+      "wall_count_raw": 78,
+      "wall_reduction_pct": 43.58974358974359,
+      "mean_width_delta_cm": 4.529584159090908,
+      "mean_height_delta_cm": 9.709446511627908,
+      "floor_gap_count": 8,
+      "floor_gap_median_cm": 10.071424654129787,
+      "flagged_count": 21,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "992198d7-4dfe-4ecd-9fa0-b66fa6cac3fd",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 65,
+      "wall_count_raw": 104,
+      "wall_reduction_pct": 37.5,
+      "mean_width_delta_cm": 4.259945092307692,
+      "mean_height_delta_cm": 12.132304307692314,
+      "floor_gap_count": 12,
+      "floor_gap_median_cm": 9.329599616966982,
+      "flagged_count": 15,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "99ce0ab2-eaac-406c-9fa2-707d7dbe30c5",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 72,
+      "wall_count_raw": 117,
+      "wall_reduction_pct": 38.46153846153846,
+      "mean_width_delta_cm": 3.770594499999999,
+      "mean_height_delta_cm": 32.84273859154931,
+      "floor_gap_count": 17,
+      "floor_gap_median_cm": 6.257819157263307,
+      "flagged_count": 70,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "9bb4ada4-60fb-4ab0-8e05-de49acc92623",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 42,
+      "wall_count_raw": 66,
+      "wall_reduction_pct": 36.36363636363637,
+      "mean_width_delta_cm": 5.498693119047622,
+      "mean_height_delta_cm": 3.144278048780503,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 10.422295240844527,
+      "flagged_count": 25,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "9bc73438-328e-440e-a4be-25efa61d3b7c",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 53,
+      "wall_count_raw": 87,
+      "wall_reduction_pct": 39.08045977011494,
+      "mean_width_delta_cm": 5.9345909183673475,
+      "mean_height_delta_cm": 12.088070408163269,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 9.55034416661324,
+      "flagged_count": 15,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "9bdb3966-1a42-44b8-a033-07cdcab74bbb",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 76,
+      "wall_count_raw": 124,
+      "wall_reduction_pct": 38.70967741935484,
+      "mean_width_delta_cm": 2.86795810810811,
+      "mean_height_delta_cm": 5.055928533333326,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 7.068968141506921,
+      "flagged_count": 12,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "9bdc330e-6144-499b-9c70-3fc6f0c4ebf3",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 93,
+      "wall_count_raw": 147,
+      "wall_reduction_pct": 36.73469387755102,
+      "mean_width_delta_cm": 4.787306236559138,
+      "mean_height_delta_cm": 31.442954301075265,
+      "floor_gap_count": 20,
+      "floor_gap_median_cm": 9.378856323269614,
+      "flagged_count": 59,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "9c07bf97-56cd-4d82-a99d-00809d1d8537",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 63,
+      "wall_count_raw": 93,
+      "wall_reduction_pct": 32.25806451612904,
+      "mean_width_delta_cm": 6.45359600952381,
+      "mean_height_delta_cm": 1.9992707936508045,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 5.900589804133397,
+      "flagged_count": 10,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "9c42b8bc-b55c-427b-b695-9d073c5f8a75",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 125,
+      "wall_count_raw": 215,
+      "wall_reduction_pct": 41.860465116279066,
+      "mean_width_delta_cm": 5.080679430645159,
+      "mean_height_delta_cm": 11.677629733870969,
+      "floor_gap_count": 26,
+      "floor_gap_median_cm": 9.119774566192653,
+      "flagged_count": 23,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "9c80d7ae-2804-4b2f-83bb-544927398846",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 99,
+      "wall_count_raw": 157,
+      "wall_reduction_pct": 36.94267515923567,
+      "mean_width_delta_cm": 6.731097030612245,
+      "mean_height_delta_cm": 6.94666545454545,
+      "floor_gap_count": 21,
+      "floor_gap_median_cm": 8.535106836327632,
+      "flagged_count": 21,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "9dce7b8f-036f-42bb-9645-a1b5cc17fbd1",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 53,
+      "wall_count_raw": 84,
+      "wall_reduction_pct": 36.904761904761905,
+      "mean_width_delta_cm": 6.734377509433962,
+      "mean_height_delta_cm": 1.4074471698113176,
+      "floor_gap_count": 14,
+      "floor_gap_median_cm": 12.888654306111775,
+      "flagged_count": 36,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "a085ad69-b4d4-4296-bc5e-731a0cceec5e",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 57,
+      "wall_count_raw": 88,
+      "wall_reduction_pct": 35.22727272727273,
+      "mean_width_delta_cm": 3.7156513392857096,
+      "mean_height_delta_cm": 6.185957368421061,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 7.892716038537257,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "a1ac389f-7406-4ddf-a270-d9a5e72dbf51",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 75,
+      "wall_count_raw": 127,
+      "wall_reduction_pct": 40.944881889763785,
+      "mean_width_delta_cm": 3.0577669864864854,
+      "mean_height_delta_cm": 5.370347866666672,
+      "floor_gap_count": 8,
+      "floor_gap_median_cm": 6.424549103965729,
+      "flagged_count": 5,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "a317a543-06cf-4f1b-97d2-139c26c1cb13",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 137,
+      "wall_count_raw": 248,
+      "wall_reduction_pct": 44.75806451612904,
+      "mean_width_delta_cm": 3.572892112781955,
+      "mean_height_delta_cm": 19.61151847500001,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 7.689231548999928,
+      "flagged_count": 35,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "a3997c27-0367-483e-a462-64847105997d",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 51,
+      "wall_count_raw": 75,
+      "wall_reduction_pct": 31.999999999999996,
+      "mean_width_delta_cm": 4.3991046700000025,
+      "mean_height_delta_cm": 6.522918039215697,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 4.8235066245063525,
+      "flagged_count": 7,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "a430ffa9-a314-4352-8b54-dfbd04634861",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 65,
+      "wall_count_raw": 102,
+      "wall_reduction_pct": 36.274509803921575,
+      "mean_width_delta_cm": 5.052900938461539,
+      "mean_height_delta_cm": 7.35792676923077,
+      "floor_gap_count": 18,
+      "floor_gap_median_cm": 8.553748656226222,
+      "flagged_count": 16,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "a443b86f-c86a-47a7-abef-0a56893c99b0",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 77,
+      "wall_count_raw": 122,
+      "wall_reduction_pct": 36.885245901639344,
+      "mean_width_delta_cm": 4.360989128571426,
+      "mean_height_delta_cm": 1.4091042337662354,
+      "floor_gap_count": 21,
+      "floor_gap_median_cm": 8.154478911750973,
+      "flagged_count": 21,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "a492a5d6-ab9f-4b1e-bbfe-4762c1370a40",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 59,
+      "wall_count_raw": 96,
+      "wall_reduction_pct": 38.541666666666664,
+      "mean_width_delta_cm": 5.672487543859649,
+      "mean_height_delta_cm": 14.302441071428563,
+      "floor_gap_count": 17,
+      "floor_gap_median_cm": 7.885181010499309,
+      "flagged_count": 27,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "a4d6eef3-6107-45a3-bd37-3cf2ef4e9efb",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 56,
+      "wall_count_raw": 82,
+      "wall_reduction_pct": 31.707317073170728,
+      "mean_width_delta_cm": 5.942182246296299,
+      "mean_height_delta_cm": 3.097892321428556,
+      "floor_gap_count": 18,
+      "floor_gap_median_cm": 10.37171879058608,
+      "flagged_count": 34,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "a6cb04fa-e84a-4641-a667-b4dd05dd7d41",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 49,
+      "wall_count_raw": 76,
+      "wall_reduction_pct": 35.526315789473685,
+      "mean_width_delta_cm": 7.419269604166664,
+      "mean_height_delta_cm": 7.2768161224489845,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 8.860562992201418,
+      "flagged_count": 14,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "a7493443-96ef-4f53-b9fe-0f91969e1ba4",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 43,
+      "wall_count_raw": 67,
+      "wall_reduction_pct": 35.820895522388064,
+      "mean_width_delta_cm": 3.8362133720930247,
+      "mean_height_delta_cm": 1.9311766666666759,
+      "floor_gap_count": 12,
+      "floor_gap_median_cm": 6.653164328792105,
+      "flagged_count": 1,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "a8a3b04b-42d0-4468-8b3a-5e2135b9313b",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 52,
+      "wall_count_raw": 84,
+      "wall_reduction_pct": 38.095238095238095,
+      "mean_width_delta_cm": 4.9514479615384674,
+      "mean_height_delta_cm": 2.0737698076923006,
+      "floor_gap_count": 11,
+      "floor_gap_median_cm": 7.5829517063861855,
+      "flagged_count": 2,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "a8aca518-ee19-4cef-8df9-1b574c2d43d1",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 73,
+      "wall_count_raw": 116,
+      "wall_reduction_pct": 37.06896551724138,
+      "mean_width_delta_cm": 3.817228630136981,
+      "mean_height_delta_cm": 159.86877215068495,
+      "floor_gap_count": 28,
+      "floor_gap_median_cm": 6.539023754493984,
+      "flagged_count": 48,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "aa047931-2b45-497d-a093-f637a2934699",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 83,
+      "wall_count_raw": 135,
+      "wall_reduction_pct": 38.51851851851852,
+      "mean_width_delta_cm": 4.446080129870129,
+      "mean_height_delta_cm": 10.474780000000006,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 7.742859320571019,
+      "flagged_count": 27,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "ac3e36b7-ae26-4ab2-9e6a-ab27c4324200",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 43,
+      "wall_count_raw": 65,
+      "wall_reduction_pct": 33.84615384615385,
+      "mean_width_delta_cm": 5.287530023255814,
+      "mean_height_delta_cm": 1.288697441860453,
+      "floor_gap_count": 14,
+      "floor_gap_median_cm": 8.003776314261607,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "ad0ee87f-5986-4d5e-9aa9-3bf1a5acf789",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 88,
+      "wall_count_raw": 147,
+      "wall_reduction_pct": 40.136054421768705,
+      "mean_width_delta_cm": 4.076521724137933,
+      "mean_height_delta_cm": 4.555956477272736,
+      "floor_gap_count": 21,
+      "floor_gap_median_cm": 8.451797261748013,
+      "flagged_count": 18,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "ad2243cf-dac2-4f43-aa8d-37d50dc46a33",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 42,
+      "wall_count_raw": 61,
+      "wall_reduction_pct": 31.147540983606557,
+      "mean_width_delta_cm": 5.3703265952380965,
+      "mean_height_delta_cm": 3.4689914285714347,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 7.8417404611051715,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "aed12163-5637-4bfd-90bf-75ab13094d83",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 47,
+      "wall_count_raw": 72,
+      "wall_reduction_pct": 34.72222222222222,
+      "mean_width_delta_cm": 4.342114170212765,
+      "mean_height_delta_cm": 2.505995106382984,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 5.085175721731343,
+      "flagged_count": 1,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "b01824fc-be43-451f-bc6e-aaab701c144d",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 49,
+      "wall_count_raw": 80,
+      "wall_reduction_pct": 38.74999999999999,
+      "mean_width_delta_cm": 4.158346375,
+      "mean_height_delta_cm": 5.231544489795916,
+      "floor_gap_count": 12,
+      "floor_gap_median_cm": 6.601687473780224,
+      "flagged_count": 6,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "b4b6f3ed-7bfd-43a8-aeed-520b558bfa2b",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 63,
+      "wall_count_raw": 104,
+      "wall_reduction_pct": 39.42307692307693,
+      "mean_width_delta_cm": 10.13610970634921,
+      "mean_height_delta_cm": 15.177717460317458,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 9.399614033332515,
+      "flagged_count": 16,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "b4f7407a-5941-4165-947a-a726dc432c69",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 43,
+      "wall_count_raw": 63,
+      "wall_reduction_pct": 31.746031746031743,
+      "mean_width_delta_cm": 3.273042441860466,
+      "mean_height_delta_cm": 2.8204111627906827,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 5.706998561589739,
+      "flagged_count": 1,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "b53c11aa-8db7-4aad-a24d-3ffa9eeff5de",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 91,
+      "wall_count_raw": 149,
+      "wall_reduction_pct": 38.92617449664429,
+      "mean_width_delta_cm": 7.704561301190479,
+      "mean_height_delta_cm": 7.073102758620691,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 12.328014868490197,
+      "flagged_count": 48,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "b65126ae-ccca-4032-876f-e9c1c059862c",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 70,
+      "wall_count_raw": 116,
+      "wall_reduction_pct": 39.6551724137931,
+      "mean_width_delta_cm": 4.849257620000001,
+      "mean_height_delta_cm": 8.76569231884058,
+      "floor_gap_count": 18,
+      "floor_gap_median_cm": 6.940928237536022,
+      "flagged_count": 10,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "b8782b87-5800-42dd-8926-07d8f11cafc0",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 61,
+      "wall_count_raw": 94,
+      "wall_reduction_pct": 35.1063829787234,
+      "mean_width_delta_cm": 4.072709688524591,
+      "mean_height_delta_cm": 1.843902622950831,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 6.992174086466891,
+      "flagged_count": 2,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "b8cefbc4-bb4e-4d53-be56-990780166cae",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 107,
+      "wall_count_raw": 176,
+      "wall_reduction_pct": 39.20454545454546,
+      "mean_width_delta_cm": 3.0891393962264173,
+      "mean_height_delta_cm": 8.47529915887851,
+      "floor_gap_count": 23,
+      "floor_gap_median_cm": 7.384202201518835,
+      "flagged_count": 21,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "b8def755-9829-4141-8ecb-3e71ef446d0d",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 74,
+      "wall_count_raw": 126,
+      "wall_reduction_pct": 41.269841269841265,
+      "mean_width_delta_cm": 3.2677566267605624,
+      "mean_height_delta_cm": 7.980870864864869,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 7.83025510454756,
+      "flagged_count": 12,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "b8f923d9-dc6a-4cc2-b99c-b98bb7d01f57",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 16,
+      "wall_count_raw": 29,
+      "wall_reduction_pct": 44.827586206896555,
+      "mean_width_delta_cm": 1.465484375000005,
+      "mean_height_delta_cm": 5.585614285714291,
+      "floor_gap_count": 3,
+      "floor_gap_median_cm": 4.692832534903821,
+      "flagged_count": 3,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "b9575f6d-aa02-4540-ba49-d8e823a41067",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 53,
+      "wall_count_raw": 75,
+      "wall_reduction_pct": 29.333333333333332,
+      "mean_width_delta_cm": 3.975946528301886,
+      "mean_height_delta_cm": 5.765096415094339,
+      "floor_gap_count": 14,
+      "floor_gap_median_cm": 4.149073919857354,
+      "flagged_count": 8,
+      "flags": [
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "bad532ea-75de-411a-a390-77f4d6a93ff8",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 67,
+      "wall_count_raw": 115,
+      "wall_reduction_pct": 41.73913043478261,
+      "mean_width_delta_cm": 13.271925360655734,
+      "mean_height_delta_cm": 135.69627042622952,
+      "floor_gap_count": 9,
+      "floor_gap_median_cm": 5.965328589027949,
+      "flagged_count": 38,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "bb00df25-e7be-420e-8ad1-1f9be60a4c4a",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 55,
+      "wall_count_raw": 82,
+      "wall_reduction_pct": 32.92682926829268,
+      "mean_width_delta_cm": 5.8738258581818155,
+      "mean_height_delta_cm": 1.510726909090908,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 9.823137663226683,
+      "flagged_count": 2,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "bb013161-a5cf-4dfc-9b88-d2c851f92aee",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 66,
+      "wall_count_raw": 98,
+      "wall_reduction_pct": 32.6530612244898,
+      "mean_width_delta_cm": 3.94905290909091,
+      "mean_height_delta_cm": 19.159997424242423,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 6.512765775693802,
+      "flagged_count": 19,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "bc2779a4-d0a2-4ba8-abbf-10129d3f82de",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 115,
+      "wall_count_raw": 196,
+      "wall_reduction_pct": 41.326530612244895,
+      "mean_width_delta_cm": 3.017370679464283,
+      "mean_height_delta_cm": 12.642539561403508,
+      "floor_gap_count": 20,
+      "floor_gap_median_cm": 7.176987681813962,
+      "flagged_count": 36,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "bfd05652-9331-4260-886d-1b6779ee1bfa",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 83,
+      "wall_count_raw": 133,
+      "wall_reduction_pct": 37.59398496240601,
+      "mean_width_delta_cm": 5.617012674698795,
+      "mean_height_delta_cm": 3.1717563855421735,
+      "floor_gap_count": 26,
+      "floor_gap_median_cm": 8.661511357295975,
+      "flagged_count": 20,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "c001b1ca-ea07-472d-b888-6ab457d4e7d9",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 43,
+      "wall_count_raw": 77,
+      "wall_reduction_pct": 44.15584415584416,
+      "mean_width_delta_cm": 5.8669918139534865,
+      "mean_height_delta_cm": 5.494325348837202,
+      "floor_gap_count": 8,
+      "floor_gap_median_cm": 12.376924224680707,
+      "flagged_count": 19,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "c2800052-b0e7-4c30-a881-f813cb0b2043",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 70,
+      "wall_count_raw": 113,
+      "wall_reduction_pct": 38.05309734513275,
+      "mean_width_delta_cm": 5.922221828571427,
+      "mean_height_delta_cm": 215.38471271428568,
+      "floor_gap_count": 26,
+      "floor_gap_median_cm": 9.9039576177729,
+      "flagged_count": 65,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "c3ddcac0-827d-48dc-9223-4b219d874fa5",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 58,
+      "wall_count_raw": 94,
+      "wall_reduction_pct": 38.297872340425535,
+      "mean_width_delta_cm": 3.613215620689657,
+      "mean_height_delta_cm": 3.3273500000000036,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 6.857148049785912,
+      "flagged_count": 17,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "c72ad855-9e52-46f1-886d-a9f37911521f",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 50,
+      "wall_count_raw": 82,
+      "wall_reduction_pct": 39.02439024390244,
+      "mean_width_delta_cm": 4.335712062499999,
+      "mean_height_delta_cm": 4.377884957446802,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 8.973021831827102,
+      "flagged_count": 7,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "c7898e89-b45b-47f3-96b7-8c1fa96ef9fd",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 34,
+      "wall_count_raw": 61,
+      "wall_reduction_pct": 44.26229508196722,
+      "mean_width_delta_cm": 3.5389210416666628,
+      "mean_height_delta_cm": 8.176076363636364,
+      "floor_gap_count": 4,
+      "floor_gap_median_cm": 8.876926361931643,
+      "flagged_count": 2,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "c7f2456f-91fe-4aaa-a9ba-d886ec8e0648",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 52,
+      "wall_count_raw": 80,
+      "wall_reduction_pct": 35.0,
+      "mean_width_delta_cm": 4.225934538461538,
+      "mean_height_delta_cm": 1.8714267307692465,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 6.8304350343361335,
+      "flagged_count": 2,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "c814dd8d-190b-4da2-ae80-d41c71e2b797",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 40,
+      "wall_count_raw": 61,
+      "wall_reduction_pct": 34.42622950819673,
+      "mean_width_delta_cm": 5.169019300000005,
+      "mean_height_delta_cm": 1.394200000000001,
+      "floor_gap_count": 11,
+      "floor_gap_median_cm": 8.071255528558776,
+      "flagged_count": 1,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "c87c1e25-ff00-44ec-b823-b0966c81af70",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 75,
+      "wall_count_raw": 123,
+      "wall_reduction_pct": 39.02439024390244,
+      "mean_width_delta_cm": 3.595779882432434,
+      "mean_height_delta_cm": 16.74456908108108,
+      "floor_gap_count": 12,
+      "floor_gap_median_cm": 6.968229996561998,
+      "flagged_count": 19,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "c9667c39-5473-492c-8ca0-aa590d891a71",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 64,
+      "wall_count_raw": 100,
+      "wall_reduction_pct": 36.0,
+      "mean_width_delta_cm": 5.096483828125002,
+      "mean_height_delta_cm": 5.535818437500009,
+      "floor_gap_count": 11,
+      "floor_gap_median_cm": 8.02332870833143,
+      "flagged_count": 5,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "c9a43a7c-7171-484c-ac98-54f9ba59b6e6",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 100,
+      "wall_count_raw": 154,
+      "wall_reduction_pct": 35.064935064935064,
+      "mean_width_delta_cm": 4.1588066363636385,
+      "mean_height_delta_cm": 7.176774937499996,
+      "floor_gap_count": 24,
+      "floor_gap_median_cm": 6.9779021021091765,
+      "flagged_count": 16,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "cb711a0b-6e8d-4ae6-b008-af3297446dcc",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 88,
+      "wall_count_raw": 146,
+      "wall_reduction_pct": 39.726027397260275,
+      "mean_width_delta_cm": 7.554534988372092,
+      "mean_height_delta_cm": 3.439398616279065,
+      "floor_gap_count": 17,
+      "floor_gap_median_cm": 6.591267386131126,
+      "flagged_count": 9,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "cf982769-994b-4193-a621-91d46d1a3344",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 47,
+      "wall_count_raw": 84,
+      "wall_reduction_pct": 44.047619047619044,
+      "mean_width_delta_cm": 6.230150936170216,
+      "mean_height_delta_cm": 16.581159411764702,
+      "floor_gap_count": 6,
+      "floor_gap_median_cm": 7.273786202292166,
+      "flagged_count": 21,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "d28b528a-475b-4ac0-a38d-ee992cd877db",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 119,
+      "wall_count_raw": 192,
+      "wall_reduction_pct": 38.020833333333336,
+      "mean_width_delta_cm": 5.130575456140355,
+      "mean_height_delta_cm": 16.38302203571429,
+      "floor_gap_count": 34,
+      "floor_gap_median_cm": 8.923147853256697,
+      "flagged_count": 35,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "d32d5562-5763-4c71-a816-6732c638fa6a",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 58,
+      "wall_count_raw": 95,
+      "wall_reduction_pct": 38.94736842105263,
+      "mean_width_delta_cm": 3.706735192982453,
+      "mean_height_delta_cm": 13.957352586206888,
+      "floor_gap_count": 14,
+      "floor_gap_median_cm": 9.061582929993971,
+      "flagged_count": 20,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "d39db17d-0f12-472b-b4ae-0e6e5ce702e1",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 76,
+      "wall_count_raw": 124,
+      "wall_reduction_pct": 38.70967741935484,
+      "mean_width_delta_cm": 6.355123219178083,
+      "mean_height_delta_cm": 9.417907105263154,
+      "floor_gap_count": 20,
+      "floor_gap_median_cm": 9.33243068123656,
+      "flagged_count": 13,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "d4665def-0566-4ccc-aa62-8d562ec6e424",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 30,
+      "wall_count_raw": 50,
+      "wall_reduction_pct": 40.0,
+      "mean_width_delta_cm": 4.241462433333343,
+      "mean_height_delta_cm": 2.231663666666657,
+      "floor_gap_count": 8,
+      "floor_gap_median_cm": 6.687969375119916,
+      "flagged_count": 2,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "d683f65d-ad08-4f69-ab23-dbd7ec1bcaed",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 99,
+      "wall_count_raw": 151,
+      "wall_reduction_pct": 34.437086092715234,
+      "mean_width_delta_cm": 4.156114275789473,
+      "mean_height_delta_cm": 15.95573144329897,
+      "floor_gap_count": 27,
+      "floor_gap_median_cm": 8.450545315916695,
+      "flagged_count": 14,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "d7f1aa19-5ca9-4e1b-ac1a-c86d63f9ede7",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 29,
+      "wall_count_raw": 43,
+      "wall_reduction_pct": 32.55813953488372,
+      "mean_width_delta_cm": 5.038468448275866,
+      "mean_height_delta_cm": 2.7064489655172626,
+      "floor_gap_count": 9,
+      "floor_gap_median_cm": 8.471608791850246,
+      "flagged_count": 7,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "d8308bfc-c2c1-42bd-8503-282571708b8c",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 73,
+      "wall_count_raw": 109,
+      "wall_reduction_pct": 33.02752293577982,
+      "mean_width_delta_cm": 5.435185127397257,
+      "mean_height_delta_cm": 19.289273150684927,
+      "floor_gap_count": 21,
+      "floor_gap_median_cm": 7.753073040648976,
+      "flagged_count": 18,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "d904fdad-775d-4382-ba44-a4289889745e",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 48,
+      "wall_count_raw": 73,
+      "wall_reduction_pct": 34.24657534246576,
+      "mean_width_delta_cm": 8.765132375000002,
+      "mean_height_delta_cm": 11.40979104166666,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 11.289329985663318,
+      "flagged_count": 34,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "d928da15-65c0-490c-84df-613a196930f0",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 43,
+      "wall_count_raw": 66,
+      "wall_reduction_pct": 34.84848484848485,
+      "mean_width_delta_cm": 4.312630162790693,
+      "mean_height_delta_cm": 1.9609641860465106,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 6.547345040108694,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "d98923f0-3373-4d3c-ba03-c0df5d8b29d8",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 42,
+      "wall_count_raw": 65,
+      "wall_reduction_pct": 35.38461538461538,
+      "mean_width_delta_cm": 4.081752047619049,
+      "mean_height_delta_cm": 3.626970952380948,
+      "floor_gap_count": 12,
+      "floor_gap_median_cm": 9.979398048833065,
+      "flagged_count": 3,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "dd4ba0e6-c9e0-444f-b815-9ad921cd3b87",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 52,
+      "wall_count_raw": 77,
+      "wall_reduction_pct": 32.467532467532465,
+      "mean_width_delta_cm": 6.29652394117646,
+      "mean_height_delta_cm": 29.478098846153838,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 10.493414023503423,
+      "flagged_count": 14,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "df1f5f4f-8801-4d5d-9c64-f0ea8e1ce027",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 39,
+      "wall_count_raw": 62,
+      "wall_reduction_pct": 37.096774193548384,
+      "mean_width_delta_cm": 3.276455897435902,
+      "mean_height_delta_cm": 2.4546225641025794,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 3.646754849289677,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "dfb88995-ff0a-4025-878b-b544364f8e92",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 52,
+      "wall_count_raw": 85,
+      "wall_reduction_pct": 38.8235294117647,
+      "mean_width_delta_cm": 4.236913153846155,
+      "mean_height_delta_cm": 6.937640288461538,
+      "floor_gap_count": 12,
+      "floor_gap_median_cm": 6.807954006661277,
+      "flagged_count": 8,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "e0155eef-34a5-4642-bca6-39b83ee42af1",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 83,
+      "wall_count_raw": 162,
+      "wall_reduction_pct": 48.76543209876543,
+      "mean_width_delta_cm": 12.48897792891566,
+      "mean_height_delta_cm": 313.3242939277108,
+      "floor_gap_count": 12,
+      "floor_gap_median_cm": 16.952577295725682,
+      "flagged_count": 79,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "e01a968a-24dd-4ca3-b46f-5aff03b1779f",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 42,
+      "wall_count_raw": 70,
+      "wall_reduction_pct": 40.0,
+      "mean_width_delta_cm": 3.2053149285714264,
+      "mean_height_delta_cm": 1.8457276190476117,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 4.760852596861371,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "e028bcc5-73ee-45f9-924b-d7badbc66caf",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 83,
+      "wall_count_raw": 124,
+      "wall_reduction_pct": 33.06451612903226,
+      "mean_width_delta_cm": 4.655564259259256,
+      "mean_height_delta_cm": 3.4475996341463375,
+      "floor_gap_count": 24,
+      "floor_gap_median_cm": 9.124627415632627,
+      "flagged_count": 10,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "e0796748-79fd-40ae-be1f-e5977a9fe1e5",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 69,
+      "wall_count_raw": 99,
+      "wall_reduction_pct": 30.303030303030297,
+      "mean_width_delta_cm": 6.448797567164179,
+      "mean_height_delta_cm": 8.162629565217378,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 10.34738214462988,
+      "flagged_count": 14,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "e496ca55-bafb-4b8b-b3f1-5f6fb5ae8c7e",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 115,
+      "wall_count_raw": 186,
+      "wall_reduction_pct": 38.17204301075269,
+      "mean_width_delta_cm": 4.692966316666663,
+      "mean_height_delta_cm": 7.0680080530973495,
+      "floor_gap_count": 28,
+      "floor_gap_median_cm": 6.954651790838366,
+      "flagged_count": 30,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "e4fe9821-2270-4d23-bc74-703743b5d282",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 59,
+      "wall_count_raw": 90,
+      "wall_reduction_pct": 34.44444444444444,
+      "mean_width_delta_cm": 6.109698,
+      "mean_height_delta_cm": 4.4788249152542345,
+      "floor_gap_count": 14,
+      "floor_gap_median_cm": 7.194641971361156,
+      "flagged_count": 11,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "e5adc187-70eb-4828-aa90-5fe3c46dfbce",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 56,
+      "wall_count_raw": 91,
+      "wall_reduction_pct": 38.46153846153846,
+      "mean_width_delta_cm": 4.238353357142856,
+      "mean_height_delta_cm": 6.958895892857153,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 8.421474552943298,
+      "flagged_count": 1,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "e661e7b6-303d-415c-b378-2d9dd2fbfd6f",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 75,
+      "wall_count_raw": 124,
+      "wall_reduction_pct": 39.516129032258064,
+      "mean_width_delta_cm": 3.9434691891891904,
+      "mean_height_delta_cm": 15.596053108108107,
+      "floor_gap_count": 18,
+      "floor_gap_median_cm": 8.411739379681507,
+      "flagged_count": 21,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "e721a943-1c4f-4bd6-b8a3-f9558de79921",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 38,
+      "wall_count_raw": 58,
+      "wall_reduction_pct": 34.48275862068966,
+      "mean_width_delta_cm": 4.107540789473687,
+      "mean_height_delta_cm": 5.110228947368414,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 5.767878471224954,
+      "flagged_count": 5,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "e7452ac7-517e-4321-9201-d52bf7f0cae9",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 78,
+      "wall_count_raw": 124,
+      "wall_reduction_pct": 37.096774193548384,
+      "mean_width_delta_cm": 5.091559346666666,
+      "mean_height_delta_cm": 15.429448051948059,
+      "floor_gap_count": 17,
+      "floor_gap_median_cm": 7.6260964480695375,
+      "flagged_count": 17,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "e909460f-1756-48e3-82e7-5e592a4975a7",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 59,
+      "wall_count_raw": 92,
+      "wall_reduction_pct": 35.86956521739131,
+      "mean_width_delta_cm": 3.943635440677964,
+      "mean_height_delta_cm": 2.077246779661009,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 6.072942770789476,
+      "flagged_count": 6,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "e93694c4-b9a9-4184-ab47-4d0d0a8504b2",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 39,
+      "wall_count_raw": 62,
+      "wall_reduction_pct": 37.096774193548384,
+      "mean_width_delta_cm": 2.906505076923076,
+      "mean_height_delta_cm": 2.381817948717967,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 4.014048640217611,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "e9a5d5e2-17c8-4879-89f2-f6a3af5cfd38",
+      "classification": "GREEN",
+      "match_rate": 1.0,
+      "wall_count_merged": 42,
+      "wall_count_raw": 59,
+      "wall_reduction_pct": 28.8135593220339,
+      "mean_width_delta_cm": 3.519055011904767,
+      "mean_height_delta_cm": 2.1386533333333193,
+      "floor_gap_count": 14,
+      "floor_gap_median_cm": 6.078657479209989,
+      "flagged_count": 0,
+      "flags": []
+    },
+    {
+      "uuid": "e9dddee6-297a-43f5-b862-90091889ea39",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 95,
+      "wall_count_raw": 163,
+      "wall_reduction_pct": 41.717791411042946,
+      "mean_width_delta_cm": 4.152038977777776,
+      "mean_height_delta_cm": 3.9624111157894726,
+      "floor_gap_count": 20,
+      "floor_gap_median_cm": 6.72737965662062,
+      "flagged_count": 25,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "e9f0631f-ae34-4d30-af21-d3369327755f",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 139,
+      "wall_count_raw": 233,
+      "wall_reduction_pct": 40.34334763948498,
+      "mean_width_delta_cm": 3.055733155555556,
+      "mean_height_delta_cm": 8.85556607194245,
+      "floor_gap_count": 28,
+      "floor_gap_median_cm": 7.739340052801288,
+      "flagged_count": 16,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "ebd94f02-abc2-476d-8bf9-9bdfbc2a58dd",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 82,
+      "wall_count_raw": 131,
+      "wall_reduction_pct": 37.40458015267175,
+      "mean_width_delta_cm": 5.1561522,
+      "mean_height_delta_cm": 6.285243125000008,
+      "floor_gap_count": 20,
+      "floor_gap_median_cm": 9.160036874836658,
+      "flagged_count": 12,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "ebded652-9e37-4267-992a-8b575c9e1016",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 52,
+      "wall_count_raw": 84,
+      "wall_reduction_pct": 38.095238095238095,
+      "mean_width_delta_cm": 4.872198294117647,
+      "mean_height_delta_cm": 6.754623269230752,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 7.563272505077103,
+      "flagged_count": 8,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "ed5231c3-375e-426e-b341-62f6d2b0b3f5",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 42,
+      "wall_count_raw": 71,
+      "wall_reduction_pct": 40.845070422535215,
+      "mean_width_delta_cm": 5.370874000000002,
+      "mean_height_delta_cm": 3.99063595238094,
+      "floor_gap_count": 9,
+      "floor_gap_median_cm": 9.555528623882308,
+      "flagged_count": 2,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "ed646d77-0d2b-4d72-b20d-be6aac6aa669",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 107,
+      "wall_count_raw": 178,
+      "wall_reduction_pct": 39.8876404494382,
+      "mean_width_delta_cm": 3.755208838095237,
+      "mean_height_delta_cm": 1.350393551401882,
+      "floor_gap_count": 28,
+      "floor_gap_median_cm": 6.79473872179989,
+      "flagged_count": 3,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "ed89b2f2-38dd-455f-a3df-13d92cdc1f8b",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 42,
+      "wall_count_raw": 66,
+      "wall_reduction_pct": 36.36363636363637,
+      "mean_width_delta_cm": 3.7432354761904776,
+      "mean_height_delta_cm": 7.681696666666672,
+      "floor_gap_count": 13,
+      "floor_gap_median_cm": 5.816269001867673,
+      "flagged_count": 7,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm"
+      ]
+    },
+    {
+      "uuid": "eda4954e-036f-4e74-817f-23ce2d309aa3",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 34,
+      "wall_count_raw": 55,
+      "wall_reduction_pct": 38.18181818181819,
+      "mean_width_delta_cm": 4.757708558823528,
+      "mean_height_delta_cm": 2.904720294117657,
+      "floor_gap_count": 11,
+      "floor_gap_median_cm": 8.389418848001123,
+      "flagged_count": 4,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "ef083e3f-47b6-42f9-a898-ceb41916e667",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 66,
+      "wall_count_raw": 98,
+      "wall_reduction_pct": 32.6530612244898,
+      "mean_width_delta_cm": 5.204120954545454,
+      "mean_height_delta_cm": 4.156151666666684,
+      "floor_gap_count": 19,
+      "floor_gap_median_cm": 7.619291404601084,
+      "flagged_count": 4,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "ef522d94-2279-4b9e-bd8f-90bb37043910",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 56,
+      "wall_count_raw": 92,
+      "wall_reduction_pct": 39.13043478260869,
+      "mean_width_delta_cm": 4.660096660714288,
+      "mean_height_delta_cm": 3.072441428571445,
+      "floor_gap_count": 17,
+      "floor_gap_median_cm": 8.790946104271896,
+      "flagged_count": 4,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "f16973df-10b9-4369-9f0d-dd295a34d970",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 46,
+      "wall_count_raw": 67,
+      "wall_reduction_pct": 31.343283582089555,
+      "mean_width_delta_cm": 3.503378760869568,
+      "mean_height_delta_cm": 1.8104623913043316,
+      "floor_gap_count": 11,
+      "floor_gap_median_cm": 6.416340118062563,
+      "flagged_count": 2,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "f332f739-1779-496c-a207-7b1c93daa8bb",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 110,
+      "wall_count_raw": 169,
+      "wall_reduction_pct": 34.9112426035503,
+      "mean_width_delta_cm": 4.189186175754717,
+      "mean_height_delta_cm": 4.041284909090916,
+      "floor_gap_count": 23,
+      "floor_gap_median_cm": 8.286128587907807,
+      "flagged_count": 9,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "f40dcc9f-b97b-4bef-8b40-ba011aabf0bd",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 45,
+      "wall_count_raw": 69,
+      "wall_reduction_pct": 34.78260869565217,
+      "mean_width_delta_cm": 6.274708377777777,
+      "mean_height_delta_cm": 11.083618000000017,
+      "floor_gap_count": 16,
+      "floor_gap_median_cm": 8.237047145426454,
+      "flagged_count": 11,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "f46b4d89-ae67-405c-af8b-eb7396b06ef8",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 51,
+      "wall_count_raw": 84,
+      "wall_reduction_pct": 39.28571428571429,
+      "mean_width_delta_cm": 4.267190857142855,
+      "mean_height_delta_cm": 11.760790196078435,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 7.407338433159503,
+      "flagged_count": 11,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "f919a443-ea71-4391-9bcb-bff1cf08c45d",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 49,
+      "wall_count_raw": 71,
+      "wall_reduction_pct": 30.98591549295775,
+      "mean_width_delta_cm": 4.484662693877551,
+      "mean_height_delta_cm": 2.6659607142857316,
+      "floor_gap_count": 6,
+      "floor_gap_median_cm": 5.9910144160588406,
+      "flagged_count": 3,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "f932e0d3-b002-4f89-97e7-ec54d4703506",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 80,
+      "wall_count_raw": 129,
+      "wall_reduction_pct": 37.98449612403101,
+      "mean_width_delta_cm": 4.322988844303797,
+      "mean_height_delta_cm": 2.4555330000000004,
+      "floor_gap_count": 20,
+      "floor_gap_median_cm": 8.004619802387907,
+      "flagged_count": 17,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_height_delta > 20cm",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "fa45599d-b1aa-4d6d-b4b4-2c823108398f",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 58,
+      "wall_count_raw": 96,
+      "wall_reduction_pct": 39.583333333333336,
+      "mean_width_delta_cm": 4.099702999999999,
+      "mean_height_delta_cm": 25.457623965517236,
+      "floor_gap_count": 10,
+      "floor_gap_median_cm": 8.82546159565852,
+      "flagged_count": 49,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "fb279aa5-092f-4146-83ff-b557415e7ba4",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 50,
+      "wall_count_raw": 77,
+      "wall_reduction_pct": 35.064935064935064,
+      "mean_width_delta_cm": 7.049436632653059,
+      "mean_height_delta_cm": 9.494335918367348,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 8.405394178055579,
+      "flagged_count": 11,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "fc46b0be-a3aa-4a28-820c-a16691bcdd61",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 46,
+      "wall_count_raw": 70,
+      "wall_reduction_pct": 34.285714285714285,
+      "mean_width_delta_cm": 4.6710502391304365,
+      "mean_height_delta_cm": 2.6774858695652344,
+      "floor_gap_count": 15,
+      "floor_gap_median_cm": 7.321321142535774,
+      "flagged_count": 0,
+      "flags": [
+        "YELLOW: wall_reduction > 30%"
+      ]
+    },
+    {
+      "uuid": "fd6ee1a7-7243-4c9b-ad7a-5d146b7f8706",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 56,
+      "wall_count_raw": 84,
+      "wall_reduction_pct": 33.333333333333336,
+      "mean_width_delta_cm": 7.973427262500001,
+      "mean_height_delta_cm": 1.6511123214285597,
+      "floor_gap_count": 14,
+      "floor_gap_median_cm": 6.7462838808786305,
+      "flagged_count": 10,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    },
+    {
+      "uuid": "fe829d59-c9f1-4194-a40b-39600a4f27b6",
+      "classification": "RED",
+      "match_rate": 1.0,
+      "wall_count_merged": 94,
+      "wall_count_raw": 152,
+      "wall_reduction_pct": 38.1578947368421,
+      "mean_width_delta_cm": 3.4491647872340416,
+      "mean_height_delta_cm": 4.231241382978723,
+      "floor_gap_count": 20,
+      "floor_gap_median_cm": 8.027750063852427,
+      "flagged_count": 6,
+      "flags": [
+        "RED: max_height_delta > 50cm"
+      ]
+    },
+    {
+      "uuid": "feccbd0c-0420-4775-b5b7-49b99559947e",
+      "classification": "YELLOW",
+      "match_rate": 1.0,
+      "wall_count_merged": 58,
+      "wall_count_raw": 93,
+      "wall_reduction_pct": 37.634408602150536,
+      "mean_width_delta_cm": 5.799046250000001,
+      "mean_height_delta_cm": 2.324253508771936,
+      "floor_gap_count": 12,
+      "floor_gap_median_cm": 9.622380329708054,
+      "flagged_count": 14,
+      "flags": [
+        "YELLOW: wall_reduction > 30%",
+        "YELLOW: max_width_delta > 15cm"
+      ]
+    }
+  ],
+  "errors": []
+}

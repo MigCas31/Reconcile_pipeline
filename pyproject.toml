@@ -1,0 +1,79 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["reconcile*"]
+
+[project]
+name = "tirana"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "hypothesis",
+    "ruff",
+    "pytest",
+    "mypy",
+    "pre-commit",
+]
+gemini = [
+    "google-genai>=0.3.0",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+exclude = [
+    "pipeline-outputs",
+    "archive",
+    ".context",
+    "node_modules",
+    "__pycache__",
+    "artifacts",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "UP",   # pyupgrade
+    "RUF",  # ruff-specific rules
+]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+check_untyped_defs = true
+ignore_missing_imports = true
+exclude = [
+    "pipeline-outputs",
+    "archive",
+    ".context",
+    "artifacts",
+]
+
+[[tool.mypy.overrides]]
+module = [
+    "reconcile.*",
+    "reconcile_v2.*",
+    "reconcile_tiers.*",
+]
+ignore_errors = true

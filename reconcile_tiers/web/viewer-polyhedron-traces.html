@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Polyhedron Topology Traces</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./viewer-polyhedron-traces.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <aside>
+    <header>
+      <h1>Topology Traces</h1>
+      <input id="search" placeholder="UUID or room" autocomplete="off">
+      <div id="sidebar-stats">Loading...</div>
+    </header>
+    <div id="trace-list"></div>
+  </aside>
+  <main>
+    <div id="top-bar">
+      <button class="icon-btn" id="prev-trace" title="Previous trace">↑</button>
+      <button class="icon-btn" id="next-trace" title="Next trace">↓</button>
+      <div id="current">
+        <div id="current-title">Loading topology traces...</div>
+        <div id="current-meta"></div>
+      </div>
+      <div id="pill">-</div>
+    </div>
+    <div id="view-controls">
+      <div class="control-row">
+        <label for="frame-slider">Frame</label>
+        <input id="frame-slider" type="range" min="0" max="0" step="1" value="0">
+        <span id="frame-readout">0 / 0</span>
+      </div>
+      <div class="control-row">
+        <button class="icon-btn" id="prev-frame" title="Previous frame">←</button>
+        <button class="icon-btn" id="next-frame" title="Next frame">→</button>
+        <label class="check-row"><input id="edges-toggle" type="checkbox" checked> Edges</label>
+        <label class="check-row"><input id="ghost-toggle" type="checkbox" checked> Previous</label>
+      </div>
+    </div>
+    <div id="viewport">
+      <canvas id="view"></canvas>
+      <section id="step-panel">
+        <header>
+          <span id="step-title">Frame</span>
+          <span id="step-counts"></span>
+        </header>
+        <div id="step-body"></div>
+      </section>
+      <div id="status">Loading...</div>
+    </div>
+  </main>
+  <script type="module" src="./viewer-polyhedron-traces-main.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+{
+  "metrics": {
+    "05cecad4-119e-4dd2-beaf-d4af36973644": {
+      "n_ceiling_pieces": 8,
+      "n_dormers": 0,
+      "n_flat": 8,
+      "n_knee_walls": 0,
+      "n_oblique": 1,
+      "n_thermal_caps": 0,
+      "roof_type": "shed",
+      "tier": 5,
+      "total_ceiling_xz_area": 72.3136
+    },
+    "0d3f2993-8386-4130-8f1c-b2938c410828": {
+      "n_ceiling_pieces": 40,
+      "n_dormers": 1,
+      "n_flat": 3,
+      "n_knee_walls": 0,
+      "n_oblique": 3,
+      "n_thermal_caps": 0,
+      "roof_type": "gable",
+      "tier": 7,
+      "total_ceiling_xz_area": 216.2199
+    },
+    "16784bad-2cd9-4f4c-bb26-60355981cfe2": {
+      "n_ceiling_pieces": 31,
+      "n_dormers": 1,
+      "n_flat": 0,
+      "n_knee_walls": 0,
+      "n_oblique": 8,
+      "n_thermal_caps": 0,
+      "roof_type": "hip",
+      "tier": 8,
+      "total_ceiling_xz_area": 131.7744
+    },
+    "19459014-f39b-4bf6-945e-c5b50930dea3": {
+      "n_ceiling_pieces": 14,
+      "n_dormers": 0,
+      "n_flat": 0,
+      "n_knee_walls": 0,
+      "n_oblique": 2,
+      "n_thermal_caps": 0,
+      "roof_type": "gable",
+      "tier": 6,
+      "total_ceiling_xz_area": 157.978
+    },
+    "3297bc28-5d39-4358-bd2e-0f1183cae489": {
+      "n_ceiling_pieces": 15,
+      "n_dormers": 3,
+      "n_flat": 1,
+      "n_knee_walls": 0,
+      "n_oblique": 2,
+      "n_thermal_caps": 0,
+      "roof_type": "gable",
+      "tier": 7,
+      "total_ceiling_xz_area": 114.2504
+    },
+    "f40dcc9f-b97b-4bef-8b40-ba011aabf0bd": {
+      "n_ceiling_pieces": 9,
+      "n_dormers": 0,
+      "n_flat": 11,
+      "n_knee_walls": 0,
+      "n_oblique": 0,
+      "n_thermal_caps": 0,
+      "roof_type": "none",
+      "tier": 1,
+      "total_ceiling_xz_area": 122.8851
+    }
+  },
+  "tolerances": {
+    "integer_abs": 0,
+    "total_ceiling_xz_area_abs_m2": 0.05
+  }
+}

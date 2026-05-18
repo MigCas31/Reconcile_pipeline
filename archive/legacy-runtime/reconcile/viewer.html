@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Building 3D Viewer - Reconciliation Pipeline</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#111; color:#ddd; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; overflow:hidden; display:flex; }
+
+#sidebar {
+  width:280px; min-width:280px; height:100vh; background:#0d0d1a;
+  border-right:1px solid #222; display:flex; flex-direction:column; z-index:20;
+}
+#sidebar-header { padding:12px; border-bottom:1px solid #222; }
+#sidebar-header h1 { font-size:15px; font-weight:600; margin-bottom:8px; }
+#search { width:100%; padding:6px 10px; border-radius:6px; border:1px solid #333; background:#1a1a2e; color:#ddd; font-size:12px; outline:none; }
+#search:focus { border-color:#3a3aff; }
+#search::placeholder { color:#555; }
+#sidebar-stats { padding:6px 12px; font-size:10px; color:#555; border-bottom:1px solid #1a1a2a; }
+#building-list { flex:1; overflow-y:auto; }
+#building-list::-webkit-scrollbar { width:6px; }
+#building-list::-webkit-scrollbar-track { background:#0d0d1a; }
+#building-list::-webkit-scrollbar-thumb { background:#333; border-radius:3px; }
+
+.bldg-item {
+  padding:8px 12px; cursor:pointer; border-bottom:1px solid #1a1a2a;
+  transition:background .12s;
+}
+.bldg-item:hover { background:#1a1a2e; }
+.bldg-item.active { background:#1a1a3e; border-left:3px solid #3a3aff; }
+.bldg-addr { font-size:12px; font-weight:500; line-height:1.3; color:#ccc; }
+.bldg-meta { font-size:10px; color:#666; margin-top:2px; display:flex; gap:6px; }
+.bldg-meta .tag { padding:1px 5px; border-radius:3px; font-size:9px; font-weight:600; }
+.tag-GREEN { background:#1a3a1a; color:#4c4; }
+.tag-YELLOW { background:#3a3a1a; color:#cc4; }
+.tag-RED { background:#3a1a1a; color:#c44; }
+.tag-UNKNOWN { background:#2a2a2a; color:#888; }
+.stories-badge { color:#888; }
+.stories-badge.multi { color:#4ecdc4; }
+
+#viewport { flex:1; position:relative; }
+#controls-bar {
+  position:absolute; top:0; left:0; right:0; z-index:10;
+  padding:10px 14px; display:flex; align-items:center; gap:16px;
+  background:linear-gradient(to bottom, rgba(0,0,0,.7) 0%, transparent 100%);
+  pointer-events:none;
+}
+#controls-bar > * { pointer-events:auto; }
+.toggle-row { display:flex; flex-wrap:wrap; gap:6px 14px; font-size:11px; max-width:600px; }
+.toggle-row label { cursor:pointer; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+.toggle-row input { accent-color:#3a3aff; }
+#legend-box { font-size:10px; line-height:1.8; }
+#legend-box span { display:inline-block; width:10px; height:10px; border-radius:2px; vertical-align:middle; margin-right:3px; }
+.raw-split-compare {
+  display:flex; align-items:center; gap:6px; padding:4px 8px;
+  border:1px solid #2e3858; border-radius:6px; background:rgba(12, 20, 36, 0.9);
+  color:#d7e3ff; font-size:11px;
+}
+.raw-split-compare select {
+  background:#0f172a; color:#d7e3ff; border:1px solid #3a4a70; border-radius:4px;
+  padding:2px 6px; font-size:11px;
+}
+.raw-split-compare .status {
+  color:#9fb2d8; font-variant-numeric:tabular-nums;
+}
+
+#building-info {
+  position:absolute; bottom:10px; left:10px; right:10px;
+  font-size:11px; color:#666; z-index:10;
+}
+
+#pipeline-bar {
+  position:absolute; bottom:40px; left:0; right:0; z-index:10;
+  padding:8px 14px;
+  background:linear-gradient(to top, rgba(0,0,0,.7) 0%, transparent 100%);
+  pointer-events:none; display:flex; align-items:center; gap:8px; font-size:11px;
+}
+#pipeline-bar > * { pointer-events:auto; }
+.pipeline-step-pill {
+  padding:2px 8px; border-radius:4px; cursor:pointer; font-size:10px;
+  background:#222; color:#666;
+}
+.pipeline-step-pill.done { background:#1a3a1a; color:#4c4; }
+.pipeline-step-pill.active { background:#1a1a4a; color:#88f; border:1px solid #44f; }
+
+canvas { display:block; width:100%; height:100%; }
+
+#proposal-panel {
+  display:none; position:absolute; top:60px; left:10px; z-index:16;
+  background:rgba(13,13,26,0.92); border:1px solid #333; border-radius:8px;
+  padding:10px; font-size:11px; width:320px; max-height:70vh; overflow-y:auto;
+}
+#proposal-panel.visible { display:block; }
+#proposal-panel h3 { font-size:12px; margin-bottom:6px; color:#cde; }
+#proposal-panel .kv { display:grid; grid-template-columns:1fr auto; gap:2px 8px; margin-bottom:8px; }
+#proposal-panel .kv .k { color:#888; }
+#proposal-panel .kv .v { color:#ddd; text-align:right; font-variant-numeric:tabular-nums; }
+#proposal-panel .heuristic-row { margin-bottom:8px; padding:4px 6px; background:#1a1a2a; border-radius:4px; }
+#proposal-panel .action-row { display:flex; gap:6px; margin-bottom:8px; }
+#proposal-panel button.action {
+  flex:1; padding:6px 8px; border:1px solid #444; border-radius:4px; cursor:pointer;
+  color:#fff; font-weight:600; font-size:11px;
+}
+#proposal-panel button.accept { background:#166534; }
+#proposal-panel button.accept:hover { background:#22c55e; }
+#proposal-panel button.reject { background:#7f1d1d; }
+#proposal-panel button.reject:hover { background:#ef4444; }
+#proposal-panel button.skip { background:#334155; }
+#proposal-panel button.skip:hover { background:#64748b; }
+#proposal-panel button.split { background:#4c1d95; }
+#proposal-panel button.split:hover { background:#7c3aed; }
+#proposal-panel button.split.active { background:#7c3aed; border-color:#c4b5fd; }
+#proposal-panel .reasons { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:6px; }
+#proposal-panel .reason-chip {
+  font-size:10px; padding:2px 6px; border-radius:10px; background:#2a2a2a;
+  color:#aaa; cursor:pointer; border:1px solid #333;
+}
+#proposal-panel .reason-chip.on { background:#3a1a1a; color:#f88; border-color:#744; }
+#proposal-panel .status-line { color:#888; font-size:10px; min-height:14px; }
+
+#roof-rating-panel {
+  position:absolute; bottom:48px; right:10px; z-index:16;
+  background:rgba(13,13,26,0.92); border:1px solid #333; border-radius:8px;
+  padding:8px 10px; font-size:11px; display:flex; align-items:center; gap:8px;
+}
+#roof-rating-panel .label { color:#cde; font-weight:600; }
+#roof-rating-panel .rating-buttons { display:flex; gap:4px; }
+#roof-rating-panel button.rating-btn {
+  min-width:24px; padding:4px 7px; border:1px solid #444; border-radius:4px;
+  cursor:pointer; color:#ddd; background:#1a1a2e; font-size:11px;
+  font-variant-numeric:tabular-nums;
+}
+#roof-rating-panel button.rating-btn:hover { background:#2a2a3e; }
+#roof-rating-panel button.rating-btn.active { background:#3a3aff; color:#fff; border-color:#7a7aff; }
+#roof-rating-panel button.rating-btn[data-rating="1"].active { background:#7f1d1d; border-color:#ef4444; }
+#roof-rating-panel button.rating-btn[data-rating="2"].active { background:#9a3412; border-color:#f97316; }
+#roof-rating-panel button.rating-btn[data-rating="3"].active { background:#854d0e; border-color:#eab308; }
+#roof-rating-panel button.rating-btn[data-rating="4"].active { background:#3f6212; border-color:#84cc16; }
+#roof-rating-panel button.rating-btn[data-rating="5"].active { background:#166534; border-color:#22c55e; }
+#roof-rating-panel button.rating-btn.upstream { padding:4px 8px; }
+#roof-rating-panel button.rating-btn.upstream.active { background:#4c1d95; border-color:#a78bfa; color:#fff; }
+#roof-rating-panel .status { color:#666; font-size:10px; min-width:20px; }
+
+#queue-bar {
+  display:none; position:absolute; top:60px; right:10px; z-index:16;
+  background:rgba(13,13,26,0.92); border:1px solid #333; border-radius:8px;
+  padding:6px 8px; font-size:11px; display:none; align-items:center; gap:6px;
+}
+#queue-bar.visible { display:flex; }
+#queue-bar button {
+  padding:3px 8px; border:1px solid #444; border-radius:4px; cursor:pointer;
+  color:#ddd; background:#1a1a2e; font-size:11px;
+}
+#queue-bar button:hover { background:#2a2a3e; }
+#queue-bar button.primary { background:#166534; color:#fff; border-color:#22c55e; }
+#queue-bar button.primary:hover { background:#22c55e; }
+#queue-bar .counter { color:#aaa; font-variant-numeric:tabular-nums; }
+#queue-bar .counter strong { color:#fff; }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <div id="sidebar-header">
+    <h1>Building 3D Viewer</h1>
+    <input type="text" id="search" placeholder="Search address or UUID...">
+  </div>
+  <div id="sidebar-stats"></div>
+  <div id="building-list"></div>
+</div>
+
+<div id="viewport">
+  <div id="controls-bar">
+    <div class="toggle-row">
+      <label><input type="checkbox" id="show-merged"> Merged (Apple)</label>
+      <label><input type="checkbox" id="show-computed" checked> Computed walls</label>
+      <label><input type="checkbox" id="show-doors" checked> Doors</label>
+      <label><input type="checkbox" id="show-windows" checked> Windows</label>
+      <label><input type="checkbox" id="show-floors" checked> Floors</label>
+      <label><input type="checkbox" id="show-wireframe"> Wireframe</label>
+      <label><input type="checkbox" id="color-by-story" checked> Color by story</label>
+      <label><input type="checkbox" id="color-by-source"> Color by source</label>
+      <label><input type="checkbox" id="show-gaps"> Gap walls</label>
+      <label><input type="checkbox" id="show-cross-story"> Cross-story gaps</label>
+      <label><input type="checkbox" id="show-extensions" checked> Wall extensions</label>
+      <label><input type="checkbox" id="show-ceilings"> Ceilings</label>
+      <label><input type="checkbox" id="show-raw-ceilings" checked> Raw ceilings (scan)</label>
+      <label><input type="checkbox" id="show-raw-ceilings-roles"> Raw-ceiling roles</label>
+      <label><input type="checkbox" id="show-raw-ceilings-reconstructions"> Raw-ceiling reconstructions</label>
+      <label><input type="checkbox" id="show-computed-overextend"> Computed overextend (vs raw)</label>
+      <label><input type="checkbox" id="show-raw-disagreement"> Raw orientation disagreement</label>
+      <label><input type="checkbox" id="show-raw-ceiling-plane-splits"> Raw eave-supported splits (final layer)</label>
+      <label><input type="checkbox" id="show-raw-ceiling-plane-split-candidates"> Raw eave-supported splits (not final)</label>
+      <div class="raw-split-compare" title="Choose which scorer output to visualize">
+        <span>Raw split data</span>
+        <select id="raw-split-version-mode">
+          <option value="v1">V1 only</option>
+          <option value="v2">V2 only</option>
+          <option value="both" selected>V1 + V2 overlay</option>
+        </select>
+        <span class="status" id="raw-split-compare-status">V1/V2: -</span>
+      </div>
+      <label><input type="checkbox" id="show-ceiling-replacement"> Clean ceilings (noisy slanted)</label>
+      <label><input type="checkbox" id="show-thermal-ceilings"> Thermal ceilings</label>
+      <label><input type="checkbox" id="show-roof-clusters"> Roof clusters</label>
+      <label><input type="checkbox" id="show-ontology-semantics"> Ontology semantics</label>
+      <label><input type="checkbox" id="show-ontology-continuation"> Roof continuation diag</label>
+      <label><input type="checkbox" id="show-ontology-cells"> Ontology cells</label>
+      <label><input type="checkbox" id="show-overlaps"> Floor overlaps</label>
+      <label><input type="checkbox" id="show-wall-clips"> Wall clips</label>
+      <label><input type="checkbox" id="show-ext-gaps"> Exterior gaps</label>
+      <label style="border-left:1px solid #444;padding-left:8px"><input type="checkbox" id="show-full-model"> Full model</label>
+      <label><input type="checkbox" id="show-full-model-diff"> Full model diff</label>
+      <label style="border-left:1px solid #444;padding-left:8px"><input type="checkbox" id="show-v3-model"> V3 model</label>
+      <label><input type="checkbox" id="show-v3-gable-extension" checked> V3 gable extension</label>
+      <label><input type="checkbox" id="show-v3-roof-proposals"> V3 roof proposals</label>
+      <label><input type="checkbox" id="merge-v3-roof-proposal-planes" checked> Merge similar planes</label>
+      <label><input type="checkbox" id="show-candidate-faces"> Candidate faces</label>
+      <label><input type="checkbox" id="show-reconstruction"> BIP envelope</label>
+      <label><input type="checkbox" id="show-ridge-eave"> Ridge/eave scoring</label>
+      <label><input type="checkbox" id="show-ortho"> Ortho map</label>
+      <label><input type="checkbox" id="show-model-map"> Model map</label>
+    </div>
+    <div id="legend-box"></div>
+  </div>
+  <div id="pipeline-bar">
+    <button id="pipeline-prev" style="padding:2px 8px;cursor:pointer;">&larr;</button>
+    <span id="pipeline-current" style="min-width:200px;"></span>
+    <button id="pipeline-next" style="padding:2px 8px;cursor:pointer;">&rarr;</button>
+    <div id="pipeline-steps" style="display:flex;gap:4px;flex-wrap:wrap;"></div>
+  </div>
+  <div id="map-panel" style="display:none;position:absolute;top:50px;right:10px;z-index:15;background:rgba(13,13,26,0.9);border:1px solid #333;border-radius:8px;padding:10px;font-size:11px;min-width:200px;">
+    <div id="map-panel-status" style="margin-bottom:6px;color:#888;"></div>
+    <label>Rotation: <input type="range" id="map-rot" min="-10" max="10" step="0.1" value="0"> <span id="map-rot-val">0</span>&deg;</label><br>
+    <label>East: <input type="range" id="map-east" min="-20" max="20" step="0.1" value="0"> <span id="map-east-val">0</span>m</label><br>
+    <label>North: <input type="range" id="map-north" min="-20" max="20" step="0.1" value="0"> <span id="map-north-val">0</span>m</label><br>
+    <button id="map-align-reset" style="margin-top:4px;">Reset</button>
+    <button id="map-auto-align" style="margin-top:4px;">Auto-align</button>
+    <button id="map-anchor-mode" style="margin-top:4px;">Anchor mode</button>
+  </div>
+  <div id="building-info"></div>
+  <div id="roof-rating-panel" title="Rate the roof reconstruction quality for this building">
+    <span class="label">Roof rating</span>
+    <div class="rating-buttons">
+      <button class="rating-btn" data-rating="1" title="1 - terrible">1</button>
+      <button class="rating-btn" data-rating="2" title="2">2</button>
+      <button class="rating-btn" data-rating="3" title="3">3</button>
+      <button class="rating-btn" data-rating="4" title="4">4</button>
+      <button class="rating-btn" data-rating="5" title="5 - perfect">5</button>
+      <button class="rating-btn upstream" data-rating="upstream_error" title="Upstream error - input data is wrong, can't rate the roof">Upstream error</button>
+    </div>
+    <span class="status" id="roof-rating-status"></span>
+  </div>
+  <div id="queue-bar">
+    <span class="counter" id="queue-counter">—</span>
+    <button id="queue-prev" title="Previous proposal">&larr;</button>
+    <button id="queue-next" title="Next proposal">&rarr;</button>
+    <button id="queue-next-unlabeled" class="primary" title="Keyboard: N">Next unlabeled (N)</button>
+  </div>
+  <div id="proposal-panel">
+    <h3>V3 Roof Proposal</h3>
+    <div class="kv" id="proposal-kv"></div>
+    <div class="heuristic-row" id="proposal-heuristic"></div>
+    <div class="reasons" id="proposal-reasons"></div>
+    <div class="action-row">
+      <button class="action accept" data-label="accepted" title="Keyboard: A">Accept (A)</button>
+      <button class="action reject" data-label="rejected" title="Keyboard: R">Reject (R)</button>
+      <button class="action skip" data-label="skipped" title="Keyboard: S">Skip (S)</button>
+    </div>
+    <div class="action-row">
+      <button class="action split" id="proposal-split" title="Keyboard: X">Split (X)</button>
+    </div>
+    <div class="status-line" id="proposal-status"></div>
+    <div class="status-line" style="color:#555;">Keys: A accept, R reject, S skip, X split, N next unlabeled, Esc cancel</div>
+  </div>
+  <canvas id="c"></canvas>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+  }
+}
+</script>
+<script type="module" src="viewer-main.js?v=20260501roofrating1"></script>
+</body>
+</html>

@@ -1,0 +1,541 @@
+{
+  "total_processed": 98,
+  "skipped": 125,
+  "errors": 0,
+  "changed_count": 23,
+  "changed": [
+    {
+      "uuid": "0d3f2993-8386-4130-8f1c-b2938c410828",
+      "n_planes": 4,
+      "old_n_surfaces": 4,
+      "new_n_surfaces": 4,
+      "old_total_area": 170.76,
+      "new_total_area": 50.92,
+      "area_diff": -119.84,
+      "old_overlap": 41.27,
+      "new_overlap": 5.82,
+      "overlap_diff": -35.45,
+      "old_areas": [
+        45.65,
+        40.46,
+        41.7,
+        42.95
+      ],
+      "new_areas": [
+        5.21,
+        15.4,
+        15.59,
+        14.72
+      ]
+    },
+    {
+      "uuid": "16784bad-2cd9-4f4c-bb26-60355981cfe2",
+      "n_planes": 5,
+      "old_n_surfaces": 5,
+      "new_n_surfaces": 5,
+      "old_total_area": 119.4,
+      "new_total_area": 42.26,
+      "area_diff": -77.14,
+      "old_overlap": 42.26,
+      "new_overlap": 0.0,
+      "overlap_diff": -42.26,
+      "old_areas": [
+        26.75,
+        31.85,
+        26.36,
+        24.2,
+        10.24
+      ],
+      "new_areas": [
+        5.59,
+        9.86,
+        10.1,
+        6.47,
+        10.24
+      ]
+    },
+    {
+      "uuid": "1d26eda3-c927-4cdf-a3b0-218036828a55",
+      "n_planes": 4,
+      "old_n_surfaces": 4,
+      "new_n_surfaces": 4,
+      "old_total_area": 93.44,
+      "new_total_area": 72.43,
+      "area_diff": -21.01,
+      "old_overlap": 19.6,
+      "new_overlap": 12.38,
+      "overlap_diff": -7.22,
+      "old_areas": [
+        24.93,
+        24.33,
+        19.62,
+        24.56
+      ],
+      "new_areas": [
+        23.67,
+        22.56,
+        1.64,
+        24.56
+      ]
+    },
+    {
+      "uuid": "1f03f6e0-dfe6-4b25-bb45-f44ad146c0a3",
+      "n_planes": 7,
+      "old_n_surfaces": 5,
+      "new_n_surfaces": 5,
+      "old_total_area": 376.3,
+      "new_total_area": 149.2,
+      "area_diff": -227.11,
+      "old_overlap": 99.79,
+      "new_overlap": 0.0,
+      "overlap_diff": -99.79,
+      "old_areas": [
+        56.59,
+        103.9,
+        81.34,
+        70.7,
+        63.77
+      ],
+      "new_areas": [
+        11.96,
+        45.34,
+        22.65,
+        5.49,
+        63.77
+      ]
+    },
+    {
+      "uuid": "21af2a12-2a29-44b5-b703-fbaa208996e9",
+      "n_planes": 3,
+      "old_n_surfaces": 3,
+      "new_n_surfaces": 3,
+      "old_total_area": 120.31,
+      "new_total_area": 58.37,
+      "area_diff": -61.94,
+      "old_overlap": 56.56,
+      "new_overlap": 0.0,
+      "overlap_diff": -56.56,
+      "old_areas": [
+        26.49,
+        30.07,
+        63.76
+      ],
+      "new_areas": [
+        23.54,
+        27.13,
+        7.71
+      ]
+    },
+    {
+      "uuid": "59b505e7-b384-451b-90b1-80f2654dd10d",
+      "n_planes": 4,
+      "old_n_surfaces": 4,
+      "new_n_surfaces": 4,
+      "old_total_area": 113.07,
+      "new_total_area": 39.77,
+      "area_diff": -73.3,
+      "old_overlap": 35.43,
+      "new_overlap": 2.24,
+      "overlap_diff": -33.19,
+      "old_areas": [
+        38.21,
+        17.8,
+        17.63,
+        39.44
+      ],
+      "new_areas": [
+        4.04,
+        16.4,
+        16.24,
+        3.09
+      ]
+    },
+    {
+      "uuid": "5c557e06-393e-466e-a957-f7391b76b8ff",
+      "n_planes": 3,
+      "old_n_surfaces": 3,
+      "new_n_surfaces": 3,
+      "old_total_area": 112.07,
+      "new_total_area": 75.04,
+      "area_diff": -37.03,
+      "old_overlap": 37.03,
+      "new_overlap": 0.0,
+      "overlap_diff": -37.03,
+      "old_areas": [
+        33.1,
+        37.1,
+        41.88
+      ],
+      "new_areas": [
+        33.1,
+        20.41,
+        21.53
+      ]
+    },
+    {
+      "uuid": "6c29deb7-51e6-437d-bfe4-0eb83e559881",
+      "n_planes": 2,
+      "old_n_surfaces": 2,
+      "new_n_surfaces": 2,
+      "old_total_area": 10.41,
+      "new_total_area": 6.22,
+      "area_diff": -4.19,
+      "old_overlap": 4.19,
+      "new_overlap": 0.0,
+      "overlap_diff": -4.19,
+      "old_areas": [
+        4.19,
+        6.22
+      ],
+      "new_areas": [
+        2.08,
+        4.14
+      ]
+    },
+    {
+      "uuid": "7153d532-16c1-45e8-b7c9-f5cd1ba5cc85",
+      "n_planes": 4,
+      "old_n_surfaces": 4,
+      "new_n_surfaces": 4,
+      "old_total_area": 93.39,
+      "new_total_area": 86.09,
+      "area_diff": -7.3,
+      "old_overlap": 7.3,
+      "new_overlap": 0.0,
+      "overlap_diff": -7.3,
+      "old_areas": [
+        12.39,
+        59.2,
+        8.99,
+        12.8
+      ],
+      "new_areas": [
+        12.39,
+        59.2,
+        1.69,
+        12.8
+      ]
+    },
+    {
+      "uuid": "7cabc39b-6328-4a6e-9491-822fa6b3c3fb",
+      "n_planes": 4,
+      "old_n_surfaces": 4,
+      "new_n_surfaces": 4,
+      "old_total_area": 206.46,
+      "new_total_area": 132.74,
+      "area_diff": -73.72,
+      "old_overlap": 37.51,
+      "new_overlap": 0.0,
+      "overlap_diff": -37.51,
+      "old_areas": [
+        45.11,
+        80.52,
+        47.12,
+        33.71
+      ],
+      "new_areas": [
+        45.11,
+        37.66,
+        16.25,
+        33.71
+      ]
+    },
+    {
+      "uuid": "893d4535-3169-4907-a93a-b3ab8f66ec1c",
+      "n_planes": 3,
+      "old_n_surfaces": 3,
+      "new_n_surfaces": 3,
+      "old_total_area": 120.27,
+      "new_total_area": 107.84,
+      "area_diff": -12.43,
+      "old_overlap": 17.47,
+      "new_overlap": 5.04,
+      "overlap_diff": -12.43,
+      "old_areas": [
+        17.47,
+        60.27,
+        42.54
+      ],
+      "new_areas": [
+        5.04,
+        60.27,
+        42.54
+      ]
+    },
+    {
+      "uuid": "8c0ef0cf-51a7-4ac0-8bbf-735f88a799cc",
+      "n_planes": 6,
+      "old_n_surfaces": 4,
+      "new_n_surfaces": 4,
+      "old_total_area": 285.55,
+      "new_total_area": 76.05,
+      "area_diff": -209.51,
+      "old_overlap": 69.23,
+      "new_overlap": 0.0,
+      "overlap_diff": -69.23,
+      "old_areas": [
+        62.32,
+        86.93,
+        23.74,
+        112.56
+      ],
+      "new_areas": [
+        14.11,
+        28.35,
+        8.65,
+        24.94
+      ]
+    },
+    {
+      "uuid": "99ce0ab2-eaac-406c-9fa2-707d7dbe30c5",
+      "n_planes": 3,
+      "old_n_surfaces": 3,
+      "new_n_surfaces": 2,
+      "old_total_area": 149.9,
+      "new_total_area": 129.44,
+      "area_diff": -20.46,
+      "old_overlap": 20.46,
+      "new_overlap": 0.0,
+      "overlap_diff": -20.46,
+      "old_areas": [
+        90.02,
+        20.46,
+        39.42
+      ],
+      "new_areas": [
+        90.02,
+        39.42
+      ]
+    },
+    {
+      "uuid": "b65126ae-ccca-4032-876f-e9c1c059862c",
+      "n_planes": 4,
+      "old_n_surfaces": 4,
+      "new_n_surfaces": 4,
+      "old_total_area": 104.36,
+      "new_total_area": 51.69,
+      "area_diff": -52.67,
+      "old_overlap": 47.41,
+      "new_overlap": 0.0,
+      "overlap_diff": -47.41,
+      "old_areas": [
+        28.26,
+        27.91,
+        23.7,
+        24.49
+      ],
+      "new_areas": [
+        17.98,
+        17.87,
+        5.2,
+        10.64
+      ]
+    },
+    {
+      "uuid": "b8def755-9829-4141-8ecb-3e71ef446d0d",
+      "n_planes": 4,
+      "old_n_surfaces": 4,
+      "new_n_surfaces": 4,
+      "old_total_area": 70.31,
+      "new_total_area": 26.46,
+      "area_diff": -43.85,
+      "old_overlap": 26.77,
+      "new_overlap": 1.24,
+      "overlap_diff": -25.54,
+      "old_areas": [
+        16.97,
+        14.84,
+        20.85,
+        17.65
+      ],
+      "new_areas": [
+        5.99,
+        4.59,
+        10.29,
+        5.58
+      ]
+    },
+    {
+      "uuid": "bb013161-a5cf-4dfc-9b88-d2c851f92aee",
+      "n_planes": 3,
+      "old_n_surfaces": 3,
+      "new_n_surfaces": 3,
+      "old_total_area": 139.1,
+      "new_total_area": 102.48,
+      "area_diff": -36.63,
+      "old_overlap": 36.63,
+      "new_overlap": 0.0,
+      "overlap_diff": -36.63,
+      "old_areas": [
+        26.36,
+        45.16,
+        67.58
+      ],
+      "new_areas": [
+        26.36,
+        45.16,
+        30.95
+      ]
+    },
+    {
+      "uuid": "bc2779a4-d0a2-4ba8-abbf-10129d3f82de",
+      "n_planes": 2,
+      "old_n_surfaces": 2,
+      "new_n_surfaces": 2,
+      "old_total_area": 41.16,
+      "new_total_area": 31.5,
+      "area_diff": -9.66,
+      "old_overlap": 9.66,
+      "new_overlap": 0.0,
+      "overlap_diff": -9.66,
+      "old_areas": [
+        31.17,
+        9.99
+      ],
+      "new_areas": [
+        26.88,
+        4.62
+      ]
+    },
+    {
+      "uuid": "cb711a0b-6e8d-4ae6-b008-af3297446dcc",
+      "n_planes": 6,
+      "old_n_surfaces": 6,
+      "new_n_surfaces": 6,
+      "old_total_area": 207.63,
+      "new_total_area": 151.85,
+      "area_diff": -55.77,
+      "old_overlap": 91.41,
+      "new_overlap": 38.29,
+      "overlap_diff": -53.12,
+      "old_areas": [
+        40.2,
+        30.13,
+        48.87,
+        42.3,
+        23.29,
+        22.83
+      ],
+      "new_areas": [
+        40.2,
+        30.13,
+        19.38,
+        26.13,
+        13.17,
+        22.83
+      ]
+    },
+    {
+      "uuid": "d8308bfc-c2c1-42bd-8503-282571708b8c",
+      "n_planes": 3,
+      "old_n_surfaces": 3,
+      "new_n_surfaces": 3,
+      "old_total_area": 84.45,
+      "new_total_area": 73.84,
+      "area_diff": -10.61,
+      "old_overlap": 5.74,
+      "new_overlap": 0.0,
+      "overlap_diff": -5.74,
+      "old_areas": [
+        10.89,
+        48.17,
+        25.39
+      ],
+      "new_areas": [
+        0.28,
+        48.17,
+        25.39
+      ]
+    },
+    {
+      "uuid": "e028bcc5-73ee-45f9-924b-d7badbc66caf",
+      "n_planes": 3,
+      "old_n_surfaces": 3,
+      "new_n_surfaces": 3,
+      "old_total_area": 159.47,
+      "new_total_area": 36.2,
+      "area_diff": -123.27,
+      "old_overlap": 29.79,
+      "new_overlap": 0.0,
+      "overlap_diff": -29.79,
+      "old_areas": [
+        50.65,
+        56.9,
+        51.92
+      ],
+      "new_areas": [
+        10.02,
+        11.4,
+        14.79
+      ]
+    },
+    {
+      "uuid": "e5adc187-70eb-4828-aa90-5fe3c46dfbce",
+      "n_planes": 3,
+      "old_n_surfaces": 3,
+      "new_n_surfaces": 3,
+      "old_total_area": 50.07,
+      "new_total_area": 47.95,
+      "area_diff": -2.12,
+      "old_overlap": 2.96,
+      "new_overlap": 0.84,
+      "overlap_diff": -2.12,
+      "old_areas": [
+        27.57,
+        19.54,
+        2.96
+      ],
+      "new_areas": [
+        27.57,
+        19.54,
+        0.84
+      ]
+    },
+    {
+      "uuid": "e9f0631f-ae34-4d30-af21-d3369327755f",
+      "n_planes": 6,
+      "old_n_surfaces": 4,
+      "new_n_surfaces": 4,
+      "old_total_area": 231.99,
+      "new_total_area": 89.7,
+      "area_diff": -142.29,
+      "old_overlap": 31.73,
+      "new_overlap": 6.43,
+      "overlap_diff": -25.3,
+      "old_areas": [
+        19.26,
+        13.53,
+        165.54,
+        33.65
+      ],
+      "new_areas": [
+        19.26,
+        13.53,
+        23.26,
+        33.65
+      ]
+    },
+    {
+      "uuid": "fb279aa5-092f-4146-83ff-b557415e7ba4",
+      "n_planes": 3,
+      "old_n_surfaces": 3,
+      "new_n_surfaces": 3,
+      "old_total_area": 159.44,
+      "new_total_area": 149.38,
+      "area_diff": -10.06,
+      "old_overlap": 10.06,
+      "new_overlap": 0.0,
+      "overlap_diff": -10.06,
+      "old_areas": [
+        10.06,
+        105.76,
+        43.63
+      ],
+      "new_areas": [
+        0.21,
+        105.55,
+        43.63
+      ]
+    }
+  ]
+}

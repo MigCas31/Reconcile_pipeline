@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calm Viewer</title>
+  <link rel="stylesheet" href="./viewer-calm.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body data-mode="browse">
+  <header id="top-bar">
+    <div id="contract-label" aria-live="polite">
+      <strong>Schematic reconstruction</strong>
+      <span>· approximately LOD 200 · scan-derived</span>
+    </div>
+    <button id="approximate-chip" type="button" class="hidden" title="Switch to Audit mode to review these elements">
+      <span class="dot"></span>
+      <span class="text">0 approximate elements</span>
+    </button>
+    <button id="projection-toggle" type="button" title="Toggle axonometric (orthographic) projection" aria-pressed="false">
+      Axon
+    </button>
+    <nav id="mode-pills" role="tablist" aria-label="Viewing mode">
+      <button type="button" data-mode="browse" role="tab" aria-selected="true">Browse</button>
+      <button type="button" data-mode="audit"  role="tab" aria-selected="false">Audit</button>
+      <button type="button" data-mode="source" role="tab" aria-selected="false">Source</button>
+      <button type="button" data-mode="export" role="tab" aria-selected="false">Export</button>
+    </nav>
+    <div id="building-meta">
+      <span id="current-address">—</span>
+      <span id="current-uuid"></span>
+    </div>
+  </header>
+
+  <canvas id="view"></canvas>
+
+  <aside id="impact-sidebar" class="collapsed"></aside>
+
+  <div id="lod-control">
+    <label for="lod-slider">Detail level</label>
+    <input id="lod-slider" type="range" min="1" max="3" step="1" value="2">
+    <div><span>LoD1</span><span>LoD2</span><span>LoD3</span></div>
+  </div>
+
+  <button id="audit-deeplink" type="button" class="hidden" title="Open this building in the audit viewer for detailed review (flag queue, roof rating)">
+    Open in audit viewer ↗
+  </button>
+  <button id="screenshot-button" type="button" class="hidden" title="Save a PNG of the current frame">
+    Save PNG
+  </button>
+
+  <div id="toast" class="hidden"></div>
+  <div id="status">Loading…</div>
+
+  <script type="module" src="./viewer-calm-main.js"></script>
+</body>
+</html>

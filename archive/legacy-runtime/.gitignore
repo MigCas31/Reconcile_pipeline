@@ -1,0 +1,6 @@
+/reconcile/buildings_3d.json.before-fix
+/reconcile/reconcile_v3_results*.json
+/reconcile/roof_algorithms_py_results*.json
+/reports/candidate_faces_20260419/candidates.json
+/reports/raw_ceiling_plane_scorer/*.csv
+/reports/raw_ceiling_plane_scorer/*.json

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Labeler · reconcile_tiers</title>
+  <link rel="stylesheet" href="./viewer-labeler.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header id="bar">
+    <div id="bar-left">
+      <button class="nav-btn" id="nav-prev" title="Previous case (↑)">↑</button>
+      <button class="nav-btn" id="nav-next" title="Next case (↓)">↓</button>
+      <span id="run-name">…</span>
+      <span id="progress">– / –</span>
+      <span id="counts"></span>
+    </div>
+    <div id="bar-right">
+      <span id="incl-pill"></span>
+      <span id="heuristic-pill"></span>
+      <button class="nav-btn" id="orbit-toggle" title="Toggle auto-orbit (o)">●</button>
+      <span id="status"></span>
+    </div>
+  </header>
+
+  <section id="panes">
+    <div class="pane" data-side="left">
+      <div class="pane-tag">
+        <span class="pane-tag-dot"></span>
+        <span class="pane-tag-label">baseline</span>
+        <span class="pane-tag-name" id="left-name"></span>
+      </div>
+      <canvas class="pane-canvas" id="canvas-left"></canvas>
+    </div>
+    <div class="pane" data-side="right">
+      <div class="pane-tag">
+        <span class="pane-tag-dot"></span>
+        <span class="pane-tag-label">your pick</span>
+        <span class="pane-tag-name" id="right-name"></span>
+        <button class="swap-btn" id="swap-btn" title="Swap with left (Tab)">⇄</button>
+      </div>
+      <canvas class="pane-canvas" id="canvas-right"></canvas>
+    </div>
+  </section>
+
+  <div id="hud-bottom">
+    <div id="strip"><div id="strip-cards"></div></div>
+    <footer id="actions">
+      <button class="action commit" data-act="commit" title="Enter">
+        <span class="action-label">Commit pick</span>
+        <span class="action-key">⏎</span>
+      </button>
+      <button class="action neither" data-act="neither" title="N">
+        <span class="action-label">Neither</span>
+        <span class="action-key">N</span>
+      </button>
+      <button class="action skip" data-act="skip" title="S">
+        <span class="action-label">Skip</span>
+        <span class="action-key">S</span>
+      </button>
+      <button class="action unsure" data-act="unsure" title="U">
+        <span class="action-label">Unsure</span>
+        <span class="action-key">U</span>
+      </button>
+    </footer>
+  </div>
+
+  <aside id="info">
+    <div id="info-head">
+      <span id="case-slug"></span>
+      <span id="case-incl" class="muted"></span>
+    </div>
+    <div id="locator" class="muted"></div>
+    <details id="features-details">
+      <summary>features</summary>
+      <table id="features"></table>
+    </details>
+    <details id="prior-label" hidden>
+      <summary>prior label</summary>
+      <pre></pre>
+    </details>
+  </aside>
+
+  <script type="module" src="./viewer-labeler-main.js"></script>
+</body>
+</html>

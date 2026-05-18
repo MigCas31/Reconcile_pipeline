@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tier Viewer</title>
+  <link rel="stylesheet" href="./viewer-tiers.css">
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+        "three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.webgpu.js",
+        "three/tsl": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.tsl.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <aside>
+    <header>
+      <h1>Buildings by complexity</h1>
+      <input id="search" placeholder="Address, UUID, or locator ID" autocomplete="off">
+      <div class="filter-pills" id="filter-tier" data-multi="true" title="Filter by tier — click to toggle; nothing selected = all">
+        <span class="filter-pills-label">Tier</span>
+        <button type="button" class="pill" data-value="1">1</button>
+        <button type="button" class="pill" data-value="2">2</button>
+        <button type="button" class="pill" data-value="3">3</button>
+        <button type="button" class="pill" data-value="4">4</button>
+        <button type="button" class="pill" data-value="5">5</button>
+        <button type="button" class="pill" data-value="6">6</button>
+        <button type="button" class="pill" data-value="7">7</button>
+        <button type="button" class="pill" data-value="8">8</button>
+        <button type="button" class="pill pill-muted" data-value="unknown">?</button>
+      </div>
+      <div class="filter-pills" id="filter-rating" data-multi="true" title="Filter by roof rating — click to toggle; nothing selected = all">
+        <span class="filter-pills-label">Rating</span>
+        <button type="button" class="pill pill-rating-1" data-value="1">1</button>
+        <button type="button" class="pill pill-rating-2" data-value="2">2</button>
+        <button type="button" class="pill pill-rating-3" data-value="3">3</button>
+        <button type="button" class="pill pill-rating-4" data-value="4">4</button>
+        <button type="button" class="pill pill-rating-5" data-value="5">5</button>
+        <button type="button" class="pill pill-muted" data-value="unrated">∅</button>
+        <button type="button" class="pill pill-muted" data-value="upstream_error">err</button>
+      </div>
+      <div class="filter-row">
+        <select id="sort-mode" title="Sort order">
+          <option value="tier-asc">Sort: tier ↑ (simple first)</option>
+          <option value="tier-desc">Sort: tier ↓ (complex first)</option>
+          <option value="rating-desc">Sort: roof rating ↓ (best first)</option>
+          <option value="rating-asc">Sort: roof rating ↑ (worst first)</option>
+          <option value="quality-asc">Sort: predicted ↑ (worst predicted first)</option>
+          <option value="quality-desc">Sort: predicted ↓ (best predicted first)</option>
+        </select>
+      </div>
+    </header>
+    <div id="sidebar-stats">Loading...</div>
+    <div id="list"></div>
+  </aside>
+  <main>
+    <div id="top-bar">
+      <button class="nav-btn" id="nav-prev" title="Previous building">↑</button>
+      <button class="nav-btn" id="nav-next" title="Next building">↓</button>
+      <div id="current">
+        <div id="current-address">Loading tier payloads...</div>
+        <div id="current-meta"></div>
+      </div>
+      <div id="pill">-</div>
+    </div>
+    <div id="signals"></div>
+    <div id="view-controls">
+      <div class="control-row">
+        <label for="explode-slider">Explode storeys</label>
+        <input id="explode-slider" type="range" min="0" max="5" step="0.1" value="0" />
+        <span id="explode-readout">0.0 m</span>
+      </div>
+      <div class="control-row">
+        <label for="story-select">Show storey</label>
+        <select id="story-select"><option value="all">All</option></select>
+      </div>
+      <div class="control-row">
+        <label class="check-row"><input id="heating-toggle" type="checkbox" /> Colour by heating</label>
+      </div>
+      <div class="control-row">
+        <label class="check-row"><input id="hide-ceilings-toggle" type="checkbox" /> Hide ceilings (peek inside)</label>
+      </div>
+      <div class="control-row">
+        <label class="check-row"><input id="source-twin-toggle" type="checkbox" /> Show digital twin (instead of tier_payload)</label>
+      </div>
+      <div id="heating-legend" class="hidden"></div>
+    </div>
+    <canvas id="view"></canvas>
+    <div id="roof-rating-panel" title="Rate the roof reconstruction quality for this building">
+      <span class="label">Roof rating</span>
+      <div class="rating-buttons">
+        <button class="rating-btn" data-rating="1" title="1 - terrible">1</button>
+        <button class="rating-btn" data-rating="2" title="2">2</button>
+        <button class="rating-btn" data-rating="3" title="3">3</button>
+        <button class="rating-btn" data-rating="4" title="4">4</button>
+        <button class="rating-btn" data-rating="5" title="5 - perfect">5</button>
+        <button class="rating-btn upstream" data-rating="upstream_error" title="Upstream error - input data is wrong, can't rate the roof">Upstream error</button>
+      </div>
+      <select id="roof-rating-reason" class="hidden" title="What's wrong (optional)">
+        <option value="">Reason (optional)…</option>
+        <option value="fragments">Fragmented pieces</option>
+        <option value="missing_dormer">Missing dormer</option>
+        <option value="wrong_ridge">Wrong ridge / eave</option>
+        <option value="splayed_wing">Splayed / out-of-envelope wing</option>
+        <option value="daylight_through">Daylight through walls/roof</option>
+        <option value="half_shell">Half-shell / one side missing</option>
+        <option value="other">Other</option>
+      </select>
+      <select id="roof-rating-error-reason" class="hidden" title="What kind of upstream error">
+        <option value="">Error reason (optional)…</option>
+        <option value="viewer_broken_render">Viewer broken render</option>
+        <option value="extraction_incomplete">Extraction incomplete</option>
+        <option value="not_my_building">Not my building</option>
+        <option value="other">Other</option>
+      </select>
+      <span class="status" id="roof-rating-status"></span>
+    </div>
+    <div id="loading" class="hidden">Loading...</div>
+    <div id="status">Click to inspect · right-click for menu · Cmd/Ctrl+right-click to copy · Cmd/Ctrl+click to multi-select · Shift+right-click to flag.</div>
+    <aside id="flag-panel" class="collapsed">
+      <header>
+        <span id="flag-panel-title">Flagged for triage</span>
+        <span id="flag-panel-count">0</span>
+        <button type="button" id="flag-panel-toggle" title="Show / hide">▾</button>
+      </header>
+      <div id="flag-panel-body">
+        <div id="flag-diff-banner" class="hidden"></div>
+        <ol id="flag-list"></ol>
+        <div class="flag-actions">
+          <button type="button" id="flag-clear">Clear</button>
+          <button type="button" id="flag-send">Send queue</button>
+        </div>
+        <div id="flag-status"></div>
+      </div>
+    </aside>
+    <div id="flag-popover" class="hidden" role="dialog" aria-label="Flag element">
+      <div class="popover-locator" id="flag-popover-locator"></div>
+      <textarea id="flag-popover-note" placeholder="Why does this look wrong? (optional — Enter to add, Esc to cancel)"></textarea>
+      <div class="popover-actions">
+        <button type="button" id="flag-popover-cancel">Cancel</button>
+        <button type="button" id="flag-popover-add">Add to queue</button>
+      </div>
+    </div>
+    <div id="context-menu" class="hidden" role="dialog" aria-label="Context menu">
+      <div class="popover-locator" id="context-menu-target"></div>
+      <div id="context-menu-actions" class="ctx-actions"></div>
+      <div id="context-menu-info" class="ctx-info hidden"></div>
+      <div id="context-menu-gemini" class="ctx-gemini hidden">
+        <textarea id="context-menu-prompt" placeholder="Ask Gemini about this selection... (Enter to send, Shift+Enter newline)"></textarea>
+        <div class="ctx-gemini-output" id="context-menu-gemini-output"></div>
+        <div class="popover-actions">
+          <button type="button" id="context-menu-gemini-send">Send</button>
+        </div>
+      </div>
+      <div class="popover-actions ctx-footer">
+        <button type="button" id="context-menu-reset" class="hidden">Reset preview</button>
+        <button type="button" id="context-menu-close">Close</button>
+      </div>
+    </div>
+  </main>
+  <script type="module" src="./viewer-tiers-main.js"></script>
+
+</body>
+</html>

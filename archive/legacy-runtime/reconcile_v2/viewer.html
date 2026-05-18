@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Topology V2 3D Viewer</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#171717; color:#e9e9e9; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; overflow:hidden; display:flex; }
+
+#sidebar {
+  width:300px; min-width:300px; height:100vh; background:#131313;
+  border-right:1px solid #252525; display:flex; flex-direction:column; z-index:20;
+}
+#sidebar-header { padding:12px; border-bottom:1px solid #222; }
+#sidebar-header h1 { font-size:15px; font-weight:600; margin-bottom:8px; }
+#sidebar-header p { font-size:11px; color:#7a7a7a; margin-bottom:8px; line-height:1.4; }
+.button-row { display:flex; gap:8px; margin-bottom:8px; }
+.btn {
+  border:1px solid #3a3a3a; border-radius:6px; background:#232323; color:#e5e5e5;
+  padding:6px 8px; font-size:11px; cursor:pointer;
+}
+.btn:hover { border-color:#666; }
+#search { width:100%; padding:6px 10px; border-radius:6px; border:1px solid #303030; background:#1e1e1e; color:#e5e5e5; font-size:12px; outline:none; }
+#search:focus { border-color:#525252; }
+#search::placeholder { color:#555; }
+#sidebar-stats { padding:6px 12px; font-size:10px; color:#555; border-bottom:1px solid #1a1a2a; }
+#room-list { flex:1; overflow-y:auto; }
+#room-list::-webkit-scrollbar { width:6px; }
+#room-list::-webkit-scrollbar-track { background:#0d0d1a; }
+#room-list::-webkit-scrollbar-thumb { background:#333; border-radius:3px; }
+
+.room-item {
+  padding:8px 12px; cursor:pointer; border-bottom:1px solid #1a1a2a;
+  transition:background .12s;
+}
+.room-item:hover { background:#1f1f1f; }
+.room-item.active { background:#252525; border-left:3px solid #6b7280; }
+.room-title { font-size:12px; font-weight:500; line-height:1.3; color:#ccc; }
+.room-meta { font-size:10px; color:#666; margin-top:2px; display:flex; gap:6px; flex-wrap:wrap; }
+.room-meta .tag { padding:1px 5px; border-radius:3px; font-size:9px; font-weight:600; }
+.tag-story { background:#1f2d3a; color:#7fb6ff; }
+.tag-gap { background:#3a251a; color:#f3a469; }
+
+#viewport { flex:1; position:relative; }
+#controls-bar {
+  position:absolute; top:0; left:0; right:0; z-index:10;
+  padding:10px 14px; display:flex; align-items:center; gap:16px;
+  background:linear-gradient(to bottom, rgba(0,0,0,.7) 0%, transparent 100%);
+  pointer-events:none;
+}
+#controls-bar > * { pointer-events:auto; }
+#pipeline-panel {
+  min-width:340px; max-width:560px; padding:8px 10px;
+  border:1px solid #313131; border-radius:8px; background:rgba(23,23,23,.9);
+}
+#pipeline-header {
+  font-size:10px; color:#9a9a9a; text-transform:uppercase;
+  letter-spacing:.08em; margin-bottom:6px;
+}
+#pipeline-controls {
+  display:flex; align-items:center; gap:8px; margin-bottom:6px;
+}
+#pipeline-current {
+  flex:1; min-width:0; font-size:11px; color:#e5e5e5;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.pipeline-arrow {
+  width:24px; height:24px; border:1px solid #3a3a3a;
+  border-radius:6px; background:#232323; color:#e5e5e5; cursor:pointer;
+}
+.pipeline-arrow:disabled { opacity:.35; cursor:default; }
+#pipeline-steps { display:flex; gap:6px; flex-wrap:wrap; }
+.pipeline-step-pill {
+  padding:2px 6px; border-radius:999px; border:1px solid #333;
+  font-size:10px; color:#a3a3a3; background:#202020; cursor:pointer;
+}
+.pipeline-step-pill.done { color:#d4d4d4; border-color:#525252; }
+.pipeline-step-pill.active { color:#fafafa; border-color:#6b7280; background:#2a2a2a; }
+
+.toggle-row { display:flex; flex-wrap:wrap; gap:6px 14px; font-size:11px; max-width:700px; }
+.toggle-row label { cursor:pointer; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+.toggle-row input, .toggle-row select { accent-color:#3a3aff; }
+#story-filter {
+  background:#1e1e1e; color:#ddd; border:1px solid #333; border-radius:6px;
+  padding:2px 6px; font-size:11px;
+}
+#legend-box { font-size:10px; line-height:1.8; }
+#legend-box span { display:inline-block; width:10px; height:10px; border-radius:2px; vertical-align:middle; margin-right:3px; }
+
+#building-info {
+  position:absolute; bottom:10px; left:10px; right:10px;
+  font-size:11px; color:#666; z-index:10;
+}
+canvas { display:block; width:100%; height:100%; }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <div id="sidebar-header">
+    <h1>Topology V2 3D Viewer</h1>
+    <p>Pascal-style material pass on topology surfaces. Load `topology-v2.json` (+ optional QA).</p>
+    <div class="button-row">
+      <button class="btn" id="load-topology-btn">Load Topology</button>
+      <button class="btn" id="load-qa-btn">Load QA</button>
+    </div>
+    <input type="file" id="topology-file" accept="application/json" style="display:none">
+    <input type="file" id="qa-file" accept="application/json" style="display:none">
+    <input type="text" id="search" placeholder="Search room id...">
+  </div>
+  <div id="sidebar-stats">No topology loaded</div>
+  <div id="room-list"></div>
+</div>
+
+<div id="viewport">
+  <div id="controls-bar">
+    <div id="pipeline-panel">
+      <div id="pipeline-header">Render Stages</div>
+      <div id="pipeline-controls">
+        <button id="pipeline-prev" class="pipeline-arrow" title="Previous stage">&larr;</button>
+        <div id="pipeline-current"></div>
+        <button id="pipeline-next" class="pipeline-arrow" title="Next stage">&rarr;</button>
+      </div>
+      <div id="pipeline-steps"></div>
+    </div>
+    <div class="toggle-row">
+      <label><input type="checkbox" id="show-structure" checked> Structure</label>
+      <label><input type="checkbox" id="show-floors" checked> Floors</label>
+      <label><input type="checkbox" id="show-doors" checked> Doors</label>
+      <label><input type="checkbox" id="show-windows" checked> Windows</label>
+      <label><input type="checkbox" id="show-openings" checked> Openings</label>
+      <label><input type="checkbox" id="show-storages" checked> Storages</label>
+      <label><input type="checkbox" id="show-gaps" checked> Gaps</label>
+      <label><input type="checkbox" id="show-adjacency"> Adjacency</label>
+      <label><input type="checkbox" id="show-boundaries"> Boundaries</label>
+      <label><input type="checkbox" id="use-stitched" checked> Use stitched planes</label>
+      <label><input type="checkbox" id="show-wireframe"> Wireframe</label>
+      <label>Story:
+        <select id="story-filter">
+          <option value="all">All</option>
+        </select>
+      </label>
+    </div>
+    <div id="legend-box"></div>
+  </div>
+  <div id="building-info"></div>
+  <canvas id="c"></canvas>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
+
+const viewport = document.getElementById('viewport');
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setClearColor(0x171717);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.95;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1200);
+camera.position.set(10, 14, 12);
+
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.target.set(0, 2, 0);
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+const dl1 = new THREE.DirectionalLight(0xffffff, 1.0);
+dl1.position.set(10, 20, 10);
+dl1.castShadow = true;
+dl1.shadow.mapSize.set(2048, 2048);
+dl1.shadow.bias = 0.0002;
+dl1.shadow.normalBias = 0.25;
+dl1.shadow.camera.near = 1;
+dl1.shadow.camera.far = 200;
+dl1.shadow.camera.left = -60;
+dl1.shadow.camera.right = 60;
+dl1.shadow.camera.top = 60;
+dl1.shadow.camera.bottom = -60;
+scene.add(dl1);
+const dl2 = new THREE.DirectionalLight(0xffffff, 0.3);
+dl2.position.set(-14, 8, -10);
+scene.add(dl2);
+
+const grid = new THREE.GridHelper(120, 120, 0x2d2d2d, 0x232323);
+scene.add(grid);
+
+const groups = {
+  structure: new THREE.Group(),
+  floors: new THREE.Group(),
+  doors: new THREE.Group(),
+  windows: new THREE.Group(),
+  openings: new THREE.Group(),
+  storages: new THREE.Group(),
+  gaps: new THREE.Group(),
+  adjacency: new THREE.Group(),
+  boundaries: new THREE.Group(),
+  selection: new THREE.Group(),
+};
+for (const g of Object.values(groups)) scene.add(g);
+
+const LAYER_CONTROL_IDS = {
+  structure: 'show-structure',
+  floors: 'show-floors',
+  doors: 'show-doors',
+  windows: 'show-windows',
+  openings: 'show-openings',
+  storages: 'show-storages',
+  gaps: 'show-gaps',
+  adjacency: 'show-adjacency',
+  boundaries: 'show-boundaries',
+};
+const LAYER_KEYS = Object.keys(LAYER_CONTROL_IDS);
+
+const PIPELINE_STEPS = [
+  { id: 'base', label: 'Base envelope', adds: ['structure', 'floors'] },
+  { id: 'openings', label: 'Openings and glazing', adds: ['doors', 'windows', 'openings'] },
+  { id: 'objects', label: 'Objects', adds: ['storages'] },
+  { id: 'topology', label: 'Topology overlays', adds: ['adjacency', 'boundaries'] },
+  { id: 'gaps', label: 'Gap diagnostics', adds: ['gaps'] },
+];
+let pipelineStepIndex = 1;
+
+const fullPalette = {
+  structure: { fill: 0xf3f1ee, edge: 0xa1a1aa, opacity: 1.0, roughness: 0.9, metalness: 0.0 },
+  floor:     { fill: 0xc8c2b7, edge: 0x9f978a, opacity: 1.0, roughness: 0.55, metalness: 0.0 },
+  door:      { fill: 0xc49a6c, edge: 0x8a5f3a, opacity: 0.96, roughness: 0.72, metalness: 0.0 },
+  window:    { fill: 0x87ceeb, edge: 0xe6f6ff, opacity: 0.28, roughness: 0.08, metalness: 0.12 },
+  opening:   { fill: 0x0a0e1b, edge: 0xfafafa, opacity: 0.92, roughness: 0.6, metalness: 0.0 },
+  storage:   { fill: 0xb9a27d, edge: 0x7f6a47, opacity: 0.95, roughness: 0.8, metalness: 0.0 },
+  gap:       { fill: 0xcc44ff, edge: 0xff88ff, opacity: 0.35, roughness: 0.5, metalness: 0.0 },
+};
+
+const fullMaterials = {
+  structure: new THREE.MeshStandardMaterial({
+    color: fullPalette.structure.fill, side: THREE.DoubleSide, roughness: fullPalette.structure.roughness, metalness: fullPalette.structure.metalness,
+  }),
+  floor: new THREE.MeshStandardMaterial({
+    color: fullPalette.floor.fill, side: THREE.DoubleSide, roughness: fullPalette.floor.roughness, metalness: fullPalette.floor.metalness,
+    emissive: 0x16120c, emissiveIntensity: 0.03,
+  }),
+  door: new THREE.MeshStandardMaterial({
+    color: fullPalette.door.fill, side: THREE.DoubleSide, roughness: fullPalette.door.roughness, metalness: fullPalette.door.metalness,
+  }),
+  window: new THREE.MeshStandardMaterial({
+    color: fullPalette.window.fill, side: THREE.DoubleSide, roughness: fullPalette.window.roughness, metalness: fullPalette.window.metalness,
+    transparent: true, opacity: fullPalette.window.opacity, depthWrite: false,
+  }),
+  opening: new THREE.MeshStandardMaterial({
+    color: fullPalette.opening.fill, side: THREE.DoubleSide, roughness: fullPalette.opening.roughness, metalness: fullPalette.opening.metalness,
+    transparent: true, opacity: fullPalette.opening.opacity, depthWrite: false,
+  }),
+  storage: new THREE.MeshStandardMaterial({
+    color: fullPalette.storage.fill, side: THREE.DoubleSide, roughness: fullPalette.storage.roughness, metalness: fullPalette.storage.metalness,
+    transparent: true, opacity: fullPalette.storage.opacity,
+  }),
+  selected: new THREE.MeshStandardMaterial({
+    color: 0xffc784, side: THREE.DoubleSide, roughness: 0.35, metalness: 0.05,
+    transparent: true, opacity: 0.85,
+  }),
+};
+
+const state = {
+  topology: null,
+  qa: null,
+  selectedStory: 'all',
+  selectedRoomId: null,
+  roomNodes: [],
+  roomPolys: new Map(),
+  roomCenters: new Map(),
+  roomToSurface: new Map(),
+  surfaceNodes: new Map(),
+  surfaceToWorldCorners: new Map(),
+  storyY: new Map(),
+};
+
+function isAllowedSyntheticKind(sk) {
+  // Keep structural gap-thickness walls in the default view.
+  return sk === 'intra_story_gap_thickness_wall';
+}
+
+function resizeRenderer() {
+  const w = viewport.clientWidth;
+  const h = viewport.clientHeight;
+  renderer.setSize(w, h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+
+function disposeGroup(g) {
+  while (g.children.length) {
+    const c = g.children[0];
+    if (c.geometry) c.geometry.dispose();
+    if (c.material) {
+      if (Array.isArray(c.material)) c.material.forEach(m => m.dispose());
+      else if (c.material !== fullMaterials.structure && c.material !== fullMaterials.floor && c.material !== fullMaterials.door && c.material !== fullMaterials.window && c.material !== fullMaterials.opening && c.material !== fullMaterials.selected) c.material.dispose();
+    }
+    g.remove(c);
+  }
+}
+
+function parseWKTPolygon(wkt) {
+  if (!wkt || typeof wkt !== 'string') return [];
+  const s = wkt.trim();
+  if (s.startsWith('POLYGON')) {
+    const inner = s.slice(s.indexOf('((') + 2, s.lastIndexOf('))'));
+    const firstRing = inner.split('),(')[0];
+    return firstRing.split(',').map(pair => {
+      const [x, y] = pair.trim().split(/\s+/).map(Number);
+      return [x, y];
+    }).filter(p => Number.isFinite(p[0]) && Number.isFinite(p[1]));
+  }
+  return [];
+}
+
+function parseWKTLineString(wkt) {
+  if (!wkt || typeof wkt !== 'string') return [];
+  const s = wkt.trim();
+  if (!s.startsWith('LINESTRING')) return [];
+  const inner = s.slice(s.indexOf('(') + 1, s.lastIndexOf(')'));
+  return inner.split(',').map(pair => {
+    const [x, y] = pair.trim().split(/\s+/).map(Number);
+    return [x, y];
+  }).filter(p => Number.isFinite(p[0]) && Number.isFinite(p[1]));
+}
+
+function transformPoint(flat, p) {
+  const x = p[0], y = p[1], z = p[2];
+  const tx = flat[0] * x + flat[4] * y + flat[8] * z + flat[12];
+  const ty = flat[1] * x + flat[5] * y + flat[9] * z + flat[13];
+  const tz = flat[2] * x + flat[6] * y + flat[10] * z + flat[14];
+  const tw = flat[3] * x + flat[7] * y + flat[11] * z + flat[15];
+  if (Math.abs(tw) > 1e-8 && Math.abs(tw - 1) > 1e-8) return [tx / tw, ty / tw, tz / tw];
+  return [tx, ty, tz];
+}
+
+function getSurfaceWorldCorners(surfaceNode) {
+  const sid = surfaceNode.id;
+  const localCorners = state.topology?.geometry_index?.surface_polygons?.[sid];
+  const tf = state.topology?.geometry_index?.transforms?.[surfaceNode.transform_ref || ''];
+  if (!Array.isArray(localCorners) || localCorners.length < 3 || !Array.isArray(tf) || tf.length !== 16) return [];
+  return localCorners.map(c => transformPoint(tf, c));
+}
+
+function polygonCentroid3(corners) {
+  if (!corners || corners.length === 0) return [0, 0, 0];
+  let x = 0, y = 0, z = 0;
+  for (const c of corners) { x += c[0]; y += c[1]; z += c[2]; }
+  const n = corners.length;
+  return [x / n, y / n, z / n];
+}
+
+function sanitizeLoop3(corners, eps = 1e-6) {
+  if (!Array.isArray(corners)) return [];
+  const out = [];
+  for (const c of corners) {
+    if (!Array.isArray(c) || c.length < 3) continue;
+    const p = [Number(c[0]), Number(c[1]), Number(c[2])];
+    if (!Number.isFinite(p[0]) || !Number.isFinite(p[1]) || !Number.isFinite(p[2])) continue;
+    if (out.length === 0) {
+      out.push(p);
+      continue;
+    }
+    const q = out[out.length - 1];
+    const dx = p[0] - q[0], dy = p[1] - q[1], dz = p[2] - q[2];
+    if ((dx * dx + dy * dy + dz * dz) > (eps * eps)) out.push(p);
+  }
+  if (out.length >= 2) {
+    const a = out[0], b = out[out.length - 1];
+    const dx = a[0] - b[0], dy = a[1] - b[1], dz = a[2] - b[2];
+    if ((dx * dx + dy * dy + dz * dz) <= (eps * eps)) out.pop();
+  }
+  return out;
+}
+
+function computeStableNormal(corners) {
+  const n = new THREE.Vector3(0, 0, 0);
+  const m = corners.length;
+  for (let i = 0; i < m; i++) {
+    const c = corners[i];
+    const d = corners[(i + 1) % m];
+    n.x += (c[1] - d[1]) * (c[2] + d[2]);
+    n.y += (c[2] - d[2]) * (c[0] + d[0]);
+    n.z += (c[0] - d[0]) * (c[1] + d[1]);
+  }
+  if (n.lengthSq() > 1e-12) return n.normalize();
+
+  for (let i = 0; i < m - 2; i++) {
+    const a = new THREE.Vector3(...corners[i]);
+    for (let j = i + 1; j < m - 1; j++) {
+      const b = new THREE.Vector3(...corners[j]);
+      for (let k = j + 1; k < m; k++) {
+        const c = new THREE.Vector3(...corners[k]);
+        const x = new THREE.Vector3().subVectors(b, a).cross(new THREE.Vector3().subVectors(c, a));
+        if (x.lengthSq() > 1e-12) return x.normalize();
+      }
+    }
+  }
+  return null;
+}
+
+function simplifyLoop2(points2, points3, eps = 1e-7) {
+  if (points2.length < 3) return { points2, points3 };
+  let p2 = points2.slice();
+  let p3 = points3.slice();
+  let changed = true;
+  while (changed && p2.length >= 3) {
+    changed = false;
+    for (let i = 0; i < p2.length; i++) {
+      const a = p2[(i - 1 + p2.length) % p2.length];
+      const b = p2[i];
+      const c = p2[(i + 1) % p2.length];
+      const abx = b.x - a.x, aby = b.y - a.y;
+      const bcx = c.x - b.x, bcy = c.y - b.y;
+      const cross = Math.abs(abx * bcy - aby * bcx);
+      const dot = (b.x - a.x) * (c.x - a.x) + (b.y - a.y) * (c.y - a.y);
+      const ac2 = (c.x - a.x) * (c.x - a.x) + (c.y - a.y) * (c.y - a.y);
+      if (cross <= eps && dot > 0 && dot < ac2) {
+        p2.splice(i, 1);
+        p3.splice(i, 1);
+        changed = true;
+        break;
+      }
+    }
+  }
+  return { points2: p2, points3: p3 };
+}
+
+function createPolygonMesh(corners, material, holes = []) {
+  const outer = sanitizeLoop3(corners);
+  if (outer.length < 3) return null;
+  const normal = computeStableNormal(outer);
+  if (!normal) return null;
+
+  const p0 = new THREE.Vector3(...outer[0]);
+  let up = new THREE.Vector3(0, 1, 0);
+  if (Math.abs(normal.dot(up)) > 0.95) up = new THREE.Vector3(1, 0, 0);
+  const u = new THREE.Vector3().crossVectors(up, normal).normalize();
+  const v = new THREE.Vector3().crossVectors(normal, u).normalize();
+
+  const toUV = (c) => {
+    const p = new THREE.Vector3(c[0], c[1], c[2]).sub(p0);
+    return new THREE.Vector2(p.dot(u), p.dot(v));
+  };
+
+  let contour2 = outer.map(toUV);
+  let contour3 = outer.map(c => new THREE.Vector3(c[0], c[1], c[2]));
+  ({ points2: contour2, points3: contour3 } = simplifyLoop2(contour2, contour3));
+  if (contour2.length < 3) return null;
+  if (!THREE.ShapeUtils.isClockWise(contour2)) {
+    contour2 = contour2.slice().reverse();
+    contour3 = contour3.slice().reverse();
+  }
+
+  const holeLoops2 = [];
+  const holeLoops3 = [];
+  for (const hole of holes) {
+    const h = sanitizeLoop3(hole);
+    if (h.length < 3) continue;
+    let h2 = h.map(toUV);
+    let h3 = h.map(c => new THREE.Vector3(c[0], c[1], c[2]));
+    ({ points2: h2, points3: h3 } = simplifyLoop2(h2, h3));
+    if (h2.length < 3) continue;
+    if (THREE.ShapeUtils.isClockWise(h2)) {
+      h2 = h2.slice().reverse();
+      h3 = h3.slice().reverse();
+    }
+    holeLoops2.push(h2);
+    holeLoops3.push(h3);
+  }
+
+  const triangles = THREE.ShapeUtils.triangulateShape(contour2, holeLoops2);
+  if (!triangles || triangles.length === 0) return null;
+
+  const all3 = contour3.concat(...holeLoops3);
+  const verts = new Float32Array(all3.length * 3);
+  for (let i = 0; i < all3.length; i++) {
+    verts[i * 3 + 0] = all3[i].x;
+    verts[i * 3 + 1] = all3[i].y;
+    verts[i * 3 + 2] = all3[i].z;
+  }
+
+  const idx = [];
+  for (const tri of triangles) idx.push(tri[0], tri[1], tri[2]);
+  if (idx.length === 0) return null;
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(verts, 3));
+  geo.setIndex(idx);
+  geo.computeVertexNormals();
+  return new THREE.Mesh(geo, material);
+}
+
+function createPolygonMeshFromNodeLoop(nodeIds, sharedNodes, material, holes = []) {
+  if (!Array.isArray(nodeIds) || nodeIds.length < 3) return null;
+  const corners = [];
+  for (const nid of nodeIds) {
+    const p = sharedNodes?.[nid];
+    if (!Array.isArray(p) || p.length < 3) return null;
+    corners.push([Number(p[0]), Number(p[1]), Number(p[2])]);
+  }
+  const holeCorners = [];
+  for (const h of holes || []) {
+    if (!h || !Array.isArray(h.node_ids)) continue;
+    const hc = [];
+    for (const nid of h.node_ids) {
+      const p = sharedNodes?.[nid];
+      if (!Array.isArray(p) || p.length < 3) continue;
+      hc.push([Number(p[0]), Number(p[1]), Number(p[2])]);
+    }
+    if (hc.length >= 3) holeCorners.push(hc);
+  }
+  return createPolygonMesh(corners, material, holeCorners);
+}
+
+function createEdgeLoop(corners, color, opacity = 0.5) {
+  const pts = corners.map(c => new THREE.Vector3(c[0], c[1], c[2]));
+  pts.push(pts[0]);
+  return new THREE.Line(
+    new THREE.BufferGeometry().setFromPoints(pts),
+    new THREE.LineBasicMaterial({ color, transparent: opacity < 1, opacity })
+  );
+}
+
+function isStoryVisible(story) {
+  if (state.selectedStory === 'all') return true;
+  return Number(story) === Number(state.selectedStory);
+}
+
+function rebuildIndices() {
+  const topology = state.topology;
+  state.roomNodes = (topology.nodes || []).filter(n => n.type === 'Room');
+  state.surfaceNodes = new Map((topology.nodes || []).filter(n => n.type === 'Surface').map(n => [n.id, n]));
+
+  state.roomPolys = new Map();
+  state.roomCenters = new Map();
+  for (const room of state.roomNodes) {
+    const polyWkt = topology.geometry_index?.room_floor_polygons?.[room.id];
+    const poly = parseWKTPolygon(polyWkt);
+    if (poly.length >= 3) {
+      state.roomPolys.set(room.id, poly);
+      let sx = 0, sz = 0;
+      for (const p of poly) { sx += p[0]; sz += p[1]; }
+      state.roomCenters.set(room.id, [sx / poly.length, sz / poly.length]);
+    }
+  }
+
+  state.roomToSurface = new Map();
+  for (const e of topology.edges || []) {
+    if (e.type === 'CONTAINS' && String(e.from).startsWith('room:') && String(e.to).startsWith('surface:')) {
+      if (!state.roomToSurface.has(e.from)) state.roomToSurface.set(e.from, []);
+      state.roomToSurface.get(e.from).push(e.to);
+    }
+  }
+
+  state.surfaceToWorldCorners = new Map();
+  const yByStory = new Map();
+  for (const surface of state.surfaceNodes.values()) {
+    const corners = getSurfaceWorldCorners(surface);
+    if (corners.length >= 3) {
+      state.surfaceToWorldCorners.set(surface.id, corners);
+      const kind = surface.properties?.surface_kind || 'surface';
+      if (kind === 'floor' && Number.isInteger(surface.story)) {
+        const ys = corners.map(c => c[1]);
+        const y = ys.reduce((a, b) => a + b, 0) / ys.length;
+        if (!yByStory.has(surface.story)) yByStory.set(surface.story, []);
+        yByStory.get(surface.story).push(y);
+      }
+    }
+  }
+
+  state.storyY = new Map();
+  for (const [story, ys] of yByStory.entries()) {
+    ys.sort((a, b) => a - b);
+    const mid = ys[Math.floor(ys.length / 2)] ?? ys[0];
+    state.storyY.set(Number(story), mid);
+  }
+}
+
+function addRoomSelectionOverlay() {
+  disposeGroup(groups.selection);
+  if (!state.selectedRoomId) return;
+  const poly = state.roomPolys.get(state.selectedRoomId);
+  const room = state.topology.nodes.find(n => n.id === state.selectedRoomId);
+  if (!poly || !room) return;
+  if (!isStoryVisible(room.story)) return;
+
+  const y = (state.storyY.get(Number(room.story)) ?? 0) + 0.03;
+  const corners = poly.map(p => [p[0], y, p[1]]);
+  const mesh = createPolygonMesh(corners, fullMaterials.selected);
+  if (mesh) {
+    mesh.renderOrder = 20;
+    groups.selection.add(mesh);
+  }
+  groups.selection.add(createEdgeLoop(corners, 0xffd89a, 1));
+}
+
+function rebuildScene() {
+  for (const g of Object.values(groups)) disposeGroup(g);
+  if (!state.topology) return;
+
+  const topology = state.topology;
+  const structureGeometries = [];
+  const floorGeometries = [];
+  const useStitched = document.getElementById('use-stitched').checked;
+
+  if (useStitched) {
+    const stitched = topology.geometry_index?.stitched_geometry;
+    const shared = stitched?.shared_nodes || {};
+    const stitchedSurfaces = (stitched?.render_surfaces && stitched.render_surfaces.length > 0)
+      ? stitched.render_surfaces
+      : (stitched?.stitched_surfaces || []);
+    const usedSourceIds = new Set();
+
+    for (const s of stitchedSurfaces) {
+      if (!isStoryVisible(s.story)) continue;
+      const kind = s.kind || 'surface';
+      const nodeIds = s.node_ids || [];
+      if (!Array.isArray(nodeIds) || nodeIds.length < 3) continue;
+      const srcIds = s.source_surface_ids || [];
+      const srcSyntheticCount = srcIds.reduce((acc, sid) => {
+        const sn = state.surfaceNodes.get(sid);
+        return acc + (((sn?.properties || {}).synthetic_kind) ? 1 : 0);
+      }, 0);
+      const srcAllowedSyntheticCount = srcIds.reduce((acc, sid) => {
+        const sn = state.surfaceNodes.get(sid);
+        const sk = (sn?.properties || {}).synthetic_kind;
+        return acc + (isAllowedSyntheticKind(sk) ? 1 : 0);
+      }, 0);
+      const srcBaseCount = srcIds.length - srcSyntheticCount;
+      if (srcIds.length > 0 && srcBaseCount === 0 && srcAllowedSyntheticCount === 0) continue;
+
+      const mesh = createPolygonMeshFromNodeLoop(nodeIds, shared, kind === 'wall' ? fullMaterials.structure : (
+        kind === 'floor' ? fullMaterials.floor : (
+          kind === 'door' ? fullMaterials.door : (
+            kind === 'window' ? fullMaterials.window : (
+              kind === 'opening' ? fullMaterials.opening : (
+                kind === 'storage' ? fullMaterials.storage : fullMaterials.structure
+              )
+            )
+          )
+        )
+      ), s.holes || []);
+      if (!mesh) continue;
+
+      if (kind === 'wall') {
+        structureGeometries.push(mesh.geometry);
+      } else if (kind === 'floor') {
+        floorGeometries.push(mesh.geometry);
+      } else if (kind === 'door') {
+        groups.doors.add(mesh);
+      } else if (kind === 'window') {
+        groups.windows.add(mesh);
+      } else if (kind === 'opening') {
+        groups.openings.add(mesh);
+      } else if (kind === 'storage') {
+        groups.storages.add(mesh);
+      } else {
+        groups.structure.add(mesh);
+      }
+
+      for (const srcId of srcIds) usedSourceIds.add(srcId);
+    }
+
+    // Add non-stitched residual surfaces (e.g. isolated elements) so nothing disappears.
+    for (const surface of state.surfaceNodes.values()) {
+      if (!isStoryVisible(surface.story)) continue;
+      const sk = surface.properties?.synthetic_kind;
+      if (sk && !isAllowedSyntheticKind(sk)) continue;
+      if (usedSourceIds.has(surface.id)) continue;
+      const kind = surface.properties?.surface_kind || 'surface';
+      const corners = state.surfaceToWorldCorners.get(surface.id) || [];
+      if (corners.length < 3) continue;
+      if (kind === 'wall') {
+        const mesh = createPolygonMesh(corners, fullMaterials.structure);
+        if (mesh) structureGeometries.push(mesh.geometry);
+      } else if (kind === 'floor') {
+        const mesh = createPolygonMesh(corners, fullMaterials.floor);
+        if (mesh) floorGeometries.push(mesh.geometry);
+      } else if (kind === 'door') {
+        const mesh = createPolygonMesh(corners, fullMaterials.door);
+        if (mesh) groups.doors.add(mesh);
+      } else if (kind === 'window') {
+        const mesh = createPolygonMesh(corners, fullMaterials.window);
+        if (mesh) groups.windows.add(mesh);
+      } else if (kind === 'opening') {
+        const mesh = createPolygonMesh(corners, fullMaterials.opening);
+        if (mesh) groups.openings.add(mesh);
+      } else if (kind === 'storage') {
+        const mesh = createPolygonMesh(corners, fullMaterials.storage);
+        if (mesh) groups.storages.add(mesh);
+      }
+    }
+  } else {
+
+    for (const surface of state.surfaceNodes.values()) {
+      if (!isStoryVisible(surface.story)) continue;
+      const sk = surface.properties?.synthetic_kind;
+      if (sk && !isAllowedSyntheticKind(sk)) continue;
+      const kind = surface.properties?.surface_kind || 'surface';
+      const corners = state.surfaceToWorldCorners.get(surface.id) || [];
+      if (corners.length < 3) continue;
+
+      if (kind === 'wall') {
+        const mesh = createPolygonMesh(corners, fullMaterials.structure);
+        if (mesh) {
+          structureGeometries.push(mesh.geometry);
+        }
+      } else if (kind === 'floor') {
+        const mesh = createPolygonMesh(corners, fullMaterials.floor);
+        if (mesh) {
+          floorGeometries.push(mesh.geometry);
+        }
+      } else if (kind === 'door') {
+        const mesh = createPolygonMesh(corners, fullMaterials.door);
+        if (mesh) groups.doors.add(mesh);
+        groups.doors.add(createEdgeLoop(corners, fullPalette.door.edge, 0.8));
+      } else if (kind === 'window') {
+        const mesh = createPolygonMesh(corners, fullMaterials.window);
+        if (mesh) groups.windows.add(mesh);
+        groups.windows.add(createEdgeLoop(corners, fullPalette.window.edge, 0.85));
+      } else if (kind === 'opening') {
+        const mesh = createPolygonMesh(corners, fullMaterials.opening);
+        if (mesh) groups.openings.add(mesh);
+        groups.openings.add(createEdgeLoop(corners, fullPalette.opening.edge, 0.95));
+      } else if (kind === 'storage') {
+        const mesh = createPolygonMesh(corners, fullMaterials.storage);
+        if (mesh) groups.storages.add(mesh);
+        groups.storages.add(createEdgeLoop(corners, fullPalette.storage.edge, 0.75));
+      }
+    }
+  }
+
+  if (structureGeometries.length > 0) {
+    const merged = BufferGeometryUtils.mergeGeometries(structureGeometries, false);
+    if (merged) {
+      merged.computeVertexNormals();
+      const m = new THREE.Mesh(merged, fullMaterials.structure);
+      m.castShadow = true;
+      m.receiveShadow = true;
+      groups.structure.add(m);
+    }
+  }
+
+  if (floorGeometries.length > 0) {
+    const merged = BufferGeometryUtils.mergeGeometries(floorGeometries, false);
+    if (merged) {
+      merged.computeVertexNormals();
+      const m = new THREE.Mesh(merged, fullMaterials.floor);
+      m.castShadow = true;
+      m.receiveShadow = true;
+      groups.floors.add(m);
+
+      const floorEdges = new THREE.LineSegments(
+        new THREE.EdgesGeometry(merged, 25),
+        new THREE.LineBasicMaterial({ color: fullPalette.floor.edge, transparent: true, opacity: 0.35 })
+      );
+      groups.floors.add(floorEdges);
+    }
+  }
+
+  // Gap overlays from gap nodes.
+  for (const gap of (topology.nodes || []).filter(n => n.type === 'Gap')) {
+    if (!isStoryVisible(gap.story)) continue;
+    const wkt = gap.properties?.region_wkt;
+    if (!wkt) continue;
+    const y = (state.storyY.get(Number(gap.story)) ?? 0) + 0.06;
+
+    if (String(wkt).startsWith('LINESTRING')) {
+      const pts2 = parseWKTLineString(wkt);
+      if (pts2.length < 2) continue;
+      const pts3 = pts2.map(p => new THREE.Vector3(p[0], y, p[1]));
+      groups.gaps.add(new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints(pts3),
+        new THREE.LineBasicMaterial({ color: 0xff88ff, transparent: true, opacity: 0.95 })
+      ));
+      continue;
+    }
+
+    const poly = parseWKTPolygon(wkt);
+    if (poly.length < 3) continue;
+    const corners = poly.map(p => [p[0], y, p[1]]);
+    const gapMat = new THREE.MeshStandardMaterial({
+      color: fullPalette.gap.fill,
+      roughness: fullPalette.gap.roughness,
+      metalness: fullPalette.gap.metalness,
+      transparent: true,
+      opacity: fullPalette.gap.opacity,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    });
+    const mesh = createPolygonMesh(corners, gapMat);
+    if (mesh) groups.gaps.add(mesh);
+    groups.gaps.add(createEdgeLoop(corners, fullPalette.gap.edge, 0.9));
+  }
+
+  // Adjacency overlays.
+  for (const e of topology.edges || []) {
+    if (e.type !== 'ADJACENT_TO') continue;
+    const a = state.topology.nodes.find(n => n.id === e.from);
+    const b = state.topology.nodes.find(n => n.id === e.to);
+    if (!a || !b) continue;
+    if (!isStoryVisible(a.story) || !isStoryVisible(b.story)) continue;
+    const ca = state.roomCenters.get(a.id);
+    const cb = state.roomCenters.get(b.id);
+    if (!ca || !cb) continue;
+    const y = (state.storyY.get(Number(a.story)) ?? 0) + 1.15;
+    const line = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(ca[0], y, ca[1]),
+        new THREE.Vector3(cb[0], y, cb[1]),
+      ]),
+      new THREE.LineBasicMaterial({ color: 0x66ccff, transparent: true, opacity: 0.75 })
+    );
+    line.userData.edge = e;
+    groups.adjacency.add(line);
+  }
+
+  // Boundary overlays.
+  const boundaryNodes = (topology.nodes || []).filter(n => n.type === 'Boundary' && isStoryVisible(n.story));
+  const boundarySet = new Set(boundaryNodes.map(n => n.id));
+  for (const e of topology.edges || []) {
+    if (e.type !== 'BOUNDS' || !boundarySet.has(e.from)) continue;
+    const target = state.surfaceNodes.get(e.to);
+    if (!target) continue;
+    const corners = state.surfaceToWorldCorners.get(target.id);
+    if (!corners || corners.length < 2) continue;
+    groups.boundaries.add(createEdgeLoop(corners, 0x8899aa, 0.35));
+  }
+
+  addRoomSelectionOverlay();
+  applyPipelineStep(pipelineStepIndex);
+  fitCameraToScene();
+  updateBuildingInfo();
+}
+
+function fitCameraToScene() {
+  const box = new THREE.Box3();
+  for (const key of ['structure', 'floors', 'doors', 'windows', 'openings', 'storages', 'gaps', 'adjacency']) {
+    if (groups[key].children.length) box.expandByObject(groups[key]);
+  }
+  if (box.isEmpty()) return;
+  const center = box.getCenter(new THREE.Vector3());
+  const size = box.getSize(new THREE.Vector3());
+  const radius = Math.max(size.x, size.y, size.z) * 0.8;
+  const dist = Math.max(8, radius * 2.2);
+  camera.position.set(center.x + dist * 0.7, center.y + dist * 0.8, center.z + dist * 0.7);
+  controls.target.copy(center);
+  controls.update();
+}
+
+function buildPipelineVisibility(stepIndex) {
+  const vis = {};
+  for (const key of LAYER_KEYS) vis[key] = false;
+  for (let i = 0; i <= stepIndex; i++) {
+    const step = PIPELINE_STEPS[i];
+    if (!step) continue;
+    for (const key of step.adds || []) vis[key] = true;
+  }
+  return vis;
+}
+
+function setLayerVisibility(layer, visible, syncControls = true) {
+  groups[layer].visible = visible;
+  if (syncControls) {
+    const id = LAYER_CONTROL_IDS[layer];
+    const ctl = id ? document.getElementById(id) : null;
+    if (ctl) ctl.checked = visible;
+  }
+}
+
+function renderPipelineStatus() {
+  const current = PIPELINE_STEPS[pipelineStepIndex];
+  document.getElementById('pipeline-current').textContent = `Stage ${pipelineStepIndex + 1}/${PIPELINE_STEPS.length}: ${current.label}`;
+  document.getElementById('pipeline-prev').disabled = pipelineStepIndex <= 0;
+  document.getElementById('pipeline-next').disabled = pipelineStepIndex >= PIPELINE_STEPS.length - 1;
+  const holder = document.getElementById('pipeline-steps');
+  holder.innerHTML = PIPELINE_STEPS.map((step, i) => {
+    const cls = i < pipelineStepIndex ? 'pipeline-step-pill done' : (i === pipelineStepIndex ? 'pipeline-step-pill active' : 'pipeline-step-pill');
+    return `<span class="${cls}" data-step="${i}">${i + 1}. ${step.label}</span>`;
+  }).join('');
+}
+
+function applyPipelineStep(stepIndex) {
+  pipelineStepIndex = Math.max(0, Math.min(stepIndex, PIPELINE_STEPS.length - 1));
+  const vis = buildPipelineVisibility(pipelineStepIndex);
+  for (const key of LAYER_KEYS) setLayerVisibility(key, !!vis[key], true);
+  renderPipelineStatus();
+  renderLegend();
+}
+
+function renderLegend() {
+  let html = '';
+  if (document.getElementById('show-structure').checked) html += `<span style="background:#f3f1ee"></span>Structure `;
+  if (document.getElementById('show-floors').checked) html += `<span style="background:#c8c2b7"></span>Floors `;
+  if (document.getElementById('show-doors').checked) html += `<span style="background:#c49a6c"></span>Doors `;
+  if (document.getElementById('show-windows').checked) html += `<span style="background:#87ceeb"></span>Windows `;
+  if (document.getElementById('show-openings').checked) html += `<span style="background:#0a0e1b"></span>Openings `;
+  if (document.getElementById('show-storages').checked) html += `<span style="background:#b9a27d"></span>Storages `;
+  if (document.getElementById('show-gaps').checked) html += `<span style="background:#cc44ff"></span>Gaps `;
+  if (document.getElementById('show-adjacency').checked) html += `<span style="background:#66ccff"></span>Adjacency `;
+  if (document.getElementById('show-boundaries').checked) html += `<span style="background:#8899aa"></span>Boundaries `;
+  document.getElementById('legend-box').innerHTML = html;
+}
+
+function updateBuildingInfo() {
+  if (!state.topology) {
+    document.getElementById('building-info').textContent = '';
+    return;
+  }
+  const q = state.topology.quality?.counts || {};
+  const sid = state.selectedStory;
+  const storyText = sid === 'all' ? 'All stories' : `Story ${sid}`;
+  const qa = state.qa?.ifc_mapping?.conformance?.passed;
+  document.getElementById('building-info').innerHTML =
+    `${state.topology.metadata?.uuid || 'Topology'} &middot; ${storyText}` +
+    ` &middot; ${q.rooms ?? state.roomNodes.length} rooms` +
+    ` &middot; ${q.surfaces ?? state.surfaceNodes.size} surfaces` +
+    ` &middot; ${q.gaps ?? ((state.topology.nodes || []).filter(n => n.type === 'Gap').length)} gaps` +
+    (qa === undefined ? '' : ` &middot; IFC checks: <span style="color:${qa ? '#6fe28f' : '#ff8c8c'}">${qa ? 'PASS' : 'FAIL'}</span>`);
+}
+
+function populateStoryFilter() {
+  const select = document.getElementById('story-filter');
+  const stories = [...new Set(state.roomNodes.map(r => r.story).filter(v => Number.isInteger(v)))].sort((a, b) => a - b);
+  select.innerHTML = `<option value="all">All</option>` + stories.map(s => `<option value="${s}">Story ${s}</option>`).join('');
+  if (state.selectedStory !== 'all' && !stories.includes(Number(state.selectedStory))) state.selectedStory = 'all';
+  select.value = String(state.selectedStory);
+}
+
+function populateRoomList() {
+  const list = document.getElementById('room-list');
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  let rooms = state.roomNodes.slice();
+  if (state.selectedStory !== 'all') rooms = rooms.filter(r => Number(r.story) === Number(state.selectedStory));
+  if (q) rooms = rooms.filter(r => r.id.toLowerCase().includes(q));
+
+  rooms.sort((a, b) => {
+    if (a.story !== b.story) return a.story - b.story;
+    return a.id.localeCompare(b.id);
+  });
+
+  list.innerHTML = '';
+  for (const room of rooms) {
+    const item = document.createElement('div');
+    item.className = 'room-item' + (room.id === state.selectedRoomId ? ' active' : '');
+
+    const gapCount = (state.topology.edges || []).filter(e => e.type === 'HAS_GAP' && e.from === room.id).length;
+
+    item.innerHTML =
+      `<div class="room-title">${room.id.replace('room:', '')}</div>` +
+      `<div class="room-meta">` +
+      `<span class="tag tag-story">S${room.story}</span>` +
+      `<span>${(state.roomToSurface.get(room.id) || []).length} surfaces</span>` +
+      (gapCount > 0 ? `<span class="tag tag-gap">${gapCount} gaps</span>` : '') +
+      `</div>`;
+
+    item.dataset.search = room.id.toLowerCase();
+    item.addEventListener('click', () => {
+      state.selectedRoomId = room.id;
+      populateRoomList();
+      rebuildScene();
+    });
+    list.appendChild(item);
+  }
+
+  document.getElementById('sidebar-stats').textContent = `${rooms.length} visible rooms`;
+}
+
+function loadTopology(topology) {
+  state.topology = topology;
+  state.selectedRoomId = null;
+  rebuildIndices();
+  populateStoryFilter();
+  populateRoomList();
+  rebuildScene();
+}
+
+function setWireframe(on) {
+  for (const key of ['structure', 'floors', 'doors', 'windows', 'openings', 'storages', 'gaps']) {
+    groups[key].traverse(c => {
+      if (c.isMesh && c.material && 'wireframe' in c.material) c.material.wireframe = on;
+    });
+  }
+}
+
+document.getElementById('load-topology-btn').addEventListener('click', () => document.getElementById('topology-file').click());
+document.getElementById('load-qa-btn').addEventListener('click', () => document.getElementById('qa-file').click());
+
+document.getElementById('topology-file').addEventListener('change', async (e) => {
+  const f = e.target.files?.[0];
+  if (!f) return;
+  loadTopology(JSON.parse(await f.text()));
+});
+
+document.getElementById('qa-file').addEventListener('change', async (e) => {
+  const f = e.target.files?.[0];
+  if (!f) return;
+  state.qa = JSON.parse(await f.text());
+  updateBuildingInfo();
+});
+
+document.getElementById('search').addEventListener('input', populateRoomList);
+
+document.getElementById('story-filter').addEventListener('change', (e) => {
+  state.selectedStory = e.target.value;
+  state.selectedRoomId = null;
+  populateRoomList();
+  rebuildScene();
+});
+
+document.getElementById('pipeline-prev').addEventListener('click', () => applyPipelineStep(pipelineStepIndex - 1));
+document.getElementById('pipeline-next').addEventListener('click', () => applyPipelineStep(pipelineStepIndex + 1));
+document.getElementById('pipeline-steps').addEventListener('click', (e) => {
+  const t = e.target.closest('[data-step]');
+  if (!t) return;
+  applyPipelineStep(Number(t.dataset.step));
+});
+
+for (const [layer, id] of Object.entries(LAYER_CONTROL_IDS)) {
+  document.getElementById(id).addEventListener('change', (e) => {
+    setLayerVisibility(layer, e.target.checked, false);
+    renderLegend();
+  });
+}
+
+document.getElementById('show-wireframe').addEventListener('change', (e) => setWireframe(e.target.checked));
+document.getElementById('use-stitched').addEventListener('change', () => rebuildScene());
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+window.addEventListener('resize', resizeRenderer);
+resizeRenderer();
+renderPipelineStatus();
+renderLegend();
+animate();
+
+(async function loadFromUrlIfPresent() {
+  const params = new URLSearchParams(location.search);
+  const dataUrl = params.get('data');
+  const qaUrl = params.get('qa');
+  if (dataUrl) {
+    const topology = await fetch(dataUrl).then(r => r.json());
+    loadTopology(topology);
+  }
+  if (qaUrl) {
+    state.qa = await fetch(qaUrl).then(r => r.json());
+    updateBuildingInfo();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,4139 @@
+# Scan Inventory: Trust + Calor Usage Matrix (All Fields)
+
+Generated: 2026-04-03T08:30:00.633Z
+
+Legend:
+- `trust`: `authoritative_*` = source of truth in that layer; `derived_*` = generated/merged layer; `_optional` = sparsely present/nullable
+- `usage`: `used_directly`, `used_indirectly_mapped`, `currently_unused`
+
+Primary Calor evidence:
+- /Users/martincollignon/conductor/workspaces/calor/port-louis-v8/internal/domain/ios/roomplan/app_models.go
+- /Users/martincollignon/conductor/workspaces/calor/port-louis-v8/internal/domain/ios/roomplan/ios_models.go
+- /Users/martincollignon/conductor/workspaces/calor/port-louis-v8/internal/domain/ios/roomplan/service.go
+- /Users/martincollignon/conductor/workspaces/calor/port-louis-v8/internal/domain/ios/roomplan/mappers.go
+- /Users/martincollignon/conductor/workspaces/calor/port-louis-v8/internal/domain/homes/room-by-room/rbr_types.go
+
+## Key Geometry Difference (Polygon Mapping)
+
+- Standalone room JSON polygon geometry (`polygonCorners` + room-local `transform`) is raw capture geometry per room.
+- Merged floor JSON polygon geometry is post-merge geometry across rooms; UUIDs and transforms can differ from raw room files.
+- Calor compensates mismatch by combining raw room wall shape with merged wall transform (`NewSegmentFromIOSSurfaceRaw`), so wall footprint comes from raw corners while placement follows merged frame.
+- For windows/openings/doors, parent linkage uses merged IDs (`parentIdentifier`), with explicit orphan handling for Apple merge inconsistencies.
+- Ceiling merged/standalone data is processed as separate ceiling segments, with vertical ceilings reclassified into ceiling elements with wall-like metadata fallback.
+
+## data.json Metadata Fields
+
+Field count: **121**
+
+- `homeMetadata`
+  - trust: `authoritative_metadata`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:229
+  - seen: 229
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `homeMetadata.address`
+  - trust: `authoritative_metadata`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:229
+  - seen: 229
+  - interpretation: Mapped into RoomPlanHome identity fields during initialization.
+- `homeMetadata.capturedAzimuths`
+  - trust: `authoritative_metadata`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:229
+  - seen: 229
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:229, object:1123
+  - seen: 229
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].accuracy`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:1123
+  - seen: 1123
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].azimuth`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:1123
+  - seen: 1123
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].storyId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:963
+  - seen: 963
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:1123
+  - seen: 1123
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:1123, array:2246
+  - seen: 1123
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[].0`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2246
+  - seen: 2246
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[].1`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2246
+  - seen: 2246
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[].10`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2246
+  - seen: 2246
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[].11`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2246
+  - seen: 2246
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[].12`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2246
+  - seen: 2246
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[].13`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2246
+  - seen: 2246
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[].14`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2246
+  - seen: 2246
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[].15`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2246
+  - seen: 2246
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[].2`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2246
+  - seen: 2246
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[].3`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2246
+  - seen: 2246
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[].4`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2246
+  - seen: 2246
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[].5`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2246
+  - seen: 2246
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[].6`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2246
+  - seen: 2246
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[].7`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2246
+  - seen: 2246
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[].8`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2246
+  - seen: 2246
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.capturedAzimuths[].transforms[].9`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2246
+  - seen: 2246
+  - interpretation: Mapped to azimuth initialization vectors and accuracy; story ids mapped via idMap when possible.
+- `homeMetadata.created`
+  - trust: `authoritative_metadata`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:229
+  - seen: 229
+  - interpretation: Timing/version metadata is parsed/available but not used in current geometry/material mapping logic.
+- `homeMetadata.floors`
+  - trust: `authoritative_metadata`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:229
+  - seen: 229
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `homeMetadata.floors[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:229, object:383
+  - seen: 229
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `homeMetadata.floors[].created`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:383
+  - seen: 383
+  - interpretation: Timing/version metadata is parsed/available but not used in current geometry/material mapping logic.
+- `homeMetadata.floors[].floorToGradeHeightInCM`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:62
+  - seen: 62
+  - interpretation: Mapped to story-level semantics and wall split constraints.
+- `homeMetadata.floors[].floorType`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:383
+  - seen: 383
+  - interpretation: Mapped to story-level semantics and wall split constraints.
+- `homeMetadata.floors[].horizontalWallSplits`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:383
+  - seen: 383
+  - interpretation: Mapped to story-level semantics and wall split constraints.
+- `homeMetadata.floors[].horizontalWallSplits[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:383
+  - seen: 383
+  - interpretation: Mapped to story-level semantics and wall split constraints.
+- `homeMetadata.floors[].id`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:383
+  - seen: 383
+  - interpretation: Used to locate and load merged floor JSON payloads.
+- `homeMetadata.floors[].jsonPath`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:383
+  - seen: 383
+  - interpretation: Used to locate and load merged floor JSON payloads.
+- `homeMetadata.floors[].rooms`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:383
+  - seen: 383
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `homeMetadata.floors[].rooms[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:383, object:2446
+  - seen: 383
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:2446
+  - seen: 2446
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.ceilings`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:94
+  - seen: 94
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.ceilings[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:94, object:185
+  - seen: 94
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.ceilings[].id`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:185
+  - seen: 185
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.ceilings[].materialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:185
+  - seen: 185
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.defaultMaterials`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:2446
+  - seen: 2446
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.defaultMaterials.ceilingAgainstKneeWallMaterialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:611
+  - seen: 611
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.defaultMaterials.ceilingMaterialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2162
+  - seen: 2162
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.defaultMaterials.ceilingSlantedWallMaterialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:1069
+  - seen: 1069
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.defaultMaterials.externalDoorMaterialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2241
+  - seen: 2241
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.defaultMaterials.externalWallBasementToAirMaterialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:170
+  - seen: 170
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.defaultMaterials.externalWallBasementToGroundMaterialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:174
+  - seen: 174
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.defaultMaterials.externalWallMaterialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2168
+  - seen: 2168
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.defaultMaterials.floorMaterialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2316
+  - seen: 2316
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.defaultMaterials.internalWallMaterialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:454
+  - seen: 454
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.defaultMaterials.kneeWallMaterialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:516
+  - seen: 516
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.defaultMaterials.windowMaterialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2340
+  - seen: 2340
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.doors`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:300
+  - seen: 300
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.doors[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:300, object:321
+  - seen: 300
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.doors[].id`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:321
+  - seen: 321
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.doors[].materialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:321
+  - seen: 321
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.floors`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:399
+  - seen: 399
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.floors[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:399, object:399
+  - seen: 399
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.floors[].id`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:399
+  - seen: 399
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.floors[].materialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:399
+  - seen: 399
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.walls`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:310
+  - seen: 310
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.walls[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:310, object:521
+  - seen: 310
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.walls[].id`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:521
+  - seen: 521
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.walls[].materialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:521
+  - seen: 521
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.windows`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:433
+  - seen: 433
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.windows[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:433, object:593
+  - seen: 433
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.windows[].id`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:593
+  - seen: 593
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].buildingElementMetadata.windows[].materialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:593
+  - seen: 593
+  - interpretation: Used for default/per-element material metadata and applied to walls/floors/doors/windows/ceilings.
+- `homeMetadata.floors[].rooms[].ceilingSource`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2443
+  - seen: 2443
+  - interpretation: Mapped to room initialization model and downstream room-by-room state.
+- `homeMetadata.floors[].rooms[].created`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:2446
+  - seen: 2446
+  - interpretation: Timing/version metadata is parsed/available but not used in current geometry/material mapping logic.
+- `homeMetadata.floors[].rooms[].heatEmitters`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2446
+  - seen: 2446
+  - interpretation: Mapped from metadata into room domain model heat emitters.
+- `homeMetadata.floors[].rooms[].heatEmitters[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2446
+  - seen: 2446
+  - interpretation: Mapped from metadata into room domain model heat emitters.
+- `homeMetadata.floors[].rooms[].id`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2446
+  - seen: 2446
+  - interpretation: Used to load individual room and optional ceiling files; anchors room matching.
+- `homeMetadata.floors[].rooms[].jsonPath`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2446
+  - seen: 2446
+  - interpretation: Used to load individual room and optional ceiling files; anchors room matching.
+- `homeMetadata.floors[].rooms[].jsonPathCeiling`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2312
+  - seen: 2312
+  - interpretation: Used to load individual room and optional ceiling files; anchors room matching.
+- `homeMetadata.floors[].rooms[].name`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2446
+  - seen: 2446
+  - interpretation: Mapped to room initialization model and downstream room-by-room state.
+- `homeMetadata.floors[].rooms[].roomHeatingType`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2446
+  - seen: 2446
+  - interpretation: Mapped to room initialization model and downstream room-by-room state.
+- `homeMetadata.floors[].rooms[].roomType`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2446
+  - seen: 2446
+  - interpretation: Mapped to room initialization model and downstream room-by-room state.
+- `homeMetadata.floors[].rooms[].usdzPath`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: string:2446
+  - seen: 2446
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `homeMetadata.floors[].thicknessToFloorAboveInCM`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:382
+  - seen: 382
+  - interpretation: Mapped to story-level semantics and wall split constraints.
+- `homeMetadata.floors[].usdzPath`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: string:383
+  - seen: 383
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `homeMetadata.frontOfHouseImage`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:188
+  - seen: 188
+  - interpretation: Transferred and forwarded as FrontOfHouseImage metadata in initialization request.
+- `homeMetadata.frontOfHouseImage.objectKey`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:188
+  - seen: 188
+  - interpretation: Transferred and forwarded as FrontOfHouseImage metadata in initialization request.
+- `homeMetadata.heatingDistributionSystem`
+  - trust: `authoritative_metadata`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:188
+  - seen: 188
+  - interpretation: Observed in metadata but no direct use in current iOS roomplan import path in Calor.
+- `homeMetadata.heatingDistributionSystem.circuits`
+  - trust: `authoritative_metadata`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:188
+  - seen: 188
+  - interpretation: Observed in metadata but no direct use in current iOS roomplan import path in Calor.
+- `homeMetadata.heatingDistributionSystem.circuits[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:188, object:188
+  - seen: 188
+  - interpretation: Observed in metadata but no direct use in current iOS roomplan import path in Calor.
+- `homeMetadata.heatingDistributionSystem.circuits[].circuitType`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: string:188
+  - seen: 188
+  - interpretation: Observed in metadata but no direct use in current iOS roomplan import path in Calor.
+- `homeMetadata.heatingDistributionSystem.circuits[].id`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: string:188
+  - seen: 188
+  - interpretation: Observed in metadata but no direct use in current iOS roomplan import path in Calor.
+- `homeMetadata.heatingDistributionSystem.circuits[].name`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: string:188
+  - seen: 188
+  - interpretation: Observed in metadata but no direct use in current iOS roomplan import path in Calor.
+- `homeMetadata.heatingDistributionSystem.mainDistributionPipeDiameterInMM`
+  - trust: `authoritative_metadata`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:188
+  - seen: 188
+  - interpretation: Observed in metadata but no direct use in current iOS roomplan import path in Calor.
+- `homeMetadata.id`
+  - trust: `authoritative_metadata`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:229
+  - seen: 229
+  - interpretation: Mapped into RoomPlanHome identity fields during initialization.
+- `homeMetadata.notes`
+  - trust: `authoritative_metadata`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:229
+  - seen: 229
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:229, object:2141
+  - seen: 229
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].area`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:90
+  - seen: 90
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].buildingElementType`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:511
+  - seen: 511
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].category`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2141
+  - seen: 2141
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].description`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2141
+  - seen: 2141
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].fromTransform`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:1393
+  - seen: 1393
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].fromTransform[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:1393, number:22288
+  - seen: 1393
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].height`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:436
+  - seen: 436
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].id`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2141
+  - seen: 2141
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].images`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:1711
+  - seen: 1711
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].images[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:1711, object:1861
+  - seen: 1711
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].images[].objectKey`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:1861
+  - seen: 1861
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].materialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:471
+  - seen: 471
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].noteableId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2141
+  - seen: 2141
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].noteableType`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2141
+  - seen: 2141
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].technicalInstallationTemplateId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:136
+  - seen: 136
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].technicalInstallationType`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:656
+  - seen: 656
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].transform`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:1393
+  - seen: 1393
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].transform[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:1393, number:22288
+  - seen: 1393
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `homeMetadata.notes[].width`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:436
+  - seen: 436
+  - interpretation: Mapped into typed notes payload including category-specific fields and points/images.
+- `materialShortlist`
+  - trust: `authoritative_metadata`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:41
+  - seen: 41
+  - interpretation: Converted and passed as shortlisted materials; country-specific mapping logic applied.
+- `materialShortlist[]`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:41, object:518
+  - seen: 41
+  - interpretation: Converted and passed as shortlisted materials; country-specific mapping logic applied.
+- `materialShortlist[].materialConstructionSource`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:317
+  - seen: 317
+  - interpretation: Converted and passed as shortlisted materials; country-specific mapping logic applied.
+- `materialShortlist[].materialId`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:518
+  - seen: 518
+  - interpretation: Converted and passed as shortlisted materials; country-specific mapping logic applied.
+- `materialShortlist[].type`
+  - trust: `authoritative_metadata_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:518
+  - seen: 518
+  - interpretation: Converted and passed as shortlisted materials; country-specific mapping logic applied.
+- `userID`
+  - trust: `authoritative_metadata`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:229
+  - seen: 229
+  - interpretation: Mapped into RoomPlanHome identity fields during initialization.
+- `version`
+  - trust: `authoritative_metadata`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:229
+  - seen: 229
+  - interpretation: Timing/version metadata is parsed/available but not used in current geometry/material mapping logic.
+
+## Standalone RoomPlan Fields
+
+Field count: **150**
+
+- `coreModel`
+  - trust: `authoritative_raw_capture`
+  - usage_in_calor: `currently_unused`
+  - observed_types: string:2443
+  - seen: 2443
+  - interpretation: Frame/session anchoring fields are preserved by schema but not used by current Calor geometry construction.
+- `doors`
+  - trust: `authoritative_raw_capture`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `doors[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2443, object:4467
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `doors[].category`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:4467
+  - seen: 4467
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `doors[].category.door`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:4467
+  - seen: 4467
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `doors[].category.door.isOpen`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: boolean:4467
+  - seen: 4467
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `doors[].completedEdges`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:4467
+  - seen: 4467
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `doors[].completedEdges[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:4467
+  - seen: 4467
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `doors[].confidence`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:4467
+  - seen: 4467
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `doors[].confidence.high`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2493
+  - seen: 2493
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `doors[].confidence.medium`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:1974
+  - seen: 1974
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `doors[].curve`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: null:4467
+  - seen: 4467
+  - interpretation: Parsed and explicitly checked; non-null curves only trigger warning (unsupported) and are otherwise ignored.
+- `doors[].dimensions`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:4467
+  - seen: 4467
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `doors[].dimensions[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:4467, number:13401
+  - seen: 4467
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `doors[].identifier`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:4467
+  - seen: 4467
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `doors[].parentIdentifier`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:4467
+  - seen: 4467
+  - interpretation: Used to attach child elements to parent walls; orphan handling present for merge inconsistencies.
+- `doors[].polygonCorners`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:4467
+  - seen: 4467
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `doors[].polygonCorners[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:4467
+  - seen: 4467
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `doors[].story`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:4467
+  - seen: 4467
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `doors[].transform`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:4467
+  - seen: 4467
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `doors[].transform[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:4467, number:71472
+  - seen: 4467
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors`
+  - trust: `authoritative_raw_capture`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `floors[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2443, object:2443
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `floors[].category`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2443
+  - seen: 2443
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `floors[].category.floor`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2443
+  - seen: 2443
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `floors[].completedEdges`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `floors[].completedEdges[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:2443
+  - seen: 2443
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `floors[].confidence`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2443
+  - seen: 2443
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `floors[].confidence.high`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2443
+  - seen: 2443
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `floors[].curve`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: null:2443
+  - seen: 2443
+  - interpretation: Parsed and explicitly checked; non-null curves only trigger warning (unsupported) and are otherwise ignored.
+- `floors[].dimensions`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors[].dimensions[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2443, number:7329
+  - seen: 2443
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors[].identifier`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2443
+  - seen: 2443
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `floors[].parentIdentifier`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: null:2443
+  - seen: 2443
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `floors[].polygonCorners`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors[].polygonCorners[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2443, array:14073
+  - seen: 2443
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors[].polygonCorners[].0`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:14073
+  - seen: 14073
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors[].polygonCorners[].1`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:14073
+  - seen: 14073
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors[].polygonCorners[].2`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:14073
+  - seen: 14073
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors[].story`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:2443
+  - seen: 2443
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `floors[].transform`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors[].transform[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2443, number:39088
+  - seen: 2443
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `objects`
+  - trust: `authoritative_raw_capture`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Object arrays are traversed, but only staircase-classified objects are turned into modeled outputs.
+- `objects[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2443, object:12971
+  - seen: 2443
+  - interpretation: Object arrays are traversed, but only staircase-classified objects are turned into modeled outputs.
+- `objects[].attributes`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: object:12971
+  - seen: 12971
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].attributes.ChairArmType`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1999
+  - seen: 1999
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].attributes.ChairBackType`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1999
+  - seen: 1999
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].attributes.ChairLegType`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1999
+  - seen: 1999
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].attributes.ChairType`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1999
+  - seen: 1999
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].attributes.SofaType`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:653
+  - seen: 653
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].attributes.StorageType`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:5639
+  - seen: 5639
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].attributes.TableShapeType`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1580
+  - seen: 1580
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].attributes.TableType`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1580
+  - seen: 1580
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].category`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: object:12971
+  - seen: 12971
+  - interpretation: Object category containers are parsed; only the stairs branch is consumed.
+- `objects[].category.bathtub`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:58
+  - seen: 58
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.bed`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:365
+  - seen: 365
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.chair`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2120
+  - seen: 2120
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.dishwasher`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:108
+  - seen: 108
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `objects[].category.fireplace`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:10
+  - seen: 10
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.oven`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:204
+  - seen: 204
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.refrigerator`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:248
+  - seen: 248
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.sink`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:588
+  - seen: 588
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.sofa`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:678
+  - seen: 678
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.stairs`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:204
+  - seen: 204
+  - interpretation: Object category is used to detect staircases and build staircase footprints.
+- `objects[].category.storage`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:5639
+  - seen: 5639
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.stove`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:185
+  - seen: 185
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.table`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:1734
+  - seen: 1734
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.television`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:277
+  - seen: 277
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.toilet`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:351
+  - seen: 351
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.washerDryer`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:202
+  - seen: 202
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].confidence`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:12971
+  - seen: 12971
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `objects[].confidence.high`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2716
+  - seen: 2716
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `objects[].confidence.low`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:7979
+  - seen: 7979
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `objects[].confidence.medium`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2276
+  - seen: 2276
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `objects[].dimensions`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:12971
+  - seen: 12971
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].dimensions[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:12971, number:38913
+  - seen: 12971
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].identifier`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:12971
+  - seen: 12971
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].parentIdentifier`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: null:11232, string:1739
+  - seen: 12971
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].story`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:12971
+  - seen: 12971
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `objects[].transform`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:12971
+  - seen: 12971
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].transform[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:12971, number:207536
+  - seen: 12971
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `openings`
+  - trust: `authoritative_raw_capture`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `openings[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2443, object:1000
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `openings[].category`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:1000
+  - seen: 1000
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `openings[].category.opening`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:1000
+  - seen: 1000
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `openings[].completedEdges`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:1000
+  - seen: 1000
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `openings[].completedEdges[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:1000
+  - seen: 1000
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `openings[].confidence`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:1000
+  - seen: 1000
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `openings[].confidence.high`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:1000
+  - seen: 1000
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `openings[].curve`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: null:1000
+  - seen: 1000
+  - interpretation: Parsed and explicitly checked; non-null curves only trigger warning (unsupported) and are otherwise ignored.
+- `openings[].dimensions`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:1000
+  - seen: 1000
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `openings[].dimensions[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:1000, number:3000
+  - seen: 1000
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `openings[].identifier`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:1000
+  - seen: 1000
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `openings[].parentIdentifier`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:1000
+  - seen: 1000
+  - interpretation: Used to attach child elements to parent walls; orphan handling present for merge inconsistencies.
+- `openings[].polygonCorners`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:1000
+  - seen: 1000
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `openings[].polygonCorners[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:1000
+  - seen: 1000
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `openings[].story`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:1000
+  - seen: 1000
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `openings[].transform`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:1000
+  - seen: 1000
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `openings[].transform[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:1000, number:16000
+  - seen: 1000
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `referenceOriginTransform`
+  - trust: `authoritative_raw_capture`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Frame/session anchoring fields are preserved by schema but not used by current Calor geometry construction.
+- `referenceOriginTransform[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:2443, number:39088
+  - seen: 2443
+  - interpretation: Frame/session anchoring fields are preserved by schema but not used by current Calor geometry construction.
+- `sections`
+  - trust: `authoritative_raw_capture`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `sections[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:2443, object:2805
+  - seen: 2443
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `sections[].center`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:2805
+  - seen: 2805
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `sections[].center[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:2805, number:8415
+  - seen: 2805
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `sections[].label`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: string:2805
+  - seen: 2805
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `sections[].story`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:2805
+  - seen: 2805
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `story`
+  - trust: `authoritative_raw_capture`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:2443
+  - seen: 2443
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `version`
+  - trust: `authoritative_raw_capture`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:2443
+  - seen: 2443
+  - interpretation: Timing/version metadata is parsed/available but not used in current geometry/material mapping logic.
+- `walls`
+  - trust: `authoritative_raw_capture`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `walls[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2443, object:14862
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `walls[].category`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:14862
+  - seen: 14862
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `walls[].category.wall`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:14862
+  - seen: 14862
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `walls[].completedEdges`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:14862
+  - seen: 14862
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `walls[].completedEdges[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:14862
+  - seen: 14862
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `walls[].confidence`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:14862
+  - seen: 14862
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `walls[].confidence.high`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:14862
+  - seen: 14862
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `walls[].curve`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: null:14862
+  - seen: 14862
+  - interpretation: Parsed and explicitly checked; non-null curves only trigger warning (unsupported) and are otherwise ignored.
+- `walls[].dimensions`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:14862
+  - seen: 14862
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].dimensions[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:14862, number:44586
+  - seen: 14862
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].identifier`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:14862
+  - seen: 14862
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `walls[].parentIdentifier`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: null:14862
+  - seen: 14862
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `walls[].polygonCorners`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:14862
+  - seen: 14862
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].polygonCorners[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:14862, array:7282
+  - seen: 14862
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].polygonCorners[].0`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:7282
+  - seen: 7282
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].polygonCorners[].1`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:7282
+  - seen: 7282
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].polygonCorners[].2`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:7282
+  - seen: 7282
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].story`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:14862
+  - seen: 14862
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `walls[].transform`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:14862
+  - seen: 14862
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].transform[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:14862, number:237792
+  - seen: 14862
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `windows`
+  - trust: `authoritative_raw_capture`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `windows[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2443, object:2985
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `windows[].category`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2985
+  - seen: 2985
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `windows[].category.window`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2985
+  - seen: 2985
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `windows[].completedEdges`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:2985
+  - seen: 2985
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `windows[].completedEdges[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:2985
+  - seen: 2985
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `windows[].confidence`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2985
+  - seen: 2985
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `windows[].confidence.high`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:1865
+  - seen: 1865
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `windows[].confidence.low`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:21
+  - seen: 21
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `windows[].confidence.medium`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:1099
+  - seen: 1099
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `windows[].curve`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: null:2985
+  - seen: 2985
+  - interpretation: Parsed and explicitly checked; non-null curves only trigger warning (unsupported) and are otherwise ignored.
+- `windows[].dimensions`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2985
+  - seen: 2985
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `windows[].dimensions[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2985, number:8955
+  - seen: 2985
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `windows[].identifier`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2985
+  - seen: 2985
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `windows[].parentIdentifier`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2985
+  - seen: 2985
+  - interpretation: Used to attach child elements to parent walls; orphan handling present for merge inconsistencies.
+- `windows[].polygonCorners`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2985
+  - seen: 2985
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `windows[].polygonCorners[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2985
+  - seen: 2985
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `windows[].story`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:2985
+  - seen: 2985
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `windows[].transform`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2985
+  - seen: 2985
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `windows[].transform[]`
+  - trust: `authoritative_raw_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2985, number:47760
+  - seen: 2985
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+
+## Merged Floor Fields
+
+Field count: **334**
+
+- `doors`
+  - trust: `derived_roomplan_merge`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:383
+  - seen: 383
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `doors[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:383, object:3116
+  - seen: 383
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `doors[].category`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:3116
+  - seen: 3116
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `doors[].category.door`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:3116
+  - seen: 3116
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `doors[].category.door.isOpen`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: boolean:3116
+  - seen: 3116
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `doors[].completedEdges`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:3116
+  - seen: 3116
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `doors[].completedEdges[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:3116, object:288
+  - seen: 3116
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `doors[].completedEdges[].bottom`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:72
+  - seen: 72
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `doors[].completedEdges[].left`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:72
+  - seen: 72
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `doors[].completedEdges[].right`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:72
+  - seen: 72
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `doors[].completedEdges[].top`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:72
+  - seen: 72
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `doors[].confidence`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:3116
+  - seen: 3116
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `doors[].confidence.high`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:1872
+  - seen: 1872
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `doors[].confidence.medium`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:1244
+  - seen: 1244
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `doors[].curve`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: null:3116
+  - seen: 3116
+  - interpretation: Parsed and explicitly checked; non-null curves only trigger warning (unsupported) and are otherwise ignored.
+- `doors[].dimensions`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:3116
+  - seen: 3116
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `doors[].dimensions[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:3116, number:9348
+  - seen: 3116
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `doors[].identifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:3116
+  - seen: 3116
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `doors[].parentIdentifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:3116
+  - seen: 3116
+  - interpretation: Used to attach child elements to parent walls; orphan handling present for merge inconsistencies.
+- `doors[].polygonCorners`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:3116
+  - seen: 3116
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `doors[].polygonCorners[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:3116
+  - seen: 3116
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `doors[].story`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:3116
+  - seen: 3116
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `doors[].transform`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:3116
+  - seen: 3116
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `doors[].transform[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:3116, number:49856
+  - seen: 3116
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors`
+  - trust: `derived_roomplan_merge`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:383
+  - seen: 383
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `floors[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:383, object:385
+  - seen: 383
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `floors[].category`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:385
+  - seen: 385
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `floors[].category.floor`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:385
+  - seen: 385
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `floors[].completedEdges`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:385
+  - seen: 385
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `floors[].completedEdges[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:385
+  - seen: 385
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `floors[].confidence`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:385
+  - seen: 385
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `floors[].confidence.high`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:385
+  - seen: 385
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `floors[].curve`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: null:385
+  - seen: 385
+  - interpretation: Parsed and explicitly checked; non-null curves only trigger warning (unsupported) and are otherwise ignored.
+- `floors[].dimensions`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:385
+  - seen: 385
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors[].dimensions[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:385, number:1155
+  - seen: 385
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors[].identifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:385
+  - seen: 385
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `floors[].parentIdentifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: null:385
+  - seen: 385
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `floors[].polygonCorners`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:385
+  - seen: 385
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors[].polygonCorners[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:385, array:6267
+  - seen: 385
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors[].polygonCorners[].0`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:6267
+  - seen: 6267
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors[].polygonCorners[].1`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:6267
+  - seen: 6267
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors[].polygonCorners[].2`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:6267
+  - seen: 6267
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors[].story`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:385
+  - seen: 385
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `floors[].transform`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:385
+  - seen: 385
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `floors[].transform[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:385, number:6160
+  - seen: 385
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `objects`
+  - trust: `derived_roomplan_merge`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:383
+  - seen: 383
+  - interpretation: Object arrays are traversed, but only staircase-classified objects are turned into modeled outputs.
+- `objects[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:383, object:12813
+  - seen: 383
+  - interpretation: Object arrays are traversed, but only staircase-classified objects are turned into modeled outputs.
+- `objects[].attributes`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: object:12813
+  - seen: 12813
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].attributes.ChairArmType`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1857
+  - seen: 1857
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].attributes.ChairBackType`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1857
+  - seen: 1857
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].attributes.ChairLegType`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1857
+  - seen: 1857
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].attributes.ChairType`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1857
+  - seen: 1857
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].attributes.SofaType`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:652
+  - seen: 652
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].attributes.StorageType`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:5490
+  - seen: 5490
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].attributes.TableShapeType`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1578
+  - seen: 1578
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].attributes.TableType`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1578
+  - seen: 1578
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].category`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: object:12813
+  - seen: 12813
+  - interpretation: Object category containers are parsed; only the stairs branch is consumed.
+- `objects[].category.bathtub`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:58
+  - seen: 58
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.bed`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:364
+  - seen: 364
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.chair`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2124
+  - seen: 2124
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.dishwasher`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:108
+  - seen: 108
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `objects[].category.fireplace`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:10
+  - seen: 10
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.oven`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:203
+  - seen: 203
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.refrigerator`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:247
+  - seen: 247
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.sink`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:587
+  - seen: 587
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.sofa`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:675
+  - seen: 675
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.stairs`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:204
+  - seen: 204
+  - interpretation: Object category is used to detect staircases and build staircase footprints.
+- `objects[].category.storage`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:5490
+  - seen: 5490
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.stove`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:185
+  - seen: 185
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.table`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:1732
+  - seen: 1732
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.television`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:277
+  - seen: 277
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.toilet`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:349
+  - seen: 349
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].category.washerDryer`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:200
+  - seen: 200
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `objects[].confidence`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:12813
+  - seen: 12813
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `objects[].confidence.high`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2700
+  - seen: 2700
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `objects[].confidence.low`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:7858
+  - seen: 7858
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `objects[].confidence.medium`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2255
+  - seen: 2255
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `objects[].dimensions`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:12813
+  - seen: 12813
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].dimensions[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:12813, number:38439
+  - seen: 12813
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].identifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:12813
+  - seen: 12813
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].parentIdentifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: null:11073, string:1740
+  - seen: 12813
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].story`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:12813
+  - seen: 12813
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `objects[].transform`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:12813
+  - seen: 12813
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `objects[].transform[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:12813, number:205008
+  - seen: 12813
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `openings`
+  - trust: `derived_roomplan_merge`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:383
+  - seen: 383
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `openings[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:383, object:460
+  - seen: 383
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `openings[].category`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:460
+  - seen: 460
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `openings[].category.opening`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:460
+  - seen: 460
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `openings[].completedEdges`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:460
+  - seen: 460
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `openings[].completedEdges[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:460, object:48
+  - seen: 460
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `openings[].completedEdges[].bottom`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:12
+  - seen: 12
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `openings[].completedEdges[].left`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:12
+  - seen: 12
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `openings[].completedEdges[].right`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:12
+  - seen: 12
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `openings[].completedEdges[].top`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:12
+  - seen: 12
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `openings[].confidence`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:460
+  - seen: 460
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `openings[].confidence.high`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:460
+  - seen: 460
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `openings[].curve`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: null:460
+  - seen: 460
+  - interpretation: Parsed and explicitly checked; non-null curves only trigger warning (unsupported) and are otherwise ignored.
+- `openings[].dimensions`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:460
+  - seen: 460
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `openings[].dimensions[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:460, number:1380
+  - seen: 460
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `openings[].identifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:460
+  - seen: 460
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `openings[].parentIdentifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:460
+  - seen: 460
+  - interpretation: Used to attach child elements to parent walls; orphan handling present for merge inconsistencies.
+- `openings[].polygonCorners`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:460
+  - seen: 460
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `openings[].polygonCorners[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:460
+  - seen: 460
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `openings[].story`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:460
+  - seen: 460
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `openings[].transform`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:460
+  - seen: 460
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `openings[].transform[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:460, number:7360
+  - seen: 460
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `rooms`
+  - trust: `derived_roomplan_merge`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:383
+  - seen: 383
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:383, object:2443
+  - seen: 383
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].coreModel`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: string:2443
+  - seen: 2443
+  - interpretation: Frame/session anchoring fields are preserved by schema but not used by current Calor geometry construction.
+- `rooms[].doors`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].doors[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2443, object:4467
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].doors[].category`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:4467
+  - seen: 4467
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].doors[].category.door`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:4467
+  - seen: 4467
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].doors[].category.door.isOpen`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: boolean:4467
+  - seen: 4467
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].doors[].completedEdges`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:4467
+  - seen: 4467
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].doors[].completedEdges[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:4467, object:420
+  - seen: 4467
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].doors[].completedEdges[].bottom`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:105
+  - seen: 105
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].doors[].completedEdges[].left`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:105
+  - seen: 105
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].doors[].completedEdges[].right`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:105
+  - seen: 105
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].doors[].completedEdges[].top`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:105
+  - seen: 105
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].doors[].confidence`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:4467
+  - seen: 4467
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].doors[].confidence.high`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:2493
+  - seen: 2493
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].doors[].confidence.medium`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:1974
+  - seen: 1974
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].doors[].curve`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: null:4467
+  - seen: 4467
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].doors[].dimensions`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:4467
+  - seen: 4467
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].doors[].dimensions[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:4467, number:13401
+  - seen: 4467
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].doors[].identifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:4467
+  - seen: 4467
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `rooms[].doors[].parentIdentifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:4467
+  - seen: 4467
+  - interpretation: Used to attach child elements to parent walls; orphan handling present for merge inconsistencies.
+- `rooms[].doors[].polygonCorners`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:4467
+  - seen: 4467
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].doors[].polygonCorners[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:4467
+  - seen: 4467
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].doors[].story`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:4467
+  - seen: 4467
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].doors[].transform`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:4467
+  - seen: 4467
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].doors[].transform[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:4467, number:71472
+  - seen: 4467
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].floors`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].floors[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2443, object:2443
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].floors[].category`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:2443
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].floors[].category.floor`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:2443
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].floors[].completedEdges`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].floors[].completedEdges[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2443, object:208
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].floors[].completedEdges[].bottom`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:52
+  - seen: 52
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].floors[].completedEdges[].left`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:52
+  - seen: 52
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].floors[].completedEdges[].right`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:52
+  - seen: 52
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].floors[].completedEdges[].top`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:52
+  - seen: 52
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].floors[].confidence`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:2443
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].floors[].confidence.high`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:2443
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].floors[].curve`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: null:2443
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].floors[].dimensions`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].floors[].dimensions[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2443, number:7329
+  - seen: 2443
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].floors[].identifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2443
+  - seen: 2443
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `rooms[].floors[].parentIdentifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: null:2443
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].floors[].polygonCorners`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].floors[].polygonCorners[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2443, array:14073
+  - seen: 2443
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].floors[].polygonCorners[].0`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: number:14073
+  - seen: 14073
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].floors[].polygonCorners[].1`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: number:14073
+  - seen: 14073
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].floors[].polygonCorners[].2`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: number:14073
+  - seen: 14073
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].floors[].story`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2443
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].floors[].transform`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].floors[].transform[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2443, number:39088
+  - seen: 2443
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].objects`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].objects[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2443, object:13045
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].objects[].attributes`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: object:13045
+  - seen: 13045
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].attributes.ChairArmType`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1867
+  - seen: 1867
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].attributes.ChairBackType`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1867
+  - seen: 1867
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].attributes.ChairLegType`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1867
+  - seen: 1867
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].attributes.ChairType`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1867
+  - seen: 1867
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].attributes.SofaType`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:653
+  - seen: 653
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].attributes.StorageType`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:5694
+  - seen: 5694
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].attributes.TableShapeType`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1580
+  - seen: 1580
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].attributes.TableType`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:1580
+  - seen: 1580
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].category`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: object:13045
+  - seen: 13045
+  - interpretation: Object category containers are parsed; only the stairs branch is consumed.
+- `rooms[].objects[].category.bathtub`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:58
+  - seen: 58
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `rooms[].objects[].category.bed`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:365
+  - seen: 365
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `rooms[].objects[].category.chair`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2139
+  - seen: 2139
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `rooms[].objects[].category.dishwasher`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:108
+  - seen: 108
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].objects[].category.fireplace`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:10
+  - seen: 10
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `rooms[].objects[].category.oven`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:204
+  - seen: 204
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `rooms[].objects[].category.refrigerator`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:248
+  - seen: 248
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `rooms[].objects[].category.sink`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:588
+  - seen: 588
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `rooms[].objects[].category.sofa`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:678
+  - seen: 678
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `rooms[].objects[].category.stairs`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:204
+  - seen: 204
+  - interpretation: Object category is used to detect staircases and build staircase footprints.
+- `rooms[].objects[].category.storage`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:5694
+  - seen: 5694
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `rooms[].objects[].category.stove`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:185
+  - seen: 185
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `rooms[].objects[].category.table`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:1734
+  - seen: 1734
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `rooms[].objects[].category.television`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:277
+  - seen: 277
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `rooms[].objects[].category.toilet`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:351
+  - seen: 351
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `rooms[].objects[].category.washerDryer`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:202
+  - seen: 202
+  - interpretation: Non-stair object categories are captured but currently ignored by Calor import logic.
+- `rooms[].objects[].confidence`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: object:13045
+  - seen: 13045
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].confidence.high`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: object:2725
+  - seen: 2725
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].confidence.low`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: object:8032
+  - seen: 8032
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].confidence.medium`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: object:2288
+  - seen: 2288
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].dimensions`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:13045
+  - seen: 13045
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].dimensions[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:13045, number:39135
+  - seen: 13045
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].identifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: string:13045
+  - seen: 13045
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].parentIdentifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: null:11296, string:1749
+  - seen: 13045
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].story`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: number:13045
+  - seen: 13045
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].transform`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:13045
+  - seen: 13045
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].objects[].transform[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:13045, number:208720
+  - seen: 13045
+  - interpretation: Consumed only when object category resolves to stairs; otherwise object fields are not used.
+- `rooms[].openings`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].openings[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2443, object:997
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].openings[].category`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:997
+  - seen: 997
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].openings[].category.opening`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:997
+  - seen: 997
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].openings[].completedEdges`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:997
+  - seen: 997
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].openings[].completedEdges[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:997, object:84
+  - seen: 997
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].openings[].completedEdges[].bottom`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:21
+  - seen: 21
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].openings[].completedEdges[].left`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:21
+  - seen: 21
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].openings[].completedEdges[].right`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:21
+  - seen: 21
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].openings[].completedEdges[].top`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:21
+  - seen: 21
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].openings[].confidence`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:997
+  - seen: 997
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].openings[].confidence.high`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:997
+  - seen: 997
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].openings[].curve`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: null:997
+  - seen: 997
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].openings[].dimensions`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:997
+  - seen: 997
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].openings[].dimensions[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:997, number:2991
+  - seen: 997
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].openings[].identifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:997
+  - seen: 997
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `rooms[].openings[].parentIdentifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:997
+  - seen: 997
+  - interpretation: Used to attach child elements to parent walls; orphan handling present for merge inconsistencies.
+- `rooms[].openings[].polygonCorners`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:997
+  - seen: 997
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].openings[].polygonCorners[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:997
+  - seen: 997
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].openings[].story`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:997
+  - seen: 997
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].openings[].transform`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:997
+  - seen: 997
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].openings[].transform[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:997, number:15952
+  - seen: 997
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].referenceOriginTransform`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Frame/session anchoring fields are preserved by schema but not used by current Calor geometry construction.
+- `rooms[].referenceOriginTransform[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:2443, number:39088
+  - seen: 2443
+  - interpretation: Frame/session anchoring fields are preserved by schema but not used by current Calor geometry construction.
+- `rooms[].sections`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `rooms[].sections[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:2443, object:2805
+  - seen: 2443
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `rooms[].sections[].center`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:2805
+  - seen: 2805
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `rooms[].sections[].center[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:2805, number:8415
+  - seen: 2805
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `rooms[].sections[].label`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: string:2805
+  - seen: 2805
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `rooms[].sections[].story`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:2805
+  - seen: 2805
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `rooms[].story`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:2443
+  - seen: 2443
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `rooms[].version`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2443
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].walls`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].walls[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2443, object:14645
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].walls[].category`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:14645
+  - seen: 14645
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].walls[].category.wall`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:14645
+  - seen: 14645
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].walls[].completedEdges`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:14645
+  - seen: 14645
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].walls[].completedEdges[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:14645, object:1372
+  - seen: 14645
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].walls[].completedEdges[].bottom`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:343
+  - seen: 343
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].walls[].completedEdges[].left`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:343
+  - seen: 343
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].walls[].completedEdges[].right`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:343
+  - seen: 343
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].walls[].completedEdges[].top`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:343
+  - seen: 343
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].walls[].confidence`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:14645
+  - seen: 14645
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `rooms[].walls[].confidence.high`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:14645
+  - seen: 14645
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `rooms[].walls[].curve`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: null:14645
+  - seen: 14645
+  - interpretation: Parsed and explicitly checked; non-null curves only trigger warning (unsupported) and are otherwise ignored.
+- `rooms[].walls[].dimensions`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:14645
+  - seen: 14645
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].walls[].dimensions[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:14645, number:43935
+  - seen: 14645
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].walls[].identifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:14645
+  - seen: 14645
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `rooms[].walls[].parentIdentifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: null:14645
+  - seen: 14645
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].walls[].polygonCorners`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:14645
+  - seen: 14645
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].walls[].polygonCorners[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:14645, array:4417
+  - seen: 14645
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].walls[].polygonCorners[].0`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: number:4417
+  - seen: 4417
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].walls[].polygonCorners[].1`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: number:4417
+  - seen: 4417
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].walls[].polygonCorners[].2`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: number:4417
+  - seen: 4417
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].walls[].story`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:14645
+  - seen: 14645
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].walls[].transform`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:14645
+  - seen: 14645
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].walls[].transform[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:14645, number:234320
+  - seen: 14645
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].windows`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].windows[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2443, object:2984
+  - seen: 2443
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].windows[].category`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:2984
+  - seen: 2984
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].windows[].category.window`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:2984
+  - seen: 2984
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].windows[].completedEdges`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2984
+  - seen: 2984
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].windows[].completedEdges[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2984, object:252
+  - seen: 2984
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].windows[].completedEdges[].bottom`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:63
+  - seen: 63
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].windows[].completedEdges[].left`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:63
+  - seen: 63
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].windows[].completedEdges[].right`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:63
+  - seen: 63
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].windows[].completedEdges[].top`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:63
+  - seen: 63
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].windows[].confidence`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:2984
+  - seen: 2984
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].windows[].confidence.high`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:1865
+  - seen: 1865
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].windows[].confidence.low`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:21
+  - seen: 21
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].windows[].confidence.medium`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:1098
+  - seen: 1098
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].windows[].curve`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: null:2984
+  - seen: 2984
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].windows[].dimensions`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2984
+  - seen: 2984
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].windows[].dimensions[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2984, number:8952
+  - seen: 2984
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].windows[].identifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2984
+  - seen: 2984
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `rooms[].windows[].parentIdentifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2984
+  - seen: 2984
+  - interpretation: Used to attach child elements to parent walls; orphan handling present for merge inconsistencies.
+- `rooms[].windows[].polygonCorners`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2984
+  - seen: 2984
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].windows[].polygonCorners[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2984
+  - seen: 2984
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].windows[].story`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:2984
+  - seen: 2984
+  - interpretation: Merged-floor room list drives room processing, metadata attachment, and room-to-story assembly.
+- `rooms[].windows[].transform`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2984
+  - seen: 2984
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `rooms[].windows[].transform[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2984, number:47744
+  - seen: 2984
+  - interpretation: Nested room geometry is structurally equivalent but Calor primarily processes top-level merged arrays plus raw room-wall reconciliation.
+- `sections`
+  - trust: `derived_roomplan_merge`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:383
+  - seen: 383
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `sections[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:383, object:2796
+  - seen: 383
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `sections[].center`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:2796
+  - seen: 2796
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `sections[].center[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:2796, number:8388
+  - seen: 2796
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `sections[].label`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: string:2796
+  - seen: 2796
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `sections[].story`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:2796
+  - seen: 2796
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `version`
+  - trust: `derived_roomplan_merge`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:383
+  - seen: 383
+  - interpretation: Timing/version metadata is parsed/available but not used in current geometry/material mapping logic.
+- `walls`
+  - trust: `derived_roomplan_merge`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:383
+  - seen: 383
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `walls[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:383, object:8860
+  - seen: 383
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `walls[].category`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:8860
+  - seen: 8860
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `walls[].category.wall`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:8860
+  - seen: 8860
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `walls[].completedEdges`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:8860
+  - seen: 8860
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `walls[].completedEdges[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:8860, object:820
+  - seen: 8860
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `walls[].completedEdges[].bottom`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:205
+  - seen: 205
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `walls[].completedEdges[].left`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:205
+  - seen: 205
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `walls[].completedEdges[].right`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:205
+  - seen: 205
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `walls[].completedEdges[].top`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:205
+  - seen: 205
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `walls[].confidence`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:8860
+  - seen: 8860
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `walls[].confidence.high`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:8860
+  - seen: 8860
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `walls[].curve`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: null:8860
+  - seen: 8860
+  - interpretation: Parsed and explicitly checked; non-null curves only trigger warning (unsupported) and are otherwise ignored.
+- `walls[].dimensions`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:8860
+  - seen: 8860
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].dimensions[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:8860, number:26580
+  - seen: 8860
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].identifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:8860
+  - seen: 8860
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `walls[].parentIdentifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: null:8860
+  - seen: 8860
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `walls[].polygonCorners`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:8860
+  - seen: 8860
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].polygonCorners[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:8860, array:1383
+  - seen: 8860
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].polygonCorners[].0`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:1383
+  - seen: 1383
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].polygonCorners[].1`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:1383
+  - seen: 1383
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].polygonCorners[].2`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:1383
+  - seen: 1383
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].story`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:8860
+  - seen: 8860
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `walls[].transform`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:8860
+  - seen: 8860
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].transform[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:8860, number:141760
+  - seen: 8860
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `windows`
+  - trust: `derived_roomplan_merge`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:383
+  - seen: 383
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `windows[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:383, object:2950
+  - seen: 383
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `windows[].category`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2950
+  - seen: 2950
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `windows[].category.window`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2950
+  - seen: 2950
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `windows[].completedEdges`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:2950
+  - seen: 2950
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `windows[].completedEdges[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:2950, object:248
+  - seen: 2950
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `windows[].completedEdges[].bottom`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:62
+  - seen: 62
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `windows[].completedEdges[].left`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:62
+  - seen: 62
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `windows[].completedEdges[].right`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:62
+  - seen: 62
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `windows[].completedEdges[].top`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:62
+  - seen: 62
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `windows[].confidence`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:2950
+  - seen: 2950
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `windows[].confidence.high`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:1853
+  - seen: 1853
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `windows[].confidence.low`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:20
+  - seen: 20
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `windows[].confidence.medium`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:1077
+  - seen: 1077
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `windows[].curve`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: null:2950
+  - seen: 2950
+  - interpretation: Parsed and explicitly checked; non-null curves only trigger warning (unsupported) and are otherwise ignored.
+- `windows[].dimensions`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2950
+  - seen: 2950
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `windows[].dimensions[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2950, number:8850
+  - seen: 2950
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `windows[].identifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2950
+  - seen: 2950
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `windows[].parentIdentifier`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:2950
+  - seen: 2950
+  - interpretation: Used to attach child elements to parent walls; orphan handling present for merge inconsistencies.
+- `windows[].polygonCorners`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2950
+  - seen: 2950
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `windows[].polygonCorners[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2950
+  - seen: 2950
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `windows[].story`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:2950
+  - seen: 2950
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `windows[].transform`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:2950
+  - seen: 2950
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `windows[].transform[]`
+  - trust: `derived_roomplan_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:2950, number:47200
+  - seen: 2950
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+
+## ceiling_* Fields
+
+Field count: **35**
+
+- `doors`
+  - trust: `authoritative_ceiling_capture`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `doors[]`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2443
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `floors`
+  - trust: `authoritative_ceiling_capture`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `floors[]`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2443
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `objects`
+  - trust: `authoritative_ceiling_capture`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Object arrays are traversed, but only staircase-classified objects are turned into modeled outputs.
+- `objects[]`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2443
+  - seen: 2443
+  - interpretation: Object arrays are traversed, but only staircase-classified objects are turned into modeled outputs.
+- `openings`
+  - trust: `authoritative_ceiling_capture`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `openings[]`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2443
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `sections`
+  - trust: `authoritative_ceiling_capture`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `sections[]`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:2443
+  - seen: 2443
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `story`
+  - trust: `authoritative_ceiling_capture`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:2443
+  - seen: 2443
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `version`
+  - trust: `authoritative_ceiling_capture`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:2443
+  - seen: 2443
+  - interpretation: Timing/version metadata is parsed/available but not used in current geometry/material mapping logic.
+- `walls`
+  - trust: `authoritative_ceiling_capture`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `walls[]`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2443, object:6596
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `walls[].category`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:6596
+  - seen: 6596
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `walls[].category.wall`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:6596
+  - seen: 6596
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `walls[].completedEdges`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:6596
+  - seen: 6596
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `walls[].completedEdges[]`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:6596
+  - seen: 6596
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `walls[].confidence`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:6596
+  - seen: 6596
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `walls[].confidence.high`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:6596
+  - seen: 6596
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `walls[].curve`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: null:6596
+  - seen: 6596
+  - interpretation: Parsed and explicitly checked; non-null curves only trigger warning (unsupported) and are otherwise ignored.
+- `walls[].dimensions`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:6596
+  - seen: 6596
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].dimensions[]`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:6596, number:19788
+  - seen: 6596
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].identifier`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:6596
+  - seen: 6596
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `walls[].parentIdentifier`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: null:6596
+  - seen: 6596
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `walls[].polygonCorners`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:6596
+  - seen: 6596
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].polygonCorners[]`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:6596, array:27332
+  - seen: 6596
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].polygonCorners[].0`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:27332
+  - seen: 27332
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].polygonCorners[].1`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:27332
+  - seen: 27332
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].polygonCorners[].2`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:27332
+  - seen: 27332
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].story`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:6596
+  - seen: 6596
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `walls[].transform`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:6596
+  - seen: 6596
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].transform[]`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:6596, number:105536
+  - seen: 6596
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `windows`
+  - trust: `authoritative_ceiling_capture`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2443
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `windows[]`
+  - trust: `authoritative_ceiling_capture_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2443
+  - seen: 2443
+  - interpretation: Element collections are iterated to build modeled building elements.
+
+## ceiling_merged_* Fields
+
+Field count: **38**
+
+- `coreModel`
+  - trust: `derived_ceiling_merge`
+  - usage_in_calor: `currently_unused`
+  - observed_types: string:2312
+  - seen: 2312
+  - interpretation: Frame/session anchoring fields are preserved by schema but not used by current Calor geometry construction.
+- `doors`
+  - trust: `derived_ceiling_merge`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2312
+  - seen: 2312
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `doors[]`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2312
+  - seen: 2312
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `floors`
+  - trust: `derived_ceiling_merge`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2312
+  - seen: 2312
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `floors[]`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2312
+  - seen: 2312
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `objects`
+  - trust: `derived_ceiling_merge`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2312
+  - seen: 2312
+  - interpretation: Object arrays are traversed, but only staircase-classified objects are turned into modeled outputs.
+- `objects[]`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2312
+  - seen: 2312
+  - interpretation: Object arrays are traversed, but only staircase-classified objects are turned into modeled outputs.
+- `openings`
+  - trust: `derived_ceiling_merge`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2312
+  - seen: 2312
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `openings[]`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2312
+  - seen: 2312
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `referenceOriginTransform`
+  - trust: `derived_ceiling_merge`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:2312
+  - seen: 2312
+  - interpretation: Frame/session anchoring fields are preserved by schema but not used by current Calor geometry construction.
+- `referenceOriginTransform[]`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:2312, number:36992
+  - seen: 2312
+  - interpretation: Frame/session anchoring fields are preserved by schema but not used by current Calor geometry construction.
+- `sections`
+  - trust: `derived_ceiling_merge`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:2312
+  - seen: 2312
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `sections[]`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:2312
+  - seen: 2312
+  - interpretation: Section labels/centers are present but not consumed in current import/mapping logic.
+- `story`
+  - trust: `derived_ceiling_merge`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:2312
+  - seen: 2312
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `version`
+  - trust: `derived_ceiling_merge`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:2312
+  - seen: 2312
+  - interpretation: Timing/version metadata is parsed/available but not used in current geometry/material mapping logic.
+- `walls`
+  - trust: `derived_ceiling_merge`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2312
+  - seen: 2312
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `walls[]`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2312, object:6394
+  - seen: 2312
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `walls[].category`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:6394
+  - seen: 6394
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `walls[].category.wall`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:6394
+  - seen: 6394
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `walls[].completedEdges`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: array:6394
+  - seen: 6394
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `walls[].completedEdges[]`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: arrayItem:6394
+  - seen: 6394
+  - interpretation: Edge-completion metadata is present in source JSON but not used in current model construction.
+- `walls[].confidence`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:6394
+  - seen: 6394
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `walls[].confidence.high`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: object:6394
+  - seen: 6394
+  - interpretation: Confidence objects are parsed in models but not used in filtering/scoring in current import path.
+- `walls[].curve`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: null:6394
+  - seen: 6394
+  - interpretation: Parsed and explicitly checked; non-null curves only trigger warning (unsupported) and are otherwise ignored.
+- `walls[].dimensions`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:6394
+  - seen: 6394
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].dimensions[]`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:6394, number:19182
+  - seen: 6394
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].identifier`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: string:6394
+  - seen: 6394
+  - interpretation: Identifiers are used for room matching, parent linking, and metadata application.
+- `walls[].parentIdentifier`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: null:6394
+  - seen: 6394
+  - interpretation: No explicit Calor consumption found in import/mapping logic.
+- `walls[].polygonCorners`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:6394
+  - seen: 6394
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].polygonCorners[]`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:6394, array:26474
+  - seen: 6394
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].polygonCorners[].0`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:26474
+  - seen: 26474
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].polygonCorners[].1`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:26474
+  - seen: 26474
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].polygonCorners[].2`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: number:26474
+  - seen: 26474
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].story`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `currently_unused`
+  - observed_types: number:6394
+  - seen: 6394
+  - interpretation: Story numbers inside geometry payloads are not used; Calor uses metadata floor/story IDs.
+- `walls[].transform`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: array:6394
+  - seen: 6394
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `walls[].transform[]`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_directly`
+  - observed_types: arrayItem:6394, number:102304
+  - seen: 6394
+  - interpretation: Primary geometric inputs for spatial model generation (plane points, shape, area, translations).
+- `windows`
+  - trust: `derived_ceiling_merge`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: array:2312
+  - seen: 2312
+  - interpretation: Element collections are iterated to build modeled building elements.
+- `windows[]`
+  - trust: `derived_ceiling_merge_optional`
+  - usage_in_calor: `used_indirectly_mapped`
+  - observed_types: arrayItem:2312
+  - seen: 2312
+  - interpretation: Element collections are iterated to build modeled building elements.
+
+## ceiling_metadata_* Fields
+
+Field count: **3**
+
+- `ceilingSource`
+  - trust: `authoritative_metadata`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:2443
+  - seen: 2443
+  - interpretation: Ceiling source metadata is mapped into room model and initialization request.
+- `ceilingSource.noMesh`
+  - trust: `authoritative_metadata`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:2375
+  - seen: 2375
+  - interpretation: Ceiling source metadata is mapped into room model and initialization request.
+- `ceilingSource.userScannedMesh`
+  - trust: `authoritative_metadata`
+  - usage_in_calor: `used_directly`
+  - observed_types: object:68
+  - seen: 68
+  - interpretation: Ceiling source metadata is mapped into room model and initialization request.
+

@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lun.energy/schemas/scan-inventory-field-reference.schema.json",
+  "title": "Scan Inventory Field Reference Row",
+  "type": "object",
+  "required": [
+    "family",
+    "fieldPath",
+    "trustLevel",
+    "usageInCalor",
+    "observedTypes",
+    "seenCount",
+    "sampleValues",
+    "interpretation",
+    "sourceOfTruth"
+  ],
+  "properties": {
+    "family": {
+      "type": "string",
+      "enum": [
+        "data",
+        "roomplan",
+        "mergedFloor",
+        "ceiling",
+        "ceilingMerged",
+        "ceilingMetadata"
+      ]
+    },
+    "familyTitle": {
+      "type": "string"
+    },
+    "fieldPath": {
+      "type": "string"
+    },
+    "trustLevel": {
+      "type": "string",
+      "enum": [
+        "authoritative_metadata",
+        "authoritative_metadata_optional",
+        "authoritative_raw_capture",
+        "authoritative_raw_capture_optional",
+        "authoritative_ceiling_capture",
+        "authoritative_ceiling_capture_optional",
+        "derived_roomplan_merge",
+        "derived_roomplan_merge_optional",
+        "derived_ceiling_merge",
+        "derived_ceiling_merge_optional",
+        "derived",
+        "derived_optional"
+      ]
+    },
+    "usageInCalor": {
+      "type": "string",
+      "enum": [
+        "used_directly",
+        "used_indirectly_mapped",
+        "currently_unused"
+      ]
+    },
+    "observedTypes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "seenCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sampleValues": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "interpretation": {
+      "type": "string"
+    },
+    "sourceOfTruth": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

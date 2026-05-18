@@ -1,0 +1,139 @@
+body {
+  grid-template-columns: 360px minmax(0, 1fr);
+}
+
+#current-meta {
+  font-variant-numeric: tabular-nums;
+}
+
+#fragment-panel {
+  position: absolute;
+  right: 14px;
+  bottom: 42px;
+  width: min(420px, calc(100vw - 410px));
+  max-height: 38vh;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#fragment-panel header {
+  padding: 9px 11px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+#fragment-list {
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.fragment-row {
+  border: 0;
+  border-bottom: 1px solid #eeeeF2;
+  background: transparent;
+  width: 100%;
+  padding: 8px 10px;
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+}
+
+.fragment-row:hover,
+.fragment-row.active {
+  background: #fff0ea;
+}
+
+.fragment-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.fragment-locator {
+  font: 10px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row.active .badge-removed {
+  background: #9f2a15;
+  color: #ffffff;
+}
+
+.badge-reason {
+  background: #ffe3d7;
+  color: #8a2f13;
+}
+
+.badge-source {
+  background: #eef0f4;
+  color: #474b55;
+}
+
+#overlay-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 2px;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+#overlay-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.legend-chip {
+  width: 12px;
+  height: 8px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.legend-chip.removed { background: #ff4b26; }
+.legend-chip.replacement { background: #18a8c8; }
+.legend-chip.extension { background: #2f9b63; }
+.legend-chip.noncoplanar { background: #c7367f; }
+
+.replacement-list {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.replacement-item {
+  font: 10px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  color: #167083;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.replacement-item.bad {
+  color: #9b245d;
+}
+
+.replacement-item.extension {
+  color: #237348;
+}

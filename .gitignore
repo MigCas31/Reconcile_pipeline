@@ -1,0 +1,133 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Packaging/build artifacts
+build/
+dist/
+*.egg-info/
+
+# Local editor/system noise
+.DS_Store
+
+# Generated AI tool configs (source of truth is .agents/, synced via scripts/sync-ai-tools.sh)
+.claude/
+.codex/
+reconcile/__pycache__/
+reconcile/extract3d/__pycache__/
+reconcile/buildings_3d.tmp.json
+
+# Analysis outputs (joined labels + expanded features)
+artifacts/
+
+# Phase 6: scored results mirror (regenerated)
+reconcile/reconcile_v3_results_scored.json
+
+.context/
+pipeline-outputs/
+.scan_cache/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+build/
+dist/
+pip-wheel-metadata/
+
+# --- Tooling / test caches ---
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# --- OS / editors ---
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+*.code-workspace
+.cursor/
+
+# --- Secrets (never commit) ---
+*.pem
+*.key
+credentials.json
+service-account*.json
+
+# --- Generated AI tool dirs (source: .agents/) ---
+.claude/
+.codex/
+
+# =============================================================================
+# LARGE LOCAL DATA — required on disk for the pipeline, not for Git
+# Regenerate with build/export commands or copy from shared storage.
+# =============================================================================
+
+# RoomPlan scan cache (~GB)
+.scan-cache/
+
+# Per-building pipeline outputs (~GB)
+pipeline-outputs/
+
+# Agent reports, trace exports, flag queues, viewer caches
+.context/
+
+# Legacy runtime bulk outputs (symlink target: reports/, artifacts/, scripts/)
+archive/legacy-runtime/reports/
+archive/legacy-runtime/artifacts/
+archive/legacy-runtime/.context/
+
+# =============================================================================
+# Generated / scratch JSON & analysis (not source)
+# =============================================================================
+
+artifacts/
+analysis_outputs/
+
+# Large investigation / corpus dumps at repo root
+arsession_investigation_raw.json
+reconcile/buildings_3d.tmp.json
+reconcile/reconcile_v3_results_scored.json
+reconcile/buildings_3d.json
+reconcile/roof_algorithms_py_results.json
+reconcile/**/buildings_3d*.json
+reconcile/**/*_results*.json
+
+# Optional: progress log is huge (~1.4MB); keep locally, omit from Git
+# tracking_progress.md
+
+# =============================================================================
+# Redundant per-package __pycache__ (covered by **/__pycache__ above)
+# =============================================================================
+reconcile/__pycache__/
+reconcile/extract3d/__pycache__/
