@@ -593,6 +593,121 @@ def export_manifold_repair_v3_traces(
     return index
 
 
+def export_manifold_repair_steps_traces(
+    *,
+    pipeline_dir: Path,
+    output_dir: Path,
+    max_buildings: int = 10,
+    corner_tol: float = 0.02,
+    coord_tol: float = 1e-3,
+    snap_tol: float = 0.05,
+) -> dict[str, Any]:
+    """Export per-room manifold-repair pipeline frames for the traces viewer.
+
+    Each trace has one frame per stage (collect → coherence → roof XZ clip →
+    merge → half-edge → holes → fillers). Load with
+    ``viewer-polyhedron-traces.html?index=<out-dir>/index.json``.
+    """
+    from reconcile_tiers.polyhedron.manifold_repair_trace import (
+        SELECTION,
+        build_manifold_repair_room_trace,
+    )
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    trace_dir = output_dir / "traces"
+    trace_dir.mkdir(exist_ok=True)
+    records: list[dict[str, Any]] = []
+    failure_counts: Counter[str] = Counter()
+    status_counts: Counter[str] = Counter()
+    payload_paths = sorted(pipeline_dir.glob("*/tier_payload.json"))[:max_buildings]
+
+    for payload_path in payload_paths:
+        uuid = payload_path.parent.name
+        try:
+            payload = json.loads(payload_path.read_text())
+        except Exception as exc:
+            failure_counts[_error_key(exc)] += 1
+            continue
+        rooms = payload.get("rooms") or []
+        for room_index, room in enumerate(rooms):
+            try:
+                viewer_trace = build_manifold_repair_room_trace(
+                    payload,
+                    room,
+                    corner_tol=corner_tol,
+                    coord_tol=coord_tol,
+                    snap_tol=snap_tol,
+                )
+            except Exception as exc:
+                failure_counts[_error_key(exc)] += 1
+                continue
+            stop_reason = str(viewer_trace["stop"]["reason"])
+            status_counts[stop_reason] += 1
+            trace_path = trace_dir / f"{uuid}__room_{room_index}.json"
+            trace_path.write_text(
+                json.dumps(viewer_trace, indent=2, sort_keys=True)
+            )
+            repair_summary = viewer_trace.get("repair_summary") or {}
+            records.append(
+                {
+                    "uuid": uuid,
+                    "room_index": room_index,
+                    "part_index": room_index,
+                    "locator_id": f"manifold-repair-steps:{room_index}",
+                    "trace": trace_path.relative_to(output_dir).as_posix(),
+                    "stop_reason": stop_reason,
+                    "step_count": len(viewer_trace["frames"]),
+                    "frame_count": len(viewer_trace["frames"]),
+                    "initial_counts": viewer_trace["frames"][0]["counts"],
+                    "final_counts": viewer_trace["frames"][-1]["counts"],
+                    "coherence_ok": repair_summary.get("coherence_ok"),
+                    "roof_clip_clipped": repair_summary.get("roof_clip_clipped"),
+                    "fillers_applied": repair_summary.get("fillers_applied"),
+                    "story": viewer_trace.get("story"),
+                }
+            )
+
+    index = {
+        "schema_version": 1,
+        "domain": SELECTION,
+        "selection": SELECTION,
+        "pipeline_dir": str(pipeline_dir),
+        "output_dir": str(output_dir),
+        "settings": {
+            "max_buildings": max_buildings,
+            "corner_tol": corner_tol,
+            "coord_tol": coord_tol,
+            "snap_tol": snap_tol,
+        },
+        "summary": {
+            "buildings": len(payload_paths),
+            "records": len(records),
+            "status_counts": dict(status_counts.most_common()),
+            "failure_counts": dict(failure_counts.most_common()),
+            "watertight_rooms": sum(
+                1 for r in records if r["stop_reason"] == "watertight"
+            ),
+            "holes_remaining_rooms": sum(
+                1 for r in records if r["stop_reason"] == "holes_remaining"
+            ),
+            "skipped_rooms": sum(
+                1 for r in records if r["stop_reason"] == "skipped"
+            ),
+        },
+        "records": records,
+    }
+    index_path = output_dir / "index.json"
+    index_path.write_text(json.dumps(index, indent=2, sort_keys=True))
+    index_url = f"/{index_path.as_posix()}"
+    print(
+        "Polyhedron steps viewer:\n"
+        f"  http://127.0.0.1:8080/reconcile_tiers/web/viewer-polyhedron-traces.html"
+        f"?index={index_url}",
+        flush=True,
+    )
+    return index
+
+
 def export_manifold_repair_building_traces(
     *,
     pipeline_dir: Path,
@@ -1251,6 +1366,7 @@ def main(argv: list[str] | None = None) -> int:
             "envelope-cell-selector",
             "selector-v2",
             "manifold-repair-v3",
+            "manifold-repair-steps",
             "manifold-repair-building",
         ),
         default="room-shell",
@@ -1302,6 +1418,14 @@ def main(argv: list[str] | None = None) -> int:
         )
     elif args.domain == "manifold-repair-v3":
         index = export_manifold_repair_v3_traces(
+            pipeline_dir=args.pipeline_dir,
+            output_dir=args.out_dir,
+            max_buildings=args.max_buildings,
+            corner_tol=args.corner_tol,
+            coord_tol=args.coord_tol,
+        )
+    elif args.domain == "manifold-repair-steps":
+        index = export_manifold_repair_steps_traces(
             pipeline_dir=args.pipeline_dir,
             output_dir=args.out_dir,
             max_buildings=args.max_buildings,

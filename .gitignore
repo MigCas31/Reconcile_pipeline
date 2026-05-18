@@ -131,3 +131,6 @@ reconcile/**/*_results*.json
 # =============================================================================
 reconcile/__pycache__/
 reconcile/extract3d/__pycache__/
+
+
+*.txt

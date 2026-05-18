@@ -25,6 +25,10 @@ from reconcile_tiers.polyhedron.manifold_repair import (
     repair_room,
     select_fillers,
 )
+from reconcile_tiers.polyhedron.roof_xz_clip import (
+    clip_roof_tiles_to_floor_xz,
+    footprint_edges_for_viewer,
+)
 from reconcile_tiers.polyhedron.tile_coherence import (
     RoomTileCoherenceResult,
     audit_room_tile_coherence,
@@ -39,12 +43,13 @@ PIPELINE_STEP_LABELS: dict[str, str] = {
     "tier_payload_input": "0. Input (tier_payload)",
     "input_tiles": "1. Collected tiles",
     "tile_coherence": "2. Tile coherence",
-    "tiles_merged": "3. Snap + merge coplanar",
-    "half_edge_built": "4. Half-edge build",
-    "holes_detected": "5. Holes (orphan edges)",
-    "filler_candidates": "6. Filler candidates",
-    "fillers_selected": "7. Fillers selected (ILP)",
-    "fillers_applied": "8. Fillers applied",
+    "roof_xz_clip": "3. Roof XZ clip",
+    "tiles_merged": "4. Snap + merge coplanar",
+    "half_edge_built": "5. Half-edge build",
+    "holes_detected": "6. Holes (orphan edges)",
+    "filler_candidates": "7. Filler candidates",
+    "fillers_selected": "8. Fillers selected (ILP)",
+    "fillers_applied": "9. Fillers applied",
     "rooms_repaired": "1. All rooms (repaired)",
     "building_exterior": "2. Building exterior",
 }
@@ -185,6 +190,7 @@ def _pipeline_frame(
     *,
     orphan_edges: list[dict[str, list[float]]] | None = None,
     coherence_edges: list[dict[str, Any]] | None = None,
+    footprint_edges: list[dict[str, list[float]]] | None = None,
     meta: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     return {
@@ -195,6 +201,7 @@ def _pipeline_frame(
             "faces": len(faces),
             "orphan_edges": len(orphan_edges or []),
             "coherence_edges": len(coherence_edges or []),
+            "footprint_edges": len(footprint_edges or []),
             "vertices": 0,
             "half_edges": 0,
         },
@@ -204,6 +211,7 @@ def _pipeline_frame(
         "faces": faces,
         "orphan_edges": orphan_edges or [],
         "coherence_edges": coherence_edges or [],
+        "footprint_edges": footprint_edges or [],
         "meta": meta or {},
     }
 
@@ -243,13 +251,15 @@ def build_manifold_repair_room_trace(
 
     frames: list[dict[str, Any]] = []
 
+    input_faces = tiles_to_viewer_faces(tiles_raw, role="tier_payload")
+
     if len(tiles_raw) < 4:
-        frames.append(_pipeline_frame(0, "tier_payload_input", []))
+        frames.append(_pipeline_frame(0, "tier_payload_input", input_faces))
         frames.append(
             _pipeline_frame(
                 1,
                 "input_tiles",
-                tiles_to_viewer_faces(tiles_raw),
+                input_faces,
                 meta={"status": "skipped", "reason": "insufficient_tiles"},
             )
         )
@@ -261,7 +271,7 @@ def build_manifold_repair_room_trace(
             story=story,
         )
 
-    frames.append(_pipeline_frame(0, "tier_payload_input", []))
+    frames.append(_pipeline_frame(0, "tier_payload_input", input_faces))
 
     frames.append(
         _pipeline_frame(1, "input_tiles", tiles_to_viewer_faces(tiles_raw))
@@ -279,22 +289,41 @@ def build_manifold_repair_room_trace(
         )
     )
 
+    clip_result = clip_roof_tiles_to_floor_xz(tiles_raw)
+    tiles_clipped = list(clip_result.tiles)
+    footprint_edges = footprint_edges_for_viewer(tiles_raw)
+    frames.append(
+        _pipeline_frame(
+            3,
+            "roof_xz_clip",
+            tiles_to_viewer_faces(tiles_clipped),
+            footprint_edges=footprint_edges,
+            meta={
+                "clipped_locator_ids": list(clip_result.clipped_locator_ids),
+                "dropped_locator_ids": list(clip_result.dropped_locator_ids),
+                "floor_area_m2": clip_result.floor_area_m2,
+            },
+        )
+    )
+
     tiles_filtered, dropped_ceilings = filter_unconnected_ceiling_tiles(
-        tiles_raw, corner_tol=snap_tol
+        tiles_clipped, corner_tol=snap_tol
     )
     tiles_merged = prepare_room_tiles(
         tiles_filtered, coord_tol=coord_tol, snap_tol=snap_tol, merge_coplanar=True
     )
     frames.append(
         _pipeline_frame(
-            3,
+            4,
             "tiles_merged",
             tiles_to_viewer_faces(tiles_merged),
             meta={
                 "tile_count_raw": len(tiles_raw),
+                "tile_count_clipped": len(tiles_clipped),
                 "tile_count_filtered": len(tiles_filtered),
                 "tile_count_merged": len(tiles_merged),
                 "dropped_ceiling_locators": list(dropped_ceilings),
+                "roof_clip_dropped": list(clip_result.dropped_locator_ids),
             },
         )
     )
@@ -305,7 +334,7 @@ def build_manifold_repair_room_trace(
     tile_faces = build_to_viewer_faces(build, role="tile")
     frames.append(
         _pipeline_frame(
-            4,
+            5,
             "half_edge_built",
             tile_faces,
             orphan_edges=[],
@@ -319,7 +348,7 @@ def build_manifold_repair_room_trace(
     extraction = extract_hole_chains(build)
     frames.append(
         _pipeline_frame(
-            5,
+            6,
             "holes_detected",
             list(tile_faces),
             orphan_edges=orphan_edges_for_frame(build),
@@ -337,7 +366,7 @@ def build_manifold_repair_room_trace(
 
     frames.append(
         _pipeline_frame(
-            6,
+            7,
             "filler_candidates",
             tile_faces + fillers_to_viewer_faces(fillers, role="filler_candidate"),
             orphan_edges=orphan_edges_for_frame(build),
@@ -349,7 +378,7 @@ def build_manifold_repair_room_trace(
     rejected = [f for f in fillers if f.face_id not in selected_ids]
     frames.append(
         _pipeline_frame(
-            7,
+            8,
             "fillers_selected",
             tile_faces
             + fillers_to_viewer_faces(selection.selected, role="filler_selected")
@@ -377,7 +406,7 @@ def build_manifold_repair_room_trace(
     status = "watertight" if not build_apply.orphan_half_edges else "holes_remaining"
     frames.append(
         _pipeline_frame(
-            8,
+            9,
             "fillers_applied",
             applied_faces,
             orphan_edges=orphan_edges_for_frame(build_apply),
@@ -399,6 +428,8 @@ def build_manifold_repair_room_trace(
             "tile_count": len(tiles_raw),
             "tile_count_filtered": len(tiles_filtered),
             "dropped_ceiling_locators": list(dropped_ceilings),
+            "roof_clip_clipped": list(clip_result.clipped_locator_ids),
+            "roof_clip_dropped": list(clip_result.dropped_locator_ids),
             "coherence_ok": coherence.ok,
             "coherence_issue_count": len(coherence.issues),
             "fillers_applied": fillers_applied,
