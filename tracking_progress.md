@@ -15326,3 +15326,18 @@ The previous full-building metric and viewer treated all support domains as requ
   - Across 446 buildings, 49,725 per-room faces → 43,589 exterior (87.7%), with 3,014 interior pairs and 3,122 duplicates removed.
   - Per-room watertight rate held at 98.8% (4,784/4,842).
   - 160 polyhedron tests pass; 4 new tests for building_merge cover shared walls, storey boundaries, default-vs-include_interior emission, and isolated rooms.
+
+## 2026-05-18 - Roof XZ clip pipeline step (manifold-repair-steps)
+- **What changed**:
+  - `reconcile_tiers/polyhedron/roof_xz_clip.py` (new): intersect each ceiling/visual_shell/gable_closure tile's XZ projection with the room floor footprint, lift the clipped ring back onto the tile plane, drop degenerate pieces.
+  - `manifold_repair_trace.py`: new viewer frame **3. Roof XZ clip** (10 frames total); magenta `footprint_edges` outline the allowed XZ boundary on that step.
+  - `manifold_repair.py`: `repair_room` runs clip + `filter_unconnected_ceiling_tiles` + `prepare_room_tiles` before build; restored missing `prepare_room_tiles` helper.
+  - `viewer-polyhedron-traces-main.js`: show `frame.label`, `frame.meta`, footprint/coherence edge overlays.
+  - Tests: `test_roof_xz_clip.py`, trace frame-count/index updates.
+- **Why**: Mis-assigned roof planes passed centroid-in-footprint checks but extended far beyond the room's horizontal boundary (visible as orange slabs hanging past walls).
+- **Result**: 31 targeted polyhedron tests pass. Re-export `manifold-repair-steps` traces to see frame 3 clip + footprint outline in the polyhedron trace viewer.
+
+## 2026-05-18 - corpus_trace_export: manifold-repair-steps domain
+- **What changed**: `export_manifold_repair_steps_traces()` in `corpus_trace_export.py`; CLI `--domain manifold-repair-steps`; test + cheatsheet viewer URL.
+- **Why**: Cheatsheet export command failed — step traces were only buildable via ad-hoc scripts, not `corpus_trace_export`.
+- **Result**: `python -m reconcile_tiers.polyhedron.corpus_trace_export --domain manifold-repair-steps` writes `index.json` + per-room traces and prints the polyhedron-traces viewer URL.

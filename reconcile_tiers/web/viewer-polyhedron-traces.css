@@ -72,9 +72,77 @@ input:not([type]) {
   font-size: 12px;
 }
 
-#trace-list {
+#building-list {
+  flex: 0 1 45%;
+  min-height: 120px;
   overflow: auto;
   padding: 8px;
+}
+
+#room-panel {
+  flex: 1 1 55%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border);
+}
+
+#room-panel.hidden {
+  display: none;
+}
+
+#room-panel-title {
+  margin: 0;
+  padding: 10px 14px 6px;
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+#room-list {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 8px 8px;
+}
+
+.building-row {
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  padding: 9px;
+  margin: 0 0 6px;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.building-row:hover {
+  background: #f3f5f7;
+}
+
+.building-row.active {
+  background: var(--accent-soft);
+  border-color: #9ec1ff;
+}
+
+.building-row .label {
+  display: block;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+.building-row .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .trace-row {
@@ -162,7 +230,8 @@ main {
   font-size: 12px;
 }
 
-#pill {
+#pill,
+.link-btn {
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 4px 9px;
@@ -170,6 +239,12 @@ main {
   color: #3d4752;
   font-size: 12px;
   white-space: nowrap;
+  text-decoration: none;
+}
+
+.link-btn:hover {
+  border-color: #aeb8c4;
+  background: #f8fafc;
 }
 
 .icon-btn {
@@ -301,7 +376,8 @@ main {
     border-bottom: 1px solid var(--border);
   }
 
-  #trace-list {
+  #building-list,
+  #room-list {
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: minmax(260px, 1fr);

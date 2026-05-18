@@ -47,6 +47,7 @@ __all__ = [
     "hypothesise_fillers",
     "hypothesise_neighbor_plane_extension_fillers",
     "hypothesise_single_face_fillers",
+    "prepare_room_tiles",
     "repair_room",
     "select_fillers",
 ]
@@ -778,6 +779,24 @@ def _merge_coplanar_tiles(
     return out
 
 
+def prepare_room_tiles(
+    tiles: Sequence[TileFace],
+    *,
+    coord_tol: float = 1e-3,
+    snap_tol: float = 0.05,
+    merge_coplanar: bool = True,
+) -> list[TileFace]:
+    """Snap shared corners and optionally merge coplanar tiles before build."""
+    snapped = (
+        _snap_tile_corners(tiles, snap_tol=snap_tol)
+        if snap_tol > 0.0
+        else list(tiles)
+    )
+    if merge_coplanar:
+        return _merge_coplanar_tiles(snapped, coord_tol=coord_tol)
+    return snapped
+
+
 def _try_add_face(
     poly: HalfEdgePolyhedron,
     tile: TileFace,
@@ -1448,6 +1467,23 @@ def repair_room(
     story = room.get("story")
     room_idx = _room_index(room)
     tiles = collect_room_tiles(payload, room, corner_tol=corner_tol)
+    if len(tiles) >= 4:
+        from reconcile_tiers.polyhedron.roof_xz_clip import clip_roof_tiles_to_floor_xz
+        from reconcile_tiers.polyhedron.tile_coherence import (
+            filter_unconnected_ceiling_tiles,
+        )
+
+        clip = clip_roof_tiles_to_floor_xz(tiles)
+        tiles = list(clip.tiles)
+        tiles, _dropped = filter_unconnected_ceiling_tiles(
+            tiles, corner_tol=corner_tol
+        )
+        tiles = prepare_room_tiles(
+            tiles,
+            coord_tol=coord_tol,
+            snap_tol=corner_tol,
+            merge_coplanar=True,
+        )
     if len(tiles) < 4:  # need at least 4 faces to bound a 3D region
         empty_build = RoomPolyhedronBuild(poly=HalfEdgePolyhedron())
         return RoomRepairResult(
@@ -1462,7 +1498,9 @@ def repair_room(
             tile_count=len(tiles),
         )
 
-    build = build_room_polyhedron(tiles, coord_tol=coord_tol)
+    build = build_room_polyhedron(
+        tiles, coord_tol=coord_tol, snap_tol=0.0, merge_coplanar=False
+    )
     extraction = extract_hole_chains(build)
     next_face_id = max((f.id for f in build.poly.faces), default=-1) + 1
     fillers = hypothesise_fillers(

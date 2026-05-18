@@ -29,19 +29,24 @@ def test_orphan_edges_for_missing_wall():
     assert all("a" in e and "b" in e for e in edges)
 
 
-def test_build_manifold_repair_room_trace_nine_frames():
+def test_build_manifold_repair_room_trace_ten_frames():
     payload = _cube_payload()
     trace = build_manifold_repair_room_trace(payload, payload["rooms"][0])
     assert trace["selection"] == SELECTION
-    assert len(trace["frames"]) == 9
+    assert len(trace["frames"]) == 10
     steps = [f["pipeline_step"] for f in trace["frames"]]
     assert steps[0] == "tier_payload_input"
     assert steps[1] == "input_tiles"
     assert steps[2] == "tile_coherence"
+    assert steps[3] == "roof_xz_clip"
     assert steps[-1] == "fillers_applied"
-    assert trace["frames"][0]["faces"] == []
+    assert len(trace["frames"][0]["faces"]) >= 4
+    assert trace["frames"][0]["pipeline_step"] == "tier_payload_input"
     coherence = trace["frames"][2]
     assert coherence["meta"]["ok"] is True
+    roof_clip = trace["frames"][3]
+    assert roof_clip["pipeline_step"] == "roof_xz_clip"
+    assert len(roof_clip.get("footprint_edges", [])) >= 4
     assert trace["stop"]["reason"] == "watertight"
 
 
@@ -49,7 +54,7 @@ def test_holes_detected_frame_has_orphan_edges():
     payload = _cube_payload()
     payload["rooms"][0]["walls"] = payload["rooms"][0]["walls"][:3]
     trace = build_manifold_repair_room_trace(payload, payload["rooms"][0])
-    holes = trace["frames"][5]
+    holes = trace["frames"][6]
     assert holes["pipeline_step"] == "holes_detected"
     assert len(holes["orphan_edges"]) >= 4
 
@@ -58,7 +63,7 @@ def test_filler_candidates_frame_includes_candidates():
     payload = _cube_payload()
     payload["rooms"][0]["walls"] = payload["rooms"][0]["walls"][:3]
     trace = build_manifold_repair_room_trace(payload, payload["rooms"][0])
-    candidates = trace["frames"][6]
+    candidates = trace["frames"][7]
     roles = {f["role"] for f in candidates["faces"]}
     assert "filler_candidate" in roles
 

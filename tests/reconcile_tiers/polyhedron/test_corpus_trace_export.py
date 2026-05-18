@@ -8,8 +8,10 @@ from reconcile_tiers.polyhedron.corpus_trace_export import (
     export_corpus_envelope_traces,
     export_corpus_room_audit,
     export_corpus_room_shell_traces,
+    export_manifold_repair_steps_traces,
     export_selector_v2_traces,
 )
+from reconcile_tiers.polyhedron.manifold_repair_trace import SELECTION
 from tests.reconcile_tiers.polyhedron.test_payload_adapter import _cube_payload
 
 
@@ -224,6 +226,32 @@ def test_selector_v2_assembly_can_use_partial_eligible_fragments():
 
     assert [record["assembly_candidate"] for record in records] == [True, True]
     assert records[0]["assembly_coverage_ratio"] == 1.0
+
+
+def test_export_manifold_repair_steps_traces_writes_index(tmp_path):
+    pipeline_dir = tmp_path / "pipeline-outputs"
+    building_dir = pipeline_dir / "building-a"
+    building_dir.mkdir(parents=True)
+    (building_dir / "tier_payload.json").write_text(json.dumps(_cube_payload()))
+
+    out_dir = tmp_path / "steps-traces"
+    index = export_manifold_repair_steps_traces(
+        pipeline_dir=pipeline_dir,
+        output_dir=out_dir,
+        max_buildings=1,
+    )
+
+    assert index["domain"] == SELECTION
+    assert index["summary"]["records"] == 1
+    record = index["records"][0]
+    assert record["uuid"] == "building-a"
+    assert record["frame_count"] == 10
+
+    trace = json.loads((out_dir / record["trace"]).read_text())
+    assert trace["selection"] == SELECTION
+    steps = [f["pipeline_step"] for f in trace["frames"]]
+    assert steps[3] == "roof_xz_clip"
+    assert trace["stop"]["reason"] == "watertight"
 
 
 def _selector_record(

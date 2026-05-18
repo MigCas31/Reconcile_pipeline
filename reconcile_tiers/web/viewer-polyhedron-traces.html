@@ -22,16 +22,21 @@
       <input id="search" placeholder="UUID or room" autocomplete="off">
       <div id="sidebar-stats">Loading...</div>
     </header>
-    <div id="trace-list"></div>
+    <div id="building-list"></div>
+    <section id="room-panel" class="hidden">
+      <h2 id="room-panel-title">Rooms</h2>
+      <div id="room-list"></div>
+    </section>
   </aside>
   <main>
     <div id="top-bar">
-      <button class="icon-btn" id="prev-trace" title="Previous trace">↑</button>
-      <button class="icon-btn" id="next-trace" title="Next trace">↓</button>
+      <button class="icon-btn" id="prev-trace" title="Previous building">↑</button>
+      <button class="icon-btn" id="next-trace" title="Next building">↓</button>
       <div id="current">
         <div id="current-title">Loading topology traces...</div>
         <div id="current-meta"></div>
       </div>
+      <a id="open-original" class="link-btn" href="#" target="_blank" rel="noreferrer">Tiers</a>
       <div id="pill">-</div>
     </div>
     <div id="view-controls">
@@ -45,6 +50,7 @@
         <button class="icon-btn" id="next-frame" title="Next frame">→</button>
         <label class="check-row"><input id="edges-toggle" type="checkbox" checked> Edges</label>
         <label class="check-row"><input id="ghost-toggle" type="checkbox" checked> Previous</label>
+        <label class="check-row"><input id="full-building-toggle" type="checkbox" checked> Full building</label>
       </div>
     </div>
     <div id="viewport">

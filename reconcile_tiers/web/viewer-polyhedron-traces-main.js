@@ -1,8 +1,12 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { populateBuildingScene } from "./tier-preview.js";
 
 const DEFAULT_INDEX_URL =
   "../../.context/polyhedron-envelope-roof-selection-safe-check/index.json";
+const PIPELINE_ROOT = "../../pipeline-outputs";
+const CONTEXT_OPACITY = 0.22;
+
 const params = new URLSearchParams(window.location.search);
 const INDEX_URL = params.get("index") || DEFAULT_INDEX_URL;
 const TRACE_ROOT = params.get("root") || traceRootForIndex(INDEX_URL);
@@ -14,7 +18,9 @@ function traceRootForIndex(indexUrl) {
 
 const viewport = document.querySelector("#viewport");
 const canvas = document.querySelector("#view");
-const traceList = document.querySelector("#trace-list");
+const buildingList = document.querySelector("#building-list");
+const roomPanel = document.querySelector("#room-panel");
+const roomList = document.querySelector("#room-list");
 const search = document.querySelector("#search");
 const sidebarStats = document.querySelector("#sidebar-stats");
 const currentTitle = document.querySelector("#current-title");
@@ -29,6 +35,8 @@ const prevFrameButton = document.querySelector("#prev-frame");
 const nextFrameButton = document.querySelector("#next-frame");
 const edgesToggle = document.querySelector("#edges-toggle");
 const ghostToggle = document.querySelector("#ghost-toggle");
+const fullBuildingToggle = document.querySelector("#full-building-toggle");
+const openOriginal = document.querySelector("#open-original");
 const stepTitle = document.querySelector("#step-title");
 const stepCounts = document.querySelector("#step-counts");
 const stepBody = document.querySelector("#step-body");
@@ -55,6 +63,12 @@ fillLight.position.set(-6, 3, -4);
 scene.add(fillLight);
 
 const modelGroup = new THREE.Group();
+const contextBuildingGroup = new THREE.Group();
+contextBuildingGroup.name = "contextBuilding";
+const traceGroup = new THREE.Group();
+traceGroup.name = "trace";
+modelGroup.add(contextBuildingGroup);
+modelGroup.add(traceGroup);
 scene.add(modelGroup);
 
 const facePalette = [
@@ -67,6 +81,16 @@ const edgeMaterial = new THREE.LineBasicMaterial({
   color: 0x17202a,
   transparent: true,
   opacity: 0.72,
+});
+const footprintEdgeMaterial = new THREE.LineBasicMaterial({
+  color: 0xc026d3,
+  transparent: true,
+  opacity: 0.95,
+});
+const coherenceEdgeMaterial = new THREE.LineBasicMaterial({
+  color: 0xdb2777,
+  transparent: true,
+  opacity: 0.9,
 });
 const ghostMaterial = new THREE.MeshBasicMaterial({
   color: 0x64748b,
@@ -85,10 +109,14 @@ const highlightMaterial = new THREE.MeshPhongMaterial({
 });
 
 let indexData = null;
-let rows = [];
-let visibleRows = [];
+let groups = [];
+let visibleGroups = [];
+let activeGroup = null;
 let activeRow = null;
 let activeTrace = null;
+let activePayload = null;
+let contextBuildingUuid = null;
+const payloadCache = new Map();
 let frameIndex = 0;
 let renderQueued = false;
 
@@ -118,35 +146,117 @@ function escapeHtml(value) {
 }
 
 function formatCounts(counts) {
+  if (!counts) return "-";
   return `${counts.faces}F ${counts.vertices}V ${counts.half_edges}HE`;
 }
 
-function matches(row, query) {
-  if (!query) return true;
-  return `${row.uuid} ${recordLabel(row)} ${row.stop_reason}`
-    .toLowerCase()
-    .includes(query);
-}
-
 function recordLabel(row) {
+  if (row.is_building) return "Building";
   if (row.room_index !== undefined && row.room_index !== null) {
     return `room ${row.room_index}`;
   }
   return row.locator_id || `part ${row.part_index}`;
 }
 
-function renderTraceList() {
+function isBuildingRow(row) {
+  return Boolean(row.is_building) || row.room_index == null;
+}
+
+function isRoomRow(row) {
+  return Boolean(row.trace) && !isBuildingRow(row);
+}
+
+function buildHouseGroups(records) {
+  const byUuid = new Map();
+  for (const row of records) {
+    if (!row.trace) continue;
+    if (!byUuid.has(row.uuid)) {
+      byUuid.set(row.uuid, { uuid: row.uuid, rooms: [], building: null });
+    }
+    const group = byUuid.get(row.uuid);
+    if (isBuildingRow(row)) {
+      group.building = row;
+    } else {
+      group.rooms.push(row);
+    }
+  }
+  return [...byUuid.values()]
+    .map((group) => {
+      group.rooms.sort(
+        (a, b) => Number(a.room_index ?? a.part_index) - Number(b.room_index ?? b.part_index),
+      );
+      const stepCount = group.rooms.reduce((sum, row) => sum + Number(row.step_count || 0), 0);
+      return { ...group, stepCount };
+    })
+    .sort(
+      (a, b) =>
+        b.stepCount - a.stepCount ||
+        b.rooms.length - a.rooms.length ||
+        a.uuid.localeCompare(b.uuid),
+    );
+}
+
+function groupMatches(group, query) {
+  if (!query) return true;
+  const haystack = [
+    group.uuid,
+    ...group.rooms.map((row) => `${recordLabel(row)} ${row.stop_reason}`),
+    group.building ? "building" : "",
+  ]
+    .join(" ")
+    .toLowerCase();
+  return haystack.includes(query);
+}
+
+function renderBuildingList() {
   const query = search.value.trim().toLowerCase();
-  visibleRows = rows.filter((row) => matches(row, query));
-  traceList.innerHTML = visibleRows
+  visibleGroups = groups.filter((group) => groupMatches(group, query));
+  buildingList.innerHTML = visibleGroups
+    .map((group) => {
+      const active = group === activeGroup ? " active" : "";
+      const roomCount = group.rooms.length;
+      const buildingBadge = group.building ? `<span class="badge">building trace</span>` : "";
+      return `
+        <button class="building-row${active}" data-uuid="${escapeHtml(group.uuid)}">
+          <span class="label">${escapeHtml(group.uuid)}</span>
+          <span class="meta">
+            <span class="badge">${roomCount} room${roomCount === 1 ? "" : "s"}</span>
+            ${buildingBadge}
+            <span class="badge">${group.stepCount} steps</span>
+          </span>
+        </button>
+      `;
+    })
+    .join("");
+
+  for (const button of buildingList.querySelectorAll(".building-row")) {
+    button.addEventListener("click", () => {
+      const group = groups.find((candidate) => candidate.uuid === button.dataset.uuid);
+      if (group) void selectHouse(group);
+    });
+  }
+}
+
+function renderRoomList() {
+  if (!activeGroup) {
+    roomPanel.classList.add("hidden");
+    roomList.innerHTML = "";
+    return;
+  }
+  roomPanel.classList.remove("hidden");
+  const rows = [];
+  if (activeGroup.building) rows.push(activeGroup.building);
+  rows.push(...activeGroup.rooms);
+
+  roomList.innerHTML = rows
     .map((row) => {
       const active = row === activeRow ? " active" : "";
       return `
         <button class="trace-row${active}" data-trace="${escapeHtml(row.trace)}">
-          <span class="label">${escapeHtml(row.uuid)}</span>
+          <span class="label">${escapeHtml(recordLabel(row))}</span>
           <span class="meta">
-            <span class="badge">${escapeHtml(recordLabel(row))}</span>
-            <span class="badge">${row.step_count} steps</span>
+            <span class="badge">${row.frame_count ?? row.step_count ?? 0} frames</span>
+            <span class="badge">${escapeHtml(row.stop_reason || "")}</span>
             <span class="badge">${formatCounts(row.initial_counts)}</span>
           </span>
         </button>
@@ -154,33 +264,100 @@ function renderTraceList() {
     })
     .join("");
 
-  for (const button of traceList.querySelectorAll(".trace-row")) {
+  for (const button of roomList.querySelectorAll(".trace-row")) {
     button.addEventListener("click", () => {
       const row = rows.find((candidate) => candidate.trace === button.dataset.trace);
-      if (row) void loadTrace(row);
+      if (row) void selectRoom(row);
     });
   }
 }
 
-async function loadTrace(row) {
+function renderSidebar() {
+  renderBuildingList();
+  renderRoomList();
+}
+
+async function fetchPayload(uuid) {
+  if (payloadCache.has(uuid)) return payloadCache.get(uuid);
+  const response = await fetch(`${PIPELINE_ROOT}/${uuid}/tier_payload.json`);
+  const payload = response.ok ? await response.json() : null;
+  payloadCache.set(uuid, payload);
+  return payload;
+}
+
+async function selectHouse(group, { preferredRoomIndex = null } = {}) {
+  activeGroup = group;
+  activePayload = await fetchPayload(group.uuid);
+  contextBuildingUuid = null;
+  renderSidebar();
+  openOriginal.href = `./viewer-tiers.html#b=${encodeURIComponent(group.uuid)}`;
+
+  let target = null;
+  if (preferredRoomIndex != null) {
+    target =
+      group.rooms.find((row) => Number(row.room_index) === Number(preferredRoomIndex)) ||
+      group.building;
+  }
+  if (!target) target = group.rooms[0] || group.building;
+  if (target) await selectRoom(target, { refocusCamera: true });
+  else status.textContent = "No traces for this building.";
+}
+
+async function selectRoom(row, { refocusCamera = false } = {}) {
+  await loadTrace(row, { resetFrame: false, refocusCamera });
+}
+
+async function loadTrace(row, { resetFrame = false, refocusCamera = false } = {}) {
+  const preservedFrame = resetFrame ? 0 : frameIndex;
   activeRow = row;
-  frameIndex = 0;
-  renderTraceList();
+  renderSidebar();
   status.textContent = "Loading trace...";
+
   const response = await fetch(`${TRACE_ROOT}/${row.trace}`);
   if (!response.ok) throw new Error(`trace fetch failed: ${response.status}`);
   activeTrace = await response.json();
+
+  const maxFrame = Math.max(0, activeTrace.frames.length - 1);
+  frameIndex = Math.min(preservedFrame, maxFrame);
   frameSlider.min = "0";
-  frameSlider.max = String(Math.max(0, activeTrace.frames.length - 1));
-  frameSlider.value = "0";
+  frameSlider.max = String(maxFrame);
+  frameSlider.value = String(frameIndex);
+
+  rebuildContextBuilding();
   renderFrame();
-  focusModel();
+  if (refocusCamera) focusModel();
+}
+
+function rebuildContextBuilding() {
+  clearGroup(contextBuildingGroup, { disposeMaterials: true });
+  contextBuildingUuid = null;
+  if (!fullBuildingToggle.checked || !activePayload || !activeGroup) return;
+  addContextBuilding(contextBuildingGroup, activePayload);
+  contextBuildingUuid = activeGroup.uuid;
+}
+
+function addContextBuilding(group, payload) {
+  populateBuildingScene(group, payload, { style: "calm" });
+  group.traverse((obj) => {
+    if (!obj.isMesh) return;
+    const materials = Array.isArray(obj.material) ? obj.material : [obj.material];
+    const cloned = materials.map((material) => {
+      const copy = material.clone();
+      const baseOpacity = copy.opacity ?? 1;
+      copy.transparent = true;
+      copy.opacity = Math.min(1, baseOpacity * CONTEXT_OPACITY);
+      copy.depthWrite = false;
+      return copy;
+    });
+    obj.material = Array.isArray(obj.material) ? cloned : cloned[0];
+    obj.userData.contextBuilding = true;
+  });
 }
 
 function currentStepForFrame() {
   if (!activeTrace) return null;
-  if (frameIndex <= 0) return activeTrace.steps[0] ?? null;
-  return activeTrace.steps.find((step) => step.after_frame === frameIndex) ?? null;
+  if (frameIndex <= 0) return activeTrace.steps?.[0] ?? null;
+  return activeTrace.steps?.find((step) => step.after_frame === frameIndex) ?? null;
 }
 
 function triggerFaceIds(step) {
@@ -188,30 +365,53 @@ function triggerFaceIds(step) {
   return new Set(step.trigger_ids.map((id) => Number(id)));
 }
 
+function displayFrame(index) {
+  const frame = activeTrace.frames[index];
+  if (!frame) return frame;
+  if (frame.faces?.length) return frame;
+  if (frame.pipeline_step !== "tier_payload_input") return frame;
+  const inputTiles = activeTrace.frames.find(
+    (candidate) => candidate.pipeline_step === "input_tiles" && candidate.faces?.length,
+  );
+  if (!inputTiles) return frame;
+  return { ...frame, faces: inputTiles.faces };
+}
+
 function renderFrame() {
-  clearGroup(modelGroup);
+  clearGroup(traceGroup);
   if (!activeTrace || !activeRow) return;
 
-  const frame = activeTrace.frames[frameIndex];
+  if (
+    fullBuildingToggle.checked &&
+    activePayload &&
+    activeGroup &&
+    contextBuildingUuid !== activeGroup.uuid
+  ) {
+    rebuildContextBuilding();
+  }
+
+  const frame = displayFrame(frameIndex);
   const previousFrame =
-    ghostToggle.checked && frameIndex > 0 ? activeTrace.frames[frameIndex - 1] : null;
+    ghostToggle.checked && frameIndex > 0 ? displayFrame(frameIndex - 1) : null;
   const step = currentStepForFrame();
   const highlightFaces = triggerFaceIds(step);
 
   if (previousFrame) {
-    const ghostGroup = new THREE.Group();
-    ghostGroup.name = "previousFrame";
-    addFrameMeshes(ghostGroup, previousFrame, {
+    const ghostFrameGroup = new THREE.Group();
+    ghostFrameGroup.name = "previousFrame";
+    addFrameMeshes(ghostFrameGroup, previousFrame, {
       ghost: true,
       highlightFaces: new Set(),
     });
-    modelGroup.add(ghostGroup);
+    traceGroup.add(ghostFrameGroup);
   }
 
-  addFrameMeshes(modelGroup, frame, {
+  addFrameMeshes(traceGroup, frame, {
     ghost: false,
     highlightFaces,
   });
+  addOverlayEdges(traceGroup, frame.coherence_edges, coherenceEdgeMaterial);
+  addOverlayEdges(traceGroup, frame.footprint_edges, footprintEdgeMaterial);
 
   updateHeader(frame, step);
   requestRender();
@@ -240,17 +440,19 @@ function addFrameMeshes(group, frame, { ghost, highlightFaces }) {
 }
 
 function updateHeader(frame, step) {
-  const stepCount = activeTrace.steps.length;
   currentTitle.textContent = `${activeRow.uuid} · ${recordLabel(activeRow)}`;
-  currentMeta.textContent = `${stepCount} topology steps · ${activeTrace.stop.reason}`;
+  const stopReason = activeTrace.stop?.reason ?? "unknown";
+  currentMeta.textContent = `${activeTrace.frames.length} pipeline frames · ${stopReason}`;
   pill.textContent = `Frame ${frameIndex + 1}/${activeTrace.frames.length}`;
   frameReadout.textContent = `${frameIndex} / ${activeTrace.frames.length - 1}`;
-  stepTitle.textContent = step ? step.action.replaceAll("_", " ") : "Initial frame";
+  stepTitle.textContent = step
+    ? step.action.replaceAll("_", " ")
+    : frame.label || frame.pipeline_step || "Frame";
   stepCounts.textContent = formatCounts(frame.counts);
   status.textContent = `${frame.faces.length} faces rendered`;
 
   if (!step) {
-    stepBody.innerHTML = `<div class="delta-line"><span>state</span><span>${escapeHtml(frame.label)}</span></div>`;
+    stepBody.innerHTML = formatFrameMeta(frame);
     return;
   }
 
@@ -261,7 +463,29 @@ function updateHeader(frame, step) {
     <div class="delta-line"><span>faces</span><span>${before.faces} → ${after.faces}</span></div>
     <div class="delta-line"><span>vertices</span><span>${before.vertices} → ${after.vertices}</span></div>
     <div class="delta-line"><span>half-edges</span><span>${before.half_edges} → ${after.half_edges}</span></div>
+    ${formatFrameMeta(frame)}
   `;
+}
+
+function formatFrameMeta(frame) {
+  const meta = frame.meta || {};
+  const lines = Object.entries(meta).map(([key, value]) => {
+    const text = Array.isArray(value) ? value.join(", ") : String(value);
+    return `<div class="delta-line"><span>${escapeHtml(key)}</span><span>${escapeHtml(text)}</span></div>`;
+  });
+  if (!lines.length) {
+    return `<div class="delta-line"><span>state</span><span>${escapeHtml(frame.label || frame.pipeline_step || "")}</span></div>`;
+  }
+  return lines.join("");
+}
+
+function addOverlayEdges(group, edges, material) {
+  if (!Array.isArray(edges) || !edges.length) return;
+  for (const edge of edges) {
+    if (!edge?.a || !edge?.b) continue;
+    const geometry = new THREE.BufferGeometry().setFromPoints([vec(edge.a), vec(edge.b)]);
+    group.add(new THREE.Line(geometry, material));
+  }
 }
 
 function polygonGeometry(corners) {
@@ -334,26 +558,40 @@ function vec(corner) {
   return new THREE.Vector3(Number(corner[0]), Number(corner[1]), Number(corner[2]));
 }
 
-function clearGroup(group) {
+function clearGroup(group, { disposeMaterials = false } = {}) {
   for (const child of group.children) {
     child.traverse((obj) => {
       if (obj.geometry) obj.geometry.dispose();
+      if (disposeMaterials && obj.material) {
+        const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+        for (const material of mats) material.dispose?.();
+      }
     });
   }
   group.clear();
 }
 
+function focusSubject() {
+  if (traceGroup.children.length) return traceGroup;
+  if (contextBuildingGroup.children.length) return contextBuildingGroup;
+  return modelGroup;
+}
+
 function focusModel() {
-  const box = new THREE.Box3().setFromObject(modelGroup);
+  const subject = focusSubject();
+  const box = new THREE.Box3().setFromObject(subject);
   if (box.isEmpty()) {
     camera.position.set(4, 3, 5);
     controls.target.set(0, 0, 0);
+    controls.update();
+    requestRender();
     return;
   }
-  const center = box.getCenter(new THREE.Vector3());
-  const size = box.getSize(new THREE.Vector3());
-  const radius = Math.max(size.x, size.y, size.z, 1);
-  camera.position.copy(center).add(new THREE.Vector3(radius * 1.3, radius * 1.0, radius * 1.45));
+  const sphere = box.getBoundingSphere(new THREE.Sphere());
+  const center = sphere.center;
+  const radius = Math.max(sphere.radius, 0.5);
+  // Frame the active room trace, not the full tier_payload shell (avoids ultra-wide pulls).
+  camera.position.copy(center).add(new THREE.Vector3(radius * 0.92, radius * 0.68, radius * 1.02));
   camera.near = Math.max(0.01, radius / 200);
   camera.far = Math.max(100, radius * 20);
   camera.updateProjectionMatrix();
@@ -382,11 +620,12 @@ function resize() {
   requestRender();
 }
 
-function moveTrace(delta) {
-  if (!visibleRows.length || !activeRow) return;
-  const index = visibleRows.indexOf(activeRow);
-  const next = visibleRows[(index + delta + visibleRows.length) % visibleRows.length];
-  void loadTrace(next);
+function moveBuilding(delta) {
+  if (!visibleGroups.length || !activeGroup) return;
+  const preferredRoomIndex = activeRow?.room_index;
+  const index = visibleGroups.indexOf(activeGroup);
+  const next = visibleGroups[(index + delta + visibleGroups.length) % visibleGroups.length];
+  void selectHouse(next, { preferredRoomIndex });
 }
 
 function moveFrame(delta) {
@@ -401,23 +640,33 @@ async function init() {
   const response = await fetch(INDEX_URL);
   if (!response.ok) throw new Error(`index fetch failed: ${response.status}`);
   indexData = await response.json();
-  rows = (indexData.records || [])
-    .filter((row) => row.trace)
-    .sort((a, b) => b.step_count - a.step_count || a.uuid.localeCompare(b.uuid));
-  const builtCount =
-    indexData.summary.built_parts ?? indexData.summary.built_rooms ?? rows.length;
+  groups = buildHouseGroups(indexData.records || []);
+  const roomCount = groups.reduce((sum, group) => sum + group.rooms.length, 0);
   const domain = indexData.domain || "room-shell";
-  sidebarStats.textContent = `${rows.length} traces · ${builtCount} built ${domain}s`;
-  renderTraceList();
-  if (rows.length) await loadTrace(rows[0]);
+  sidebarStats.textContent = `${groups.length} buildings · ${roomCount} rooms · ${domain}`;
+
+  renderBuildingList();
+  const first = visibleGroups[0] || groups[0];
+  if (first) await selectHouse(first, { preferredRoomIndex: null });
   else status.textContent = "No traces found.";
 }
 
 search.addEventListener("input", () => {
-  renderTraceList();
+  const query = search.value.trim().toLowerCase();
+  const previousUuid = activeGroup?.uuid;
+  renderBuildingList();
+  if (!visibleGroups.length) {
+    roomPanel.classList.add("hidden");
+    return;
+  }
+  const stillVisible = visibleGroups.find((group) => group.uuid === previousUuid);
+  if (!stillVisible) void selectHouse(visibleGroups[0]);
+  else if (stillVisible !== activeGroup) void selectHouse(stillVisible);
+  else renderRoomList();
 });
-prevTraceButton.addEventListener("click", () => moveTrace(-1));
-nextTraceButton.addEventListener("click", () => moveTrace(1));
+
+prevTraceButton.addEventListener("click", () => moveBuilding(-1));
+nextTraceButton.addEventListener("click", () => moveBuilding(1));
 prevFrameButton.addEventListener("click", () => moveFrame(-1));
 nextFrameButton.addEventListener("click", () => moveFrame(1));
 frameSlider.addEventListener("input", () => {
@@ -426,6 +675,11 @@ frameSlider.addEventListener("input", () => {
 });
 edgesToggle.addEventListener("change", renderFrame);
 ghostToggle.addEventListener("change", renderFrame);
+fullBuildingToggle.addEventListener("change", () => {
+  rebuildContextBuilding();
+  renderFrame();
+  focusModel();
+});
 window.addEventListener("resize", resize);
 new ResizeObserver(resize).observe(viewport);
 
