@@ -105,6 +105,69 @@ def tile_undirected_edges(corner_vids: list[int]) -> set[frozenset[int]]:
     }
 
 
+def _coords_near(
+    a: tuple[float, float, float],
+    b: tuple[float, float, float],
+    tol: float,
+) -> bool:
+    tol_sq = tol * tol
+    return (
+        (float(a[0]) - float(b[0])) ** 2
+        + (float(a[1]) - float(b[1])) ** 2
+        + (float(a[2]) - float(b[2])) ** 2
+    ) <= tol_sq
+
+
+def _wall_top_corner_coords(
+    wall: TileFace,
+    *,
+    rim_y_tol: float,
+) -> list[tuple[float, float, float]]:
+    ys = [float(c[1]) for c in wall.corners]
+    if not ys:
+        return []
+    y_ref = max(ys)
+    return [
+        (float(c[0]), float(c[1]), float(c[2]))
+        for c in wall.corners
+        if abs(float(c[1]) - y_ref) <= rim_y_tol
+    ]
+
+
+def _any_corner_near_points(
+    corners: Sequence[tuple[float, float, float]],
+    targets: Sequence[tuple[float, float, float]],
+    tol: float,
+) -> bool:
+    if not targets:
+        return False
+    for corner in corners:
+        for target in targets:
+            if _coords_near(corner, target, tol):
+                return True
+    return False
+
+
+def ceiling_corner_near_wall_tops(
+    ceiling: TileFace,
+    walls: Sequence[TileFace],
+    *,
+    corner_tol: float,
+    rim_y_tol: float,
+) -> bool:
+    """Fallback: any ceiling corner within corner_tol of a wall top corner."""
+
+    wall_tops: list[tuple[float, float, float]] = []
+    for wall in walls:
+        wall_tops.extend(_wall_top_corner_coords(wall, rim_y_tol=rim_y_tol))
+    if not wall_tops:
+        return False
+    ceiling_corners = [
+        (float(c[0]), float(c[1]), float(c[2])) for c in ceiling.corners
+    ]
+    return _any_corner_near_points(ceiling_corners, wall_tops, corner_tol)
+
+
 def ceiling_connects_to_walls(
     ceiling: TileFace,
     walls: Sequence[TileFace],
@@ -112,7 +175,7 @@ def ceiling_connects_to_walls(
     corner_tol: float,
     rim_y_tol: float = 0.08,
 ) -> bool:
-    """True when the ceiling shares at least one rim/edge with wall tops."""
+    """True when the ceiling meets wall tops by shared rim/edge or corner proximity."""
 
     if not walls:
         return False
@@ -136,7 +199,54 @@ def ceiling_connects_to_walls(
         if ceiling_edges.intersection(tile_undirected_edges(per_tile_vids[wi])):
             return True
 
-    return bool(ceiling_rim.intersection(wall_top_rims))
+    if ceiling_rim.intersection(wall_top_rims):
+        return True
+
+    return ceiling_corner_near_wall_tops(
+        ceiling, walls, corner_tol=corner_tol, rim_y_tol=rim_y_tol
+    )
+
+
+def _ceiling_indices_anchored_to_walls(
+    ceilings: Sequence[TileFace],
+    walls: Sequence[TileFace],
+    *,
+    corner_tol: float,
+    rim_y_tol: float,
+) -> set[int]:
+    """Ceiling tile indices that connect to walls, plus ceiling-only neighbours."""
+
+    if not ceilings:
+        return set()
+
+    wall_anchored = {
+        i
+        for i, ceiling in enumerate(ceilings)
+        if ceiling_connects_to_walls(
+            ceiling, walls, corner_tol=corner_tol, rim_y_tol=rim_y_tol
+        )
+    }
+    if not wall_anchored:
+        return set()
+
+    per_tile_vids = cluster_tile_corners(ceilings, corner_tol)
+    edge_sets = [tile_undirected_edges(vids) for vids in per_tile_vids]
+    adjacency: dict[int, set[int]] = {i: set() for i in range(len(ceilings))}
+    for i in range(len(ceilings)):
+        for j in range(i + 1, len(ceilings)):
+            if edge_sets[i].intersection(edge_sets[j]):
+                adjacency[i].add(j)
+                adjacency[j].add(i)
+
+    kept = set(wall_anchored)
+    stack = list(wall_anchored)
+    while stack:
+        node = stack.pop()
+        for nb in adjacency.get(node, ()):
+            if nb not in kept:
+                kept.add(nb)
+                stack.append(nb)
+    return kept
 
 
 def filter_unconnected_ceiling_tiles(
@@ -146,9 +256,19 @@ def filter_unconnected_ceiling_tiles(
     rim_y_tol: float = 0.08,
     max_ceiling_clearance_m: float = 1.0,
 ) -> tuple[list[TileFace], tuple[str, ...]]:
-    """Drop ceiling/visual_shell/gable_closure tiles that do not meet wall tops."""
+    """Drop ceiling tiles not anchored to wall tops.
+
+    A ceiling is kept when it meets wall tops directly, or shares an edge with
+    another ceiling that is (transitively) wall-anchored.
+    """
 
     walls = [t for t in tiles if t.source == "wall"]
+    ceilings = [t for t in tiles if t.source in CEILING_SOURCES]
+    anchored = _ceiling_indices_anchored_to_walls(
+        ceilings, walls, corner_tol=corner_tol, rim_y_tol=rim_y_tol
+    )
+    anchored_locators = {ceilings[i].locator_id for i in anchored}
+
     kept: list[TileFace] = []
     dropped: list[str] = []
 
@@ -156,9 +276,7 @@ def filter_unconnected_ceiling_tiles(
         if tile.source not in CEILING_SOURCES:
             kept.append(tile)
             continue
-        if not ceiling_connects_to_walls(
-            tile, walls, corner_tol=corner_tol, rim_y_tol=rim_y_tol
-        ):
+        if tile.locator_id not in anchored_locators:
             dropped.append(tile.locator_id)
             continue
         clearance = _min_ceiling_clearance_m(walls, [tile], rim_y_tol=rim_y_tol)
@@ -243,6 +361,21 @@ def audit_room_tile_coherence(
                 adjacency[i].add(j)
                 adjacency[j].add(i)
 
+    for wi in wall_indices:
+        wall = tiles[wi]
+        for ci in ceiling_indices:
+            ceiling = tiles[ci]
+            if adjacency[wi].intersection({ci}):
+                continue
+            if ceiling_corner_near_wall_tops(
+                ceiling,
+                [wall],
+                corner_tol=corner_tol,
+                rim_y_tol=rim_y_tol,
+            ):
+                adjacency[wi].add(ci)
+                adjacency[ci].add(wi)
+
     component_count = _connected_components(len(tiles), adjacency)
     if component_count > 1:
         issues.append(
@@ -283,6 +416,7 @@ def audit_room_tile_coherence(
                 wall_indices,
                 ceiling_indices,
                 per_tile_vids,
+                corner_tol=corner_tol,
                 rim_y_tol=rim_y_tol,
             )
         )
@@ -477,24 +611,33 @@ def _check_wall_ceiling_rims(
     ceiling_indices: list[int],
     per_tile_vids: list[list[int]],
     *,
+    corner_tol: float,
     rim_y_tol: float,
 ) -> list[TileCoherenceIssue]:
     issues: list[TileCoherenceIssue] = []
     ceiling_rims = _collect_rim_edges(
         ceiling_indices, tiles, per_tile_vids, rim_y_tol=rim_y_tol, prefer_top=True
     )
+    ceiling_corners: list[tuple[float, float, float]] = []
+    for ci in ceiling_indices:
+        for c in tiles[ci].corners:
+            ceiling_corners.append((float(c[0]), float(c[1]), float(c[2])))
+
     for wi in wall_indices:
         wall = tiles[wi]
         vids = per_tile_vids[wi]
         for edge in _rim_edges(wall, vids, rim_y_tol=rim_y_tol, prefer_top=True):
             if edge in ceiling_rims:
                 continue
+            a, b = _segment_for_edge(wall, vids, edge)
+            if _any_corner_near_points(ceiling_corners, [a, b], corner_tol):
+                continue
             issues.append(
                 TileCoherenceIssue(
                     kind="wall_ceiling_gap",
                     message="wall top edge has no matching ceiling edge",
                     tile_locator_ids=(wall.locator_id,),
-                    edge=_segment_for_edge(wall, vids, edge),
+                    edge=(a, b),
                 )
             )
     return issues

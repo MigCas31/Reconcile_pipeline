@@ -15341,3 +15341,13 @@ The previous full-building metric and viewer treated all support domains as requ
 - **What changed**: `export_manifold_repair_steps_traces()` in `corpus_trace_export.py`; CLI `--domain manifold-repair-steps`; test + cheatsheet viewer URL.
 - **Why**: Cheatsheet export command failed — step traces were only buildable via ad-hoc scripts, not `corpus_trace_export`.
 - **Result**: `python -m reconcile_tiers.polyhedron.corpus_trace_export --domain manifold-repair-steps` writes `index.json` + per-room traces and prints the polyhedron-traces viewer URL.
+
+## 2026-05-20 - Ceiling–wall point contact fallback (rim/edge unchanged)
+- **What changed**: `tile_coherence.py` — `ceiling_connects_to_walls` and `_check_wall_ceiling_rims` keep shared rim/edge matching; add fallback when any ceiling corner is within `corner_tol` of a wall top corner (`rim_y_tol` band). Audit tile graph adds ceiling↔wall adjacency on point contact for `_shell_reachable`. Test `test_ceiling_point_contact_anchors_sloped_tile_without_rim_edge`.
+- **Why**: Sloped ceilings meet walls at eave corners without a full top-rim edge pair; large `corner_tol` alone did not help.
+- **Result**: 7/7 `test_tile_coherence.py` pass.
+
+## 2026-05-20 - Ceiling filter: transitive wall anchor via ceiling edges
+- **What changed**: `filter_unconnected_ceiling_tiles` in `tile_coherence.py` now keeps a ceiling when it meets wall tops **or** shares a polygon edge (corner_tol) with another ceiling that is transitively wall-anchored. Tests in `test_tile_coherence.py` cover oblique+flat hybrid and ceiling-only islands.
+- **Why**: Hybrid rooms dropped oblique/flat lids that visually met each other and walls but only the flat piece passed per-tile `ceiling_connects_to_walls`; sloped tiles attached to an anchored flat were removed at step 4.
+- **Result**: 6/6 `test_tile_coherence.py` pass. Re-export `manifold-repair-steps` traces to see frame 4 retain chained ceilings.
