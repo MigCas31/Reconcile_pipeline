@@ -353,6 +353,69 @@ main {
   font-variant-numeric: tabular-nums;
 }
 
+.meta-block {
+  margin: 6px 0 4px;
+}
+
+.meta-block-title {
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.meta-bad {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.issue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 220px;
+  overflow: auto;
+  padding-left: 2px;
+}
+
+.issue-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 8px;
+  align-items: start;
+  padding: 4px 6px;
+  border-radius: 4px;
+  background: #f8fafc;
+  border: 1px solid #e8edf2;
+}
+
+.issue-kind {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--warn);
+  white-space: nowrap;
+}
+
+.issue-msg {
+  grid-column: 2;
+  overflow-wrap: anywhere;
+}
+
+.issue-locs {
+  display: block;
+  grid-column: 1 / -1;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.issue-more,
+.issue-empty {
+  color: var(--muted);
+  font-size: 11px;
+  padding: 2px 0;
+}
+
 #status {
   position: absolute;
   left: 12px;
