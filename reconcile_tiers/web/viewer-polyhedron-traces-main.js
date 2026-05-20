@@ -6,6 +6,13 @@ const DEFAULT_INDEX_URL =
   "../../.context/polyhedron-envelope-roof-selection-safe-check/index.json";
 const PIPELINE_ROOT = "../../pipeline-outputs";
 const CONTEXT_OPACITY = 0.22;
+const FILLERS_APPLIED_STEP = "fillers_applied";
+const CEILING_TILE_LABELS = new Set([
+  "ceiling",
+  "visual_shell",
+  "gable_closure",
+  "polyhedron_v3_filler",
+]);
 
 const params = new URLSearchParams(window.location.search);
 const INDEX_URL = params.get("index") || DEFAULT_INDEX_URL;
@@ -36,6 +43,7 @@ const nextFrameButton = document.querySelector("#next-frame");
 const edgesToggle = document.querySelector("#edges-toggle");
 const ghostToggle = document.querySelector("#ghost-toggle");
 const fullBuildingToggle = document.querySelector("#full-building-toggle");
+const reconstructedCeilingToggle = document.querySelector("#reconstructed-ceiling-toggle");
 const openOriginal = document.querySelector("#open-original");
 const stepTitle = document.querySelector("#step-title");
 const stepCounts = document.querySelector("#step-counts");
@@ -65,9 +73,12 @@ scene.add(fillLight);
 const modelGroup = new THREE.Group();
 const contextBuildingGroup = new THREE.Group();
 contextBuildingGroup.name = "contextBuilding";
+const reconstructedCeilingGroup = new THREE.Group();
+reconstructedCeilingGroup.name = "reconstructedCeiling";
 const traceGroup = new THREE.Group();
 traceGroup.name = "trace";
 modelGroup.add(contextBuildingGroup);
+modelGroup.add(reconstructedCeilingGroup);
 modelGroup.add(traceGroup);
 scene.add(modelGroup);
 
@@ -99,6 +110,15 @@ const ghostMaterial = new THREE.MeshBasicMaterial({
   side: THREE.DoubleSide,
   depthWrite: false,
 });
+const reconstructedCeilingMaterial = new THREE.MeshPhongMaterial({
+  color: 0x0891b2,
+  emissive: 0x042f3a,
+  shininess: 24,
+  transparent: true,
+  opacity: 0.58,
+  side: THREE.DoubleSide,
+  depthWrite: false,
+});
 const highlightMaterial = new THREE.MeshPhongMaterial({
   color: 0xfacc15,
   emissive: 0x4d3d00,
@@ -117,6 +137,9 @@ let activeTrace = null;
 let activePayload = null;
 let contextBuildingUuid = null;
 const payloadCache = new Map();
+const traceCache = new Map();
+const buildingCeilingCache = new Map();
+let reconstructedCeilingBuildingUuid = null;
 let frameIndex = 0;
 let renderQueued = false;
 
@@ -285,10 +308,95 @@ async function fetchPayload(uuid) {
   return payload;
 }
 
+async function fetchTrace(tracePath) {
+  if (traceCache.has(tracePath)) return traceCache.get(tracePath);
+  const response = await fetch(`${TRACE_ROOT}/${tracePath}`);
+  if (!response.ok) throw new Error(`trace fetch failed: ${response.status}`);
+  const trace = await response.json();
+  traceCache.set(tracePath, trace);
+  return trace;
+}
+
+function fillersAppliedFrame(trace) {
+  if (!trace?.frames?.length) return null;
+  return (
+    trace.frames.find((frame) => frame.pipeline_step === FILLERS_APPLIED_STEP) ??
+    trace.frames[9] ??
+    null
+  );
+}
+
+function isReconstructedCeilingFace(face) {
+  if (!face) return false;
+  if (CEILING_TILE_LABELS.has(face.label)) return true;
+  return face.role === "filler";
+}
+
+async function collectBuildingReconstructedCeilings(group) {
+  if (buildingCeilingCache.has(group.uuid)) {
+    return buildingCeilingCache.get(group.uuid);
+  }
+  const faces = [];
+  await Promise.all(
+    group.rooms.map(async (row) => {
+      if (!row.trace) return;
+      let trace;
+      try {
+        trace = await fetchTrace(row.trace);
+      } catch (_err) {
+        return;
+      }
+      const frame = fillersAppliedFrame(trace);
+      if (!frame) return;
+      for (const face of frame.faces || []) {
+        if (isReconstructedCeilingFace(face)) faces.push(face);
+      }
+    }),
+  );
+  buildingCeilingCache.set(group.uuid, faces);
+  return faces;
+}
+
+function clearReconstructedCeilingOverlay({ resetBuilding = false } = {}) {
+  clearGroup(reconstructedCeilingGroup, { disposeMaterials: false });
+  if (resetBuilding) reconstructedCeilingBuildingUuid = null;
+}
+
+function addReconstructedCeilingMeshes(group, faces) {
+  for (const face of faces) {
+    if (!Array.isArray(face.corners) || face.corners.length < 3) continue;
+    const geometry = polygonGeometry(face.corners);
+    if (!geometry) continue;
+    const mesh = new THREE.Mesh(geometry, reconstructedCeilingMaterial);
+    mesh.userData.reconstructedCeiling = true;
+    mesh.userData.roomLabel = face.label;
+    group.add(mesh);
+    if (edgesToggle.checked) {
+      const edge = edgeLoop(face.corners);
+      if (edge) group.add(edge);
+    }
+  }
+}
+
+async function rebuildReconstructedCeiling() {
+  clearReconstructedCeilingOverlay();
+  if (!reconstructedCeilingToggle.checked || !activeGroup?.rooms?.length) {
+    reconstructedCeilingBuildingUuid = null;
+    return;
+  }
+  status.textContent = "Loading reconstructed ceilings...";
+  const faces = await collectBuildingReconstructedCeilings(activeGroup);
+  addReconstructedCeilingMeshes(reconstructedCeilingGroup, faces);
+  reconstructedCeilingBuildingUuid = activeGroup.uuid;
+}
+
 async function selectHouse(group, { preferredRoomIndex = null } = {}) {
   activeGroup = group;
   activePayload = await fetchPayload(group.uuid);
   contextBuildingUuid = null;
+  if (reconstructedCeilingBuildingUuid && reconstructedCeilingBuildingUuid !== group.uuid) {
+    clearReconstructedCeilingOverlay({ resetBuilding: true });
+  }
   renderSidebar();
   openOriginal.href = `./viewer-tiers.html#b=${encodeURIComponent(group.uuid)}`;
 
@@ -299,8 +407,15 @@ async function selectHouse(group, { preferredRoomIndex = null } = {}) {
       group.building;
   }
   if (!target) target = group.rooms[0] || group.building;
-  if (target) await selectRoom(target, { refocusCamera: true });
-  else status.textContent = "No traces for this building.";
+  if (target) {
+    await selectRoom(target, { refocusCamera: true });
+    if (reconstructedCeilingToggle.checked) {
+      await rebuildReconstructedCeiling();
+      renderFrame();
+    }
+  } else {
+    status.textContent = "No traces for this building.";
+  }
 }
 
 async function selectRoom(row, { refocusCamera = false } = {}) {
@@ -313,9 +428,7 @@ async function loadTrace(row, { resetFrame = false, refocusCamera = false } = {}
   renderSidebar();
   status.textContent = "Loading trace...";
 
-  const response = await fetch(`${TRACE_ROOT}/${row.trace}`);
-  if (!response.ok) throw new Error(`trace fetch failed: ${response.status}`);
-  activeTrace = await response.json();
+  activeTrace = await fetchTrace(row.trace);
 
   const maxFrame = Math.max(0, activeTrace.frames.length - 1);
   frameIndex = Math.min(preservedFrame, maxFrame);
@@ -388,6 +501,14 @@ function renderFrame() {
     contextBuildingUuid !== activeGroup.uuid
   ) {
     rebuildContextBuilding();
+  }
+
+  if (
+    reconstructedCeilingToggle.checked &&
+    activeGroup &&
+    reconstructedCeilingBuildingUuid !== activeGroup.uuid
+  ) {
+    void rebuildReconstructedCeiling().then(() => renderFrame());
   }
 
   const frame = displayFrame(frameIndex);
@@ -735,12 +856,20 @@ frameSlider.addEventListener("input", () => {
   frameIndex = Number(frameSlider.value);
   renderFrame();
 });
-edgesToggle.addEventListener("change", renderFrame);
+edgesToggle.addEventListener("change", () => {
+  if (reconstructedCeilingToggle.checked && reconstructedCeilingBuildingUuid === activeGroup?.uuid) {
+    void rebuildReconstructedCeiling().then(() => renderFrame());
+    return;
+  }
+  renderFrame();
+});
 ghostToggle.addEventListener("change", renderFrame);
 fullBuildingToggle.addEventListener("change", () => {
   rebuildContextBuilding();
   renderFrame();
-  focusModel();
+});
+reconstructedCeilingToggle.addEventListener("change", () => {
+  void rebuildReconstructedCeiling().then(() => renderFrame());
 });
 window.addEventListener("resize", resize);
 new ResizeObserver(resize).observe(viewport);
