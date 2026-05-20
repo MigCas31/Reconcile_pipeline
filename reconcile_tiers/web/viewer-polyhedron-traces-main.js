@@ -467,12 +467,74 @@ function updateHeader(frame, step) {
   `;
 }
 
+
+function shortLocator(id) {
+  const s = String(id ?? "");
+  const parts = s.split("::");
+  if (parts.length >= 3) return parts.slice(-2).join("::");
+  if (s.length > 52) return "…" + s.slice(-49);
+  return s;
+}
+
+function formatMetaScalar(value) {
+  if (value === null || value === undefined) return "";
+  if (typeof value === "boolean") return value ? "true" : "false";
+  if (typeof value === "number") {
+    if (Number.isInteger(value)) return String(value);
+    const rounded = Number(value.toFixed(6));
+    return String(rounded);
+  }
+  if (typeof value === "object") return JSON.stringify(value);
+  return String(value);
+}
+
+function formatCoherenceIssues(issues) {
+  if (!issues.length) {
+    return `<div class="issue-empty">none</div>`;
+  }
+  const max = 14;
+  const rows = issues.slice(0, max).map((issue) => {
+    const kind = issue?.kind ?? "issue";
+    const message = issue?.message ?? "";
+    const locators = Array.isArray(issue?.tile_locator_ids)
+      ? issue.tile_locator_ids.map(shortLocator).filter(Boolean)
+      : [];
+    const locHtml = locators.length
+      ? `<span class="issue-locs">${escapeHtml(locators.join(", "))}</span>`
+      : "";
+    return `<div class="issue-row"><span class="issue-kind">${escapeHtml(kind)}</span><span class="issue-msg">${escapeHtml(message)}</span>${locHtml}</div>`;
+  });
+  const more =
+    issues.length > max
+      ? `<div class="issue-more">+${issues.length - max} more</div>`
+      : "";
+  return `<div class="issue-list">${rows.join("")}${more}</div>`;
+}
+
 function formatFrameMeta(frame) {
   const meta = frame.meta || {};
-  const lines = Object.entries(meta).map(([key, value]) => {
-    const text = Array.isArray(value) ? value.join(", ") : String(value);
-    return `<div class="delta-line"><span>${escapeHtml(key)}</span><span>${escapeHtml(text)}</span></div>`;
-  });
+  const lines = [];
+  for (const [key, value] of Object.entries(meta)) {
+    if (key === "issues" && Array.isArray(value)) {
+      lines.push(
+        `<div class="meta-block"><div class="meta-block-title">${escapeHtml(key)} (${value.length})</div>${formatCoherenceIssues(value)}</div>`,
+      );
+      continue;
+    }
+    let text;
+    if (Array.isArray(value)) {
+      text =
+        value.length && typeof value[0] === "object"
+          ? JSON.stringify(value)
+          : value.map(shortLocator).join(", ");
+    } else {
+      text = formatMetaScalar(value);
+    }
+    const bad = key === "ok" && value === false;
+    lines.push(
+      `<div class="delta-line"><span>${escapeHtml(key)}</span><span${bad ? ' class="meta-bad"' : ""}>${escapeHtml(text)}</span></div>`,
+    );
+  }
   if (!lines.length) {
     return `<div class="delta-line"><span>state</span><span>${escapeHtml(frame.label || frame.pipeline_step || "")}</span></div>`;
   }
