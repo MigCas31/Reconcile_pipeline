@@ -389,7 +389,7 @@ function nodeLabel(node) {
   if (graphMode === "segments") {
     const n = node.segment_count ?? node.segment_ids?.length ?? 0;
     const w = node.wall_ids?.length ?? 0;
-    return `${n} seg · ${w}w`;
+    return node.orphan ? `orphan · ${n} seg` : `${n} seg · ${w}w`;
   }
   if (graphMode === "walls") {
     const room = node.room_index != null ? `r${node.room_index}` : "wall";
@@ -460,6 +460,17 @@ function cytoscapeStyles() {
       },
     },
   ];
+  if (graphMode === "segments") {
+    styles.splice(1, 0, {
+      selector: "node[orphan = 1]",
+      style: {
+        "background-color": "#dc2626",
+        "border-color": "#991b1b",
+        "border-width": 3,
+        color: "#ffffff",
+      },
+    });
+  }
   if (graphMode === "all") {
     styles.splice(1, 0,
       {
@@ -507,6 +518,7 @@ function rebuildGraph() {
         kind: node.kind,
         wall_id: node.wall_id,
         degree: node.degree ?? 0,
+        orphan: node.orphan ? 1 : 0,
       },
     });
   }
@@ -560,10 +572,13 @@ function updateGraphMeta() {
   const segE = graphData.wall_segment_graph?.edges?.length ?? 0;
   const roomN = graphData.segment_room_graph?.nodes?.length ?? 0;
   const roomE = graphData.segment_room_graph?.edges?.length ?? 0;
+  const orphanN = graphMode === "segments"
+    ? (graphData.wall_segment_graph?.nodes || []).filter((n) => n.orphan).length
+    : 0;
   const view = graphMode === "rooms"
     ? `${roomN} rooms · ${roomE} adjacency edges`
     : graphMode === "segments"
-      ? `${segCount} segments · ${grpN} approx groups · ${segE} edges`
+      ? `${segCount} segments · ${grpN} groups · ${orphanN} orphan · ${segE} edges`
       : graphMode === "walls"
         ? `walls ${wallN} nodes · ${wallE} edges`
         : `all ${allN} nodes · ${allE} edges`;

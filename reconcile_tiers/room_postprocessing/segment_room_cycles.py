@@ -325,18 +325,85 @@ def _room_adjacency_edges(
     return edges
 
 
+def _filter_span_edges_to_groups(
+    span_edges: list[dict[str, Any]],
+    allowed: set[str],
+) -> list[dict[str, Any]]:
+    return [
+        edge
+        for edge in span_edges
+        if edge["source"] in allowed and edge["target"] in allowed
+    ]
+
+
+def _groups_in_bounded_faces(
+    group_ids: list[str],
+    span_edges: list[dict[str, Any]],
+    positions: dict[str, tuple[float, float]],
+    min_room_area_m2: float,
+) -> set[str]:
+    """Junction groups that appear on at least one bounded room face (discovery pass)."""
+
+    faces = _find_faces(group_ids, span_edges, positions)
+    faces = _filter_faces(faces, positions, min_room_area_m2)
+    in_cycle: set[str] = set()
+    for cycle in faces:
+        in_cycle.update(cycle)
+    return in_cycle
+
+
+def _junction_degrees(wall_segment_graph: dict[str, Any]) -> dict[str, int]:
+    """Undirected degree of each approx group in the segment junction graph."""
+
+    degree: dict[str, int] = defaultdict(int)
+    for edge in wall_segment_graph.get("edges") or []:
+        src = edge.get("source")
+        tgt = edge.get("target")
+        if src:
+            degree[src] += 1
+        if tgt:
+            degree[tgt] += 1
+    return dict(degree)
+
+
+def annotate_orphan_segment_groups(
+    wall_segment_graph: dict[str, Any],
+    groups_in_room_cycle: set[str],
+) -> None:
+    """Mark approx groups not used in any room cycle (orphans) on segment graph nodes.
+
+    Groups with junction degree ≤ 1 are dead ends (stub walls): they cannot lie on a
+    closed room loop and are always orphans even if a spurious planar face includes them.
+    """
+
+    junction_degree = _junction_degrees(wall_segment_graph)
+    for node in wall_segment_graph.get("nodes") or []:
+        gid = node["id"]
+        deg = junction_degree.get(gid, 0)
+        in_cycle = gid in groups_in_room_cycle
+        is_leaf = deg <= 1
+        node["junction_degree"] = deg
+        node["in_room_cycle"] = in_cycle
+        node["orphan"] = not in_cycle or is_leaf
+
+
 def build_segment_room_graph(
     wall_segment_graph: dict[str, Any],
     *,
     corner_tol: float = 0.05,
     min_room_area_m2: float = 1.0,
 ) -> dict[str, Any]:
-    """Rooms as bounded cycles of junction groups connected by wall-span edges."""
+    """Rooms as bounded cycles of junction groups connected by wall-span edges.
+
+    Groups that do not lie on any bounded face, or that are junction-graph leaves
+    (degree ≤ 1 — dead-end stubs), are orphans: excluded from room detection and
+    flagged on ``wall_segment_graph`` nodes via :func:`annotate_orphan_segment_groups`.
+    """
 
     group_nodes = wall_segment_graph.get("nodes") or []
     segments = wall_segment_graph.get("segments") or []
     if not group_nodes or not segments:
-        return {"nodes": [], "edges": []}
+        return {"nodes": [], "edges": [], "groups_in_room_cycle": []}
 
     segments_by_id = {s["id"]: s for s in segments}
     seg_to_group: dict[str, str] = {}
@@ -350,6 +417,8 @@ def build_segment_room_graph(
         groups_by_story[story_by_group.get(node["id"])].append(node)
 
     segment_ids_by_group = _segment_ids_by_group(group_nodes)
+    junction_degree = _junction_degrees(wall_segment_graph)
+    groups_in_room_cycle: set[str] = set()
     room_nodes: list[dict[str, Any]] = []
     room_index = 0
 
@@ -365,8 +434,24 @@ def build_segment_room_graph(
             if story_by_group.get(seg_to_group.get(s["id"], "")) == story
         ]
         span_edges = _wall_span_edges(story_segments, seg_to_group, corner_tol)
-        faces = _find_faces(group_ids, span_edges, positions)
-        faces = _filter_faces(faces, positions, min_room_area_m2)
+        story_in_cycle = _groups_in_bounded_faces(
+            group_ids,
+            span_edges,
+            positions,
+            min_room_area_m2,
+        )
+        participating = {
+            g
+            for g in story_in_cycle
+            if junction_degree.get(g, 0) > 1
+        }
+        groups_in_room_cycle |= participating
+        if len(participating) < 3:
+            continue
+        part_positions = {g: positions[g] for g in participating if g in positions}
+        part_edges = _filter_span_edges_to_groups(span_edges, participating)
+        faces = _find_faces(list(participating), part_edges, part_positions)
+        faces = _filter_faces(faces, part_positions, min_room_area_m2)
 
         for cycle in faces:
             wall_ids: set[str] = set()
@@ -374,14 +459,14 @@ def build_segment_room_graph(
             for i in range(len(cycle)):
                 a = cycle[i]
                 b = cycle[(i + 1) % len(cycle)]
-                for edge in span_edges:
+                for edge in part_edges:
                     src, tgt = edge["source"], edge["target"]
                     if (src == a and tgt == b) or (src == b and tgt == a):
                         wall_ids.add(edge["wall_id"])
             for gid in cycle:
                 segment_ids.extend(segment_ids_by_group.get(gid, []))
 
-            poly = [positions[g] for g in cycle if g in positions]
+            poly = [part_positions[g] for g in cycle if g in part_positions]
             area = _polygon_area_xz(poly) if len(poly) >= 3 else 0.0
             story_key = story if story is not None else "none"
             room_id = f"room_cycle::{story_key}::{room_index}"
@@ -407,4 +492,8 @@ def build_segment_room_graph(
     for node in room_nodes:
         node["degree"] = degree.get(node["id"], 0)
 
-    return {"nodes": room_nodes, "edges": adj_edges}
+    return {
+        "nodes": room_nodes,
+        "edges": adj_edges,
+        "groups_in_room_cycle": sorted(groups_in_room_cycle),
+    }

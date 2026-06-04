@@ -66,6 +66,22 @@ def _wall_has_corner_near(
     return False
 
 
+def _wall_has_corner_near_xz(
+    wall: BuildingElement,
+    anchor: tuple[float, float, float],
+    tol: float,
+) -> bool:
+    """True when a wall corner already occupies the junction in plan view."""
+
+    tol_sq = tol * tol
+    ax, az = anchor[0], anchor[2]
+    for c in wall.corners:
+        d2 = (c[0] - ax) ** 2 + (c[2] - az) ** 2
+        if d2 <= tol_sq:
+            return True
+    return False
+
+
 def _multi_wall_junction_anchors(
     segments: Sequence,
     approx: set[tuple[int, int]],
@@ -155,6 +171,8 @@ def _find_horizontal_splits(
 def _apply_wall_splits(
     wall: BuildingElement,
     splits: list[tuple[int, float, float, float]],
+    *,
+    corner_tol: float = 0.05,
 ) -> list[BuildingElement]:
     """Apply ordered splits; returns one or more wall elements."""
 
@@ -179,7 +197,7 @@ def _apply_wall_splits(
                     current[edge_i0],
                     current[(edge_i0 + 1) % 4],
                 )
-                if dist > 0.05 or t_check <= 0.03 or t_check >= 0.97:
+                if dist > corner_tol or t_check <= 0.03 or t_check >= 0.97:
                     continue
                 left, right = _split_quad_at_bottom_param(current, edge_i0, t, jx, jz)
                 next_pieces.append(left)
@@ -225,5 +243,5 @@ def split_walls_at_approx_junctions(
             result.append(el)
             continue
         splits = _find_horizontal_splits(el, anchors, corner_tol, adjacency_tol)
-        result.extend(_apply_wall_splits(el, splits))
+        result.extend(_apply_wall_splits(el, splits, corner_tol=corner_tol))
     return result

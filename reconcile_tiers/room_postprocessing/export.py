@@ -18,7 +18,11 @@ from reconcile_tiers.room_postprocessing.models import CornerGraphExport
 from reconcile_tiers.room_postprocessing.wall_junction_split import (
     split_walls_at_approx_junctions,
 )
+from reconcile_tiers.room_postprocessing.wall_near_segment_split import (
+    split_walls_at_near_segments,
+)
 from reconcile_tiers.room_postprocessing.segment_room_cycles import (
+    annotate_orphan_segment_groups,
     build_segment_room_graph,
 )
 from reconcile_tiers.room_postprocessing.wall_segment_graph import build_wall_segment_graph
@@ -51,6 +55,11 @@ def build_corner_graph(
     building_uuid = str(payload.get("uuid") or "")
     elements = flatten_tier_payload(payload)
     elements = split_walls_at_approx_junctions(
+        elements,
+        corner_tol,
+        adjacency_tol,
+    )
+    elements = split_walls_at_near_segments(
         elements,
         corner_tol,
         adjacency_tol,
@@ -109,6 +118,10 @@ def build_corner_graph(
     segment_room_graph = build_segment_room_graph(
         wall_segment_graph,
         corner_tol=corner_tol,
+    )
+    annotate_orphan_segment_groups(
+        wall_segment_graph,
+        set(segment_room_graph.get("groups_in_room_cycle") or []),
     )
 
     export = CornerGraphExport(

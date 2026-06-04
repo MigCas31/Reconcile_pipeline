@@ -15400,3 +15400,18 @@ The previous full-building metric and viewer treated all support domains as requ
 - **What changed**: `_approx_segment_pairs` in `wall_segment_graph.py` only links segments with the same `story`; test `test_approx_groups_do_not_merge_across_stories`.
 - **Why**: Vertically stacked junction segments (same XZ, within `adjacency_tol` in 3D) were merged into one approx group across floors.
 - **Result**: 14/14 `room_postprocessing` tests pass.
+
+## 2026-06-04 - Segment graph orphan groups (no room cycle)
+- **What changed**: `segment_room_cycles.py` — discovery pass marks groups on bounded faces; room graph built only from participating groups; `annotate_orphan_segment_groups` sets `orphan` / `in_room_cycle` on `wall_segment_graph` nodes. Viewer: red Cytoscape nodes for orphans in Wall segments mode.
+- **Why**: Dead-end / open junction groups are not part of any room cycle but should remain visible and excluded from room detection.
+- **Result**: 15/15 `room_postprocessing` tests pass.
+
+## 2026-05-24 - Orphan segment groups: junction-graph leaves (dead ends)
+- **What changed**: `segment_room_cycles.py` — orphan if not in room cycle **or** junction degree ≤ 1 (dead-end stub); leaf groups excluded from room-cycle participation; `junction_degree` on segment graph nodes. Test `test_dead_end_stub_group_is_orphan`.
+- **Why**: A stub wall’s free-end group can sit on a spurious planar face and stay blue in the viewer even though it only has one graph edge and cannot close a room loop.
+- **Result**: 17/17 `room_postprocessing` tests pass.
+
+## 2026-05-24 - Near-segment wall split (segment close to passing wall)
+- **What changed**: `wall_near_segment_split.py` — when a vertical segment endpoint is within `adjacency_tol` of another wall's **floor rim** (XZ projection), insert a corner on that wall via `_find_horizontal_splits` / `_apply_wall_splits`. Anchors use rim-projected 3D points; skip targets that already have a corner or vertical segment at the site (XZ); only unsplit walls (`::split::` not in id). `wall_junction_split.py`: `_wall_has_corner_near_xz`, `_apply_wall_splits` uses `corner_tol` for rim distance. Wired in `export.py` after approx junction split. Test `test_wall_near_segment_split.py`.
+- **Why**: A junction wall can have a vertical segment while a crossing wall has no corner there — room/segment graph needs the passing wall split so a vertical edge links the two sub-meshes.
+- **Result**: 16/16 `room_postprocessing` tests pass.

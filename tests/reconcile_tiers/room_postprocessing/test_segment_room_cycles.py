@@ -174,6 +174,51 @@ def test_single_wall_has_no_room_cycles() -> None:
     graph = build_corner_graph(_single_wall_quad_payload(), corner_tol=0.05)
     rg = graph["segment_room_graph"]
     assert rg["nodes"] == []
+    sg = graph["wall_segment_graph"]
+    assert all(n.get("orphan") for n in sg["nodes"])
+
+
+def test_four_wall_room_groups_not_orphan() -> None:
+    graph = build_corner_graph(_four_wall_room_payload(), corner_tol=0.05)
+    sg = graph["wall_segment_graph"]
+    room_groups = set()
+    for room in graph["segment_room_graph"]["nodes"]:
+        room_groups.update(room["group_ids"])
+    for node in sg["nodes"]:
+        if node["id"] in room_groups:
+            assert node.get("in_room_cycle") is True
+            assert node.get("orphan") is False
+
+
+def _room_with_dead_end_stub_payload() -> dict[str, Any]:
+    """Closed room plus a short internal wall whose free end is a graph leaf."""
+
+    payload = _four_wall_room_payload()
+    payload["rooms"][0]["walls"] = list(payload["rooms"][0]["walls"]) + [
+        {
+            "locator_id": "w-stub",
+            "corners": [
+                _pt(2.0, 0.0, 0.0),
+                _pt(2.0, 0.0, 1.5),
+                _pt(2.0, 2.0, 1.5),
+                _pt(2.0, 2.0, 0.0),
+            ],
+        },
+    ]
+    return payload
+
+
+def test_dead_end_stub_group_is_orphan() -> None:
+    graph = build_corner_graph(_room_with_dead_end_stub_payload(), corner_tol=0.05)
+    sg = graph["wall_segment_graph"]
+    leaves = [n for n in sg["nodes"] if n.get("junction_degree", n.get("degree", 0)) <= 1]
+    assert leaves
+    assert all(n.get("orphan") for n in leaves)
+    room_groups: set[str] = set()
+    for room in graph["segment_room_graph"]["nodes"]:
+        room_groups.update(room["group_ids"])
+    for leaf in leaves:
+        assert leaf["id"] not in room_groups
 
 
 def test_two_adjacent_rooms_share_wall_edge() -> None:
