@@ -21,6 +21,7 @@ from reconcile_tiers.room_postprocessing.wall_junction_split import (
 from reconcile_tiers.room_postprocessing.wall_near_segment_split import (
     split_walls_at_near_segments,
 )
+from reconcile_tiers.room_postprocessing.room_floor_clip import attach_room_floor_polygons
 from reconcile_tiers.room_postprocessing.segment_room_cycles import (
     annotate_orphan_segment_groups,
     build_segment_room_graph,
@@ -119,6 +120,7 @@ def build_corner_graph(
         wall_segment_graph,
         corner_tol=corner_tol,
     )
+    attach_room_floor_polygons(segment_room_graph, elements)
     annotate_orphan_segment_groups(
         wall_segment_graph,
         set(segment_room_graph.get("groups_in_room_cycle") or []),

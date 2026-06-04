@@ -15406,6 +15406,11 @@ The previous full-building metric and viewer treated all support domains as requ
 - **Why**: Dead-end / open junction groups are not part of any room cycle but should remain visible and excluded from room detection.
 - **Result**: 15/15 `room_postprocessing` tests pass.
 
+## 2026-05-24 - Room highlight: floor clipped to wall delineation
+- **What changed**: `room_floor_clip.py` — `floor_polygon_xz` / `floor_area_m2` per room (scan floor ∩ room cycle polygon); `export.py` wires it. Corner-graph viewer: translucent green floor fill + gold outline + scan floor meshes inside polygon highlighted. Test `test_room_floor_polygon_clipped_to_wall_delineation`.
+- **Why**: Room selection should show the floor area inside the wall-bounded cycle, not only walls/segments.
+- **Result**: 18/18 `room_postprocessing` tests pass.
+
 ## 2026-05-24 - Orphan segment groups: junction-graph leaves (dead ends)
 - **What changed**: `segment_room_cycles.py` — orphan if not in room cycle **or** junction degree ≤ 1 (dead-end stub); leaf groups excluded from room-cycle participation; `junction_degree` on segment graph nodes. Test `test_dead_end_stub_group_is_orphan`.
 - **Why**: A stub wall’s free-end group can sit on a spurious planar face and stay blue in the viewer even though it only has one graph edge and cannot close a room loop.

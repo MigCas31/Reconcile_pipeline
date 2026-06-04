@@ -648,7 +648,7 @@ function apply3DWallHighlight(selectedWallId, connectedWallIds) {
   apply3DWallHighlightSets(selected, connectedWallIds);
 }
 
-function clearRoomFloorLoop() {
+function clearRoomFloorHighlight() {
   while (roomFloorGroup.children.length) {
     const child = roomFloorGroup.children.pop();
     child.geometry?.dispose?.();
@@ -656,13 +656,21 @@ function clearRoomFloorLoop() {
   }
 }
 
-function updateRoomFloorLoop(roomId) {
-  clearRoomFloorLoop();
-  if (!roomId || !graphData?.segment_room_graph) return;
-  const room = graphData.segment_room_graph.nodes?.find((n) => n.id === roomId);
-  const poly = room?.polygon_xz;
-  if (!poly || poly.length < 3) return;
+function pointInPolygonXZ(px, pz, poly) {
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i, i += 1) {
+    const xi = poly[i].x;
+    const zi = poly[i].z;
+    const xj = poly[j].x;
+    const zj = poly[j].z;
+    const intersect =
+      zi > pz !== zj > pz && px < ((xj - xi) * (pz - zi)) / (zj - zi + 1e-12) + xi;
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
 
+function roomFloorY(room) {
   const segmentsById = new Map(
     (graphData.wall_segment_graph?.segments || []).map((s) => [s.id, s]),
   );
@@ -672,13 +680,51 @@ function updateRoomFloorLoop(roomId) {
     if (!seg) continue;
     floorY = Math.min(floorY, seg.start.y, seg.end.y);
   }
-  if (!Number.isFinite(floorY)) floorY = 0;
+  if (!Number.isFinite(floorY)) {
+    for (const node of graphData.nodes || []) {
+      if (node.kind !== "floor" || node.story !== room.story) continue;
+      for (const c of node.corners || []) {
+        floorY = Math.min(floorY, c.y);
+      }
+    }
+  }
+  return Number.isFinite(floorY) ? floorY : 0;
+}
 
+function addRoomFloorFill(poly, floorY) {
+  if (!poly || poly.length < 3) return;
+  const positions = [];
+  for (let i = 1; i < poly.length - 1; i += 1) {
+    positions.push(poly[0].x, floorY + 0.02, poly[0].z);
+    positions.push(poly[i].x, floorY + 0.02, poly[i].z);
+    positions.push(poly[i + 1].x, floorY + 0.02, poly[i + 1].z);
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(positions, 3),
+  );
+  geometry.computeVertexNormals();
+  const mesh = new THREE.Mesh(
+    geometry,
+    new THREE.MeshBasicMaterial({
+      color: KIND_COLORS.floor,
+      transparent: true,
+      opacity: 0.5,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    }),
+  );
+  roomFloorGroup.add(mesh);
+}
+
+function addRoomFloorOutline(poly, floorY) {
+  if (!poly || poly.length < 3) return;
   const positions = [];
   for (const p of poly) {
-    positions.push(p.x, floorY + 0.02, p.z);
+    positions.push(p.x, floorY + 0.025, p.z);
   }
-  positions.push(poly[0].x, floorY + 0.02, poly[0].z);
+  positions.push(poly[0].x, floorY + 0.025, poly[0].z);
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute(
     "position",
@@ -689,10 +735,46 @@ function updateRoomFloorLoop(roomId) {
     new THREE.LineBasicMaterial({
       color: HIGHLIGHT_SELECTED,
       transparent: true,
-      opacity: 0.85,
+      opacity: 0.9,
     }),
   );
   roomFloorGroup.add(line);
+}
+
+function apply3DRoomFloorMeshes(room, fillPoly) {
+  if (!room || !fillPoly?.length) return;
+  for (const [id, mesh] of meshById) {
+    if (kindById.get(id) !== "floor") continue;
+    const node = graphData.nodes?.find((n) => n.id === id);
+    if (!node || node.story !== room.story) continue;
+    const corners = node.corners || [];
+    if (!corners.length) continue;
+    let cx = 0;
+    let cz = 0;
+    for (const c of corners) {
+      cx += c.x;
+      cz += c.z;
+    }
+    cx /= corners.length;
+    cz /= corners.length;
+    if (!pointInPolygonXZ(cx, cz, fillPoly)) continue;
+    mesh.material.dispose();
+    mesh.material = materialForKind("floor", "connected");
+  }
+}
+
+function updateRoomFloorHighlight(roomId) {
+  clearRoomFloorHighlight();
+  if (!roomId || !graphData?.segment_room_graph) return;
+  const room = graphData.segment_room_graph.nodes?.find((n) => n.id === roomId);
+  const fillPoly =
+    room?.floor_polygon_xz?.length >= 3 ? room.floor_polygon_xz : room?.polygon_xz;
+  if (!fillPoly || fillPoly.length < 3) return;
+
+  const floorY = roomFloorY(room);
+  addRoomFloorFill(fillPoly, floorY);
+  addRoomFloorOutline(fillPoly, floorY);
+  apply3DRoomFloorMeshes(room, fillPoly);
 }
 
 /** Segment mode: keep building context muted; only vertical segment lines carry selection. */
@@ -758,10 +840,10 @@ function apply3DHighlight(elementId, connected) {
     }
     apply3DWallHighlightSets(selectedWalls, connectedWalls);
     apply3DSegmentLineHighlight(selectedSegs, connectedSegs);
-    updateRoomFloorLoop(elementId);
+    updateRoomFloorHighlight(elementId);
     return;
   }
-  clearRoomFloorLoop();
+  clearRoomFloorHighlight();
   if (graphMode === "segments") {
     apply3DBuildingMuted(!!elementId);
     const selectedSegs = new Set(groupIdToSegmentIds.get(elementId) || []);
@@ -824,7 +906,7 @@ function clearSelection() {
   selectedId = null;
   apply3DBuildingMuted(false);
   apply3DSegmentLineHighlight(null, new Set());
-  clearRoomFloorLoop();
+  clearRoomFloorHighlight();
   if (graphMode !== "rooms") {
     apply3DWallHighlightSets(new Set(), new Set());
   }

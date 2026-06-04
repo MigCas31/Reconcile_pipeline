@@ -178,6 +178,27 @@ def test_single_wall_has_no_room_cycles() -> None:
     assert all(n.get("orphan") for n in sg["nodes"])
 
 
+def test_room_floor_polygon_clipped_to_wall_delineation() -> None:
+    payload = _four_wall_room_payload()
+    payload["rooms"][0]["floor"] = {
+        "locator_id": "floor-big",
+        "corners": [
+            _pt(-1.0, 0.0, -1.0),
+            _pt(5.0, 0.0, -1.0),
+            _pt(5.0, 0.0, 4.0),
+            _pt(-1.0, 0.0, 4.0),
+        ],
+    }
+    graph = build_corner_graph(payload, corner_tol=0.05)
+    rooms = [n for n in graph["segment_room_graph"]["nodes"] if n["kind"] == "segment_room"]
+    assert rooms
+    room = rooms[0]
+    floor_poly = room.get("floor_polygon_xz") or []
+    assert len(floor_poly) >= 3
+    assert room.get("floor_area_m2", 0) < 20.0
+    assert room.get("floor_area_m2", 0) >= 8.0
+
+
 def test_four_wall_room_groups_not_orphan() -> None:
     graph = build_corner_graph(_four_wall_room_payload(), corner_tol=0.05)
     sg = graph["wall_segment_graph"]
