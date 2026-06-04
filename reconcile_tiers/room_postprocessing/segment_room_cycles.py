@@ -6,6 +6,10 @@ import math
 from collections import defaultdict
 from typing import Any
 
+from reconcile_tiers.room_postprocessing.segment_group_representative import (
+    representative_segments_for_cycle,
+)
+
 def _segment_bottom_xz(seg: dict[str, Any]) -> tuple[float, float]:
     s = seg["start"]
     e = seg["end"]
@@ -454,17 +458,15 @@ def build_segment_room_graph(
         faces = _filter_faces(faces, part_positions, min_room_area_m2)
 
         for cycle in faces:
-            wall_ids: set[str] = set()
-            segment_ids: list[str] = []
-            for i in range(len(cycle)):
-                a = cycle[i]
-                b = cycle[(i + 1) % len(cycle)]
-                for edge in part_edges:
-                    src, tgt = edge["source"], edge["target"]
-                    if (src == a and tgt == b) or (src == b and tgt == a):
-                        wall_ids.add(edge["wall_id"])
-            for gid in cycle:
-                segment_ids.extend(segment_ids_by_group.get(gid, []))
+            rep_segment_ids, rep_wall_ids, by_group = representative_segments_for_cycle(
+                cycle,
+                part_edges,
+                segment_ids_by_group,
+                segments_by_id,
+                part_positions,
+            )
+            if len(rep_wall_ids) < 3:
+                continue
 
             poly = [part_positions[g] for g in cycle if g in part_positions]
             area = _polygon_area_xz(poly) if len(poly) >= 3 else 0.0
@@ -477,8 +479,9 @@ def build_segment_room_graph(
                     "kind": "segment_room",
                     "story": story,
                     "group_ids": list(cycle),
-                    "wall_ids": sorted(wall_ids),
-                    "segment_ids": sorted(set(segment_ids)),
+                    "wall_ids": rep_wall_ids,
+                    "segment_ids": rep_segment_ids,
+                    "representative_by_group": by_group,
                     "polygon_xz": [{"x": x, "z": z} for x, z in poly],
                     "area_m2": area,
                 }

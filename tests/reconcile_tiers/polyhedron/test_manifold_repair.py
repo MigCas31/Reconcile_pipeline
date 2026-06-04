@@ -645,7 +645,7 @@ def test_ceiling_tiles_lost_before_build_includes_filter_drops():
     assert any(t.locator_id == "floating::ceiling" for t in lost)
 
 
-def test_hypothesise_fillers_includes_filter_dropped_ceiling():
+def test_hypothesise_fillers_ignores_filter_dropped_ceiling():
     from reconcile_tiers.polyhedron.manifold_repair import (
         _ceiling_tiles_lost_before_build,
         hypothesise_fillers,
@@ -678,15 +678,15 @@ def test_hypothesise_fillers_includes_filter_dropped_ceiling():
         tiles_clipped=mixed,
         build_tiles=filtered,
     )
+    assert any(t.locator_id == "floating::ceiling" for t in pre_filter)
     fillers = hypothesise_fillers(
         build,
         extraction,
         first_face_id=len(build.poly.faces),
         all_tiles=build_tiles,
-        pre_filter_ceilings=pre_filter,
     )
     derivations = [f.derivation for f in fillers]
-    assert any(d == "original_tile:floating::ceiling" for d in derivations)
+    assert not any("floating::ceiling" in d for d in derivations)
 
 
 def test_hypothesise_fillers_includes_original_ceiling_tiles():

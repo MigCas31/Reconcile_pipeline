@@ -15406,6 +15406,21 @@ The previous full-building metric and viewer treated all support domains as requ
 - **Why**: Dead-end / open junction groups are not part of any room cycle but should remain visible and excluded from room detection.
 - **Result**: 15/15 `room_postprocessing` tests pass.
 
+## 2026-05-24 - Segment rooms: one representative segment per group per incident wall
+- **What changed**: `segment_group_representative.py` — `representative_segments_for_cycle()` picks one segment per wall that appears on a cycle span edge at that group (bottom endpoint nearest junction XZ). `segment_room_cycles.py` sets `segment_ids`, `wall_ids`, `representative_by_group` from that step. Tests `test_segment_group_representative.py`.
+- **Why**: Approx groups can merge segments from many walls; rooms and polyhedron input should only use the wall(s) that bound the room at that junction, not every wall in the cluster.
+- **Result**: room_postprocessing + polyhedron segment trace tests pass.
+
+## 2026-05-24 - Manifold repair: ignore removed tiles as filler candidates
+- **What changed**: `manifold_repair.py` — `_filler_ceiling_catalog` / `hypothesise_original_tile_fillers` / `hypothesise_fillers` no longer take `pre_filter_ceilings` (roof XZ clip + connectivity drops). `_ceiling_tiles_lost_before_build` kept for trace diagnostics only. Test renamed `test_hypothesise_fillers_ignores_filter_dropped_ceiling`.
+- **Why**: Tiles deliberately removed before the half-edge build should not re-enter as `original_tile` filler hypotheses.
+- **Result**: 25/25 `test_manifold_repair.py` pass.
+
+## 2026-05-24 - Segment rooms as polyhedron trace input (manifold-repair-steps)
+- **What changed**: `segment_room_payload.py` — `build_segment_room_tier_payload()` (post-split walls + clipped floor → tier-shaped `rooms[]`). `corpus_trace_export.export_manifold_repair_steps_traces` defaults to `--room-source segment`, writes `tier_payload_segment_rooms.json` per building, traces one room per segment cycle. CLI: `--room-source`, `--segment-corner-tol`, `--segment-adjacency-tol`. Tests `test_segment_room_payload.py`, `test_segment_room_trace_export.py`.
+- **Why**: Polyhedron manifold repair should run on wall-delineated segment rooms from the corner-graph pipeline, not raw tier_payload room groupings.
+- **Result**: 23/23 room_postprocessing + segment trace export tests pass.
+
 ## 2026-05-24 - Room highlight: floor clipped to wall delineation
 - **What changed**: `room_floor_clip.py` — `floor_polygon_xz` / `floor_area_m2` per room (scan floor ∩ room cycle polygon); `export.py` wires it. Corner-graph viewer: translucent green floor fill + gold outline + scan floor meshes inside polygon highlighted. Test `test_room_floor_polygon_clipped_to_wall_delineation`.
 - **Why**: Room selection should show the floor area inside the wall-bounded cycle, not only walls/segments.

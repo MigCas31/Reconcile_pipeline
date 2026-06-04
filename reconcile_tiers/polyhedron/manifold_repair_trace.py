@@ -373,7 +373,6 @@ def build_manifold_repair_room_trace(
         first_face_id=next_face_id,
         all_tiles=tiles_merged,
         skipped_tiles=build.skipped_tiles,
-        pre_filter_ceilings=pre_filter_ceilings,
     )
     selection = select_fillers(build, extraction, fillers)
 

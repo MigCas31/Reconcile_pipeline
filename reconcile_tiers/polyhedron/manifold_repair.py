@@ -1057,10 +1057,9 @@ def _ceiling_tiles_lost_before_build(
     tiles_clipped: Sequence[TileFace],
     build_tiles: Sequence[TileFace],
 ) -> list[TileFace]:
-    """Ceiling tiles dropped by roof XZ clip or step-4 filter before build.
+    """Ceiling tiles dropped by roof XZ clip or connectivity filter before build.
 
-    These never enter ``build_tiles`` but should still propose ``original_tile``
-    filler hypotheses so scan ceilings can close holes.
+    For trace diagnostics only — not used as filler candidates.
     """
     in_build = {
         tile.locator_id
@@ -1086,14 +1085,9 @@ def _ceiling_tiles_lost_before_build(
 def _filler_ceiling_catalog(
     all_tiles: Sequence[TileFace],
     skipped_tiles: Sequence[tuple[TileFace, str]],
-    *,
-    pre_filter_ceilings: Sequence[TileFace],
 ) -> list[TileFace]:
-    """Merge ceiling tiles for ``original_tile`` hypotheses (build tiles win)."""
+    """Ceiling tiles from the mesh input and build skips (not clip/filter drops)."""
     catalog: dict[str, TileFace] = {}
-    for tile in pre_filter_ceilings:
-        if tile.source in CEILING_TILE_SOURCES:
-            catalog[tile.locator_id] = tile
     for tile in all_tiles:
         if tile.source in CEILING_TILE_SOURCES:
             catalog[tile.locator_id] = tile
@@ -1153,20 +1147,13 @@ def hypothesise_original_tile_fillers(
     first_face_id: int,
     all_tiles: Sequence[TileFace],
     skipped_tiles: Sequence[tuple[TileFace, str]] = (),
-    pre_filter_ceilings: Sequence[TileFace] = (),
 ) -> list[FillerCandidate]:
     """tier_payload ceiling tiles as filler candidates per hole.
 
-    Includes tiles that failed half-edge insertion (``skipped_tiles``)
-    and ceilings removed by roof clip / connectivity filter
-    (``pre_filter_ceilings``) so scan lids can close holes even when
-    they are not mesh faces.
+    Includes tiles that failed half-edge insertion (``skipped_tiles``).
+    Ceilings removed by roof XZ clip or connectivity filter are ignored.
     """
-    catalog = _filler_ceiling_catalog(
-        all_tiles,
-        skipped_tiles,
-        pre_filter_ceilings=pre_filter_ceilings,
-    )
+    catalog = _filler_ceiling_catalog(all_tiles, skipped_tiles)
     out: list[FillerCandidate] = []
     next_id = first_face_id
     for hole_id, chain in enumerate(extraction.closed_chains):
@@ -1252,13 +1239,12 @@ def hypothesise_fillers(
     first_face_id: int,
     all_tiles: Sequence[TileFace] | None = None,
     skipped_tiles: Sequence[tuple[TileFace, str]] = (),
-    pre_filter_ceilings: Sequence[TileFace] = (),
 ) -> list[FillerCandidate]:
     """Generate filler candidates per hole for the ILP.
 
-    Union of best-fit plane, tier_payload ceiling tiles (including build
-    skips and ceilings dropped before build), and neighbor / input-tile
-    plane extensions. The ILP picks exactly one candidate per hole.
+    Union of best-fit plane, tier_payload ceiling tiles on the mesh (plus
+    build skips), and neighbor / input-tile plane extensions. Tiles removed
+    before build (roof clip, connectivity filter) are not candidates.
     """
     single = hypothesise_single_face_fillers(
         build, extraction, first_face_id=first_face_id
@@ -1272,7 +1258,6 @@ def hypothesise_fillers(
             first_face_id=next_id,
             all_tiles=all_tiles,
             skipped_tiles=skipped_tiles,
-            pre_filter_ceilings=pre_filter_ceilings,
         )
         next_id += len(original)
     neighbour = hypothesise_neighbor_plane_extension_fillers(
@@ -1635,7 +1620,6 @@ def repair_room(
     story = room.get("story")
     room_idx = _room_index(room)
     tiles_raw = collect_room_tiles(payload, room, corner_tol=corner_tol)
-    pre_filter_ceilings: list[TileFace] = []
     tiles = tiles_raw
     if len(tiles_raw) >= 4:
         from reconcile_tiers.polyhedron.roof_xz_clip import clip_roof_tiles_to_floor_xz
@@ -1653,11 +1637,6 @@ def repair_room(
             coord_tol=coord_tol,
             snap_tol=corner_tol,
             merge_coplanar=True,
-        )
-        pre_filter_ceilings = _ceiling_tiles_lost_before_build(
-            tiles_raw=tiles_raw,
-            tiles_clipped=tiles_clipped,
-            build_tiles=tiles,
         )
     if len(tiles) < 4:  # need at least 4 faces to bound a 3D region
         empty_build = RoomPolyhedronBuild(poly=HalfEdgePolyhedron())
@@ -1684,7 +1663,6 @@ def repair_room(
         first_face_id=next_face_id,
         all_tiles=tiles,
         skipped_tiles=build.skipped_tiles,
-        pre_filter_ceilings=pre_filter_ceilings,
     )
     selection = select_fillers(build, extraction, fillers)
     fillers_applied = apply_fillers(build, extraction, selection.selected)
