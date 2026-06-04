@@ -613,6 +613,105 @@ def test_hypothesise_fillers_emits_best_fit_for_perpendicular_hole():
     assert all(d == "best_fit_plane" for d in derivations)
 
 
+def test_ceiling_tiles_lost_before_build_includes_filter_drops():
+    from reconcile_tiers.polyhedron.manifold_repair import (
+        _ceiling_tiles_lost_before_build,
+    )
+    from reconcile_tiers.polyhedron.tile_coherence import (
+        filter_unconnected_ceiling_tiles,
+    )
+
+    tiles = _cube_tiles()
+    floating = TileFace(
+        face_id=99,
+        corners=(
+            (0.0, 3.0, 0.0),
+            (0.0, 3.0, 1.0),
+            (1.0, 3.0, 1.0),
+            (1.0, 3.0, 0.0),
+        ),
+        plane=tiles[1].plane,
+        source="ceiling",
+        locator_id="floating::ceiling",
+    )
+    mixed = [tiles[0], tiles[1], *tiles[2:], floating]
+    filtered, dropped = filter_unconnected_ceiling_tiles(mixed, corner_tol=0.05)
+    assert "floating::ceiling" in dropped
+    lost = _ceiling_tiles_lost_before_build(
+        tiles_raw=mixed,
+        tiles_clipped=mixed,
+        build_tiles=filtered,
+    )
+    assert any(t.locator_id == "floating::ceiling" for t in lost)
+
+
+def test_hypothesise_fillers_includes_filter_dropped_ceiling():
+    from reconcile_tiers.polyhedron.manifold_repair import (
+        _ceiling_tiles_lost_before_build,
+        hypothesise_fillers,
+    )
+    from reconcile_tiers.polyhedron.tile_coherence import (
+        filter_unconnected_ceiling_tiles,
+    )
+
+    cube = _cube_tiles()
+    floating = TileFace(
+        face_id=99,
+        corners=(
+            (0.0, 3.0, 0.0),
+            (0.0, 3.0, 1.0),
+            (1.0, 3.0, 1.0),
+            (1.0, 3.0, 0.0),
+        ),
+        plane=cube[1].plane,
+        source="ceiling",
+        locator_id="floating::ceiling",
+    )
+    mixed = [cube[0], cube[1], *cube[2:], floating]
+    filtered, _dropped = filter_unconnected_ceiling_tiles(mixed, corner_tol=0.05)
+    # Open box: drop ceiling from mesh so the top is a hole.
+    build_tiles = [cube[0], *cube[2:]]
+    build = build_room_polyhedron(build_tiles)
+    extraction = extract_hole_chains(build)
+    pre_filter = _ceiling_tiles_lost_before_build(
+        tiles_raw=mixed,
+        tiles_clipped=mixed,
+        build_tiles=filtered,
+    )
+    fillers = hypothesise_fillers(
+        build,
+        extraction,
+        first_face_id=len(build.poly.faces),
+        all_tiles=build_tiles,
+        pre_filter_ceilings=pre_filter,
+    )
+    derivations = [f.derivation for f in fillers]
+    assert any(d == "original_tile:floating::ceiling" for d in derivations)
+
+
+def test_hypothesise_fillers_includes_original_ceiling_tiles():
+    """Skipped tier_payload ceilings still propose original_tile fillers."""
+    from reconcile_tiers.polyhedron.manifold_repair import hypothesise_fillers
+
+    cube = _cube_tiles()
+    # Open box: floor + four walls, no ceiling in the mesh.
+    tiles = [cube[0], cube[2], cube[3], cube[4], cube[5]]
+    build = build_room_polyhedron(tiles)
+    extraction = extract_hole_chains(build)
+    assert extraction.closed_chains
+    skipped_ceiling = (cube[1], "duplicate_directed_edge_both_windings")
+    fillers = hypothesise_fillers(
+        build,
+        extraction,
+        first_face_id=len(build.poly.faces),
+        all_tiles=[*tiles, cube[1]],
+        skipped_tiles=[skipped_ceiling],
+    )
+    derivations = [f.derivation for f in fillers]
+    assert any(d.startswith("original_tile:") for d in derivations)
+    assert any("cube::ceiling" in d or "ceiling" in d for d in derivations)
+
+
 def test_hypothesise_fillers_emits_neighbor_extension_for_oblique_hole():
     """For a hole whose chain is NOT perpendicular to a neighbour face,
     that neighbour becomes a viable extension candidate. Uses a tilted

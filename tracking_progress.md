@@ -15351,3 +15351,27 @@ The previous full-building metric and viewer treated all support domains as requ
 - **What changed**: `filter_unconnected_ceiling_tiles` in `tile_coherence.py` now keeps a ceiling when it meets wall tops **or** shares a polygon edge (corner_tol) with another ceiling that is transitively wall-anchored. Tests in `test_tile_coherence.py` cover oblique+flat hybrid and ceiling-only islands.
 - **Why**: Hybrid rooms dropped oblique/flat lids that visually met each other and walls but only the flat piece passed per-tile `ceiling_connects_to_walls`; sloped tiles attached to an anchored flat were removed at step 4.
 - **Result**: 6/6 `test_tile_coherence.py` pass. Re-export `manifold-repair-steps` traces to see frame 4 retain chained ceilings.
+
+## 2026-05-24 - Original ceiling tiles as filler candidates
+- **What changed**: `manifold_repair.py` — added `hypothesise_original_tile_fillers` (tier_payload `ceiling` / `visual_shell` / `gable_closure` tiles, including `build.skipped_tiles`) and extended `hypothesise_neighbor_plane_extension_fillers` with `all_tiles` for wall/floor planes (`input_tile:` derivations). `hypothesise_fillers`, `repair_room`, and `manifold_repair_trace` pass the merged tile list + skipped tiles into the ILP pool. ILP scoring prefers `original_tile:` over `best_fit_plane`. Test `test_hypothesise_fillers_includes_original_ceiling_tiles`.
+- **Why**: Ceiling tiles visible at step 4 but skipped at half-edge build were never offered to the filler ILP — holes were patched only with synthetic best-fit / mesh-neighbor planes, not scan ceilings.
+- **Result**: 23/23 `test_manifold_repair.py` pass. Re-export `manifold-repair-steps` traces to see `original_tile:` candidates at frame 7.
+
+## 2026-05-24 - Filler catalog: ceilings dropped at clip/filter (step 4)
+- **What changed**: `manifold_repair.py` — `_ceiling_tiles_lost_before_build` collects ceiling tiles present in `tiles_raw` / `tiles_clipped` but absent from build input; `_filler_ceiling_catalog` merges them with mesh + `skipped_tiles` for `hypothesise_original_tile_fillers`. `hypothesise_fillers(..., pre_filter_ceilings=...)`; `repair_room` and `manifold_repair_trace` pass the catalog. Tests `test_ceiling_tiles_lost_before_build_includes_filter_drops`, `test_hypothesise_fillers_includes_filter_dropped_ceiling`.
+- **Why**: Step-4 `filter_unconnected_ceiling_tiles` and roof XZ clip removed scan ceilings from `all_tiles` before hypothesising — only half-edge `skipped_tiles` were recovered, not filter/clip drops.
+- **Result**: 25/25 `test_manifold_repair.py` pass. Re-export traces to pick up filter-dropped ceilings as `original_tile:` at frame 7.
+
+## 2026-05-24 - Corner-sharing graph viewer (room_postprocessing)
+- **What changed**:
+  - `reconcile_tiers/room_postprocessing/` — `flatten_tier_payload`, `cluster_element_corners`, `element_adjacency_pairs`, `isolated_wall_edges`, `build_corner_graph` export.
+  - `reconcile_tiers/server.py` — `GET /room-postprocessing/graph?uuid=&corner_tol=`; redirect `/viewer-corner-graph.html`.
+  - `reconcile_tiers/web/viewer-corner-graph.{html,css,main.js}` — dual-pane Three.js + Cytoscape; graph node click highlights element; isolated wall edges in magenta.
+  - `tests/reconcile_tiers/room_postprocessing/test_corner_graph.py`; cheatsheet entry.
+- **Why**: Per-room mental model hides building-wide corner connectivity; need to see which elements share corners and which wall rim segments are geometrically isolated before room repair work.
+- **Result**: 3/3 `test_corner_graph.py` pass. Open tier server → `viewer-corner-graph.html?uuid=<uuid>` to verify shared-corner walls connect in the graph and floating walls show degree 0 + magenta edges.
+
+## 2026-05-24 - Corner graph: exclude ceilings from flatten input
+- **What changed**: `flatten_tier_payload` no longer appends `tier_payload.ceiling[]`; test renamed to assert ceilings are omitted.
+- **Why**: Ceiling tiles add corner links at wall tops that obscure floor–wall shell connectivity for this diagnostic step.
+- **Result**: 3/3 `test_corner_graph.py` pass.

@@ -14,6 +14,8 @@ APIs the viewer calls into:
                                        Gemini function calling
                                        (gated by GEMINI_API_KEY)
     GET  /jobs/<id>                 →  status + log_tail of a dev_tools job
+    GET  /room-postprocessing/graph →  corner-sharing element graph JSON
+                                       (?uuid=, optional corner_tol=)
 
 Run:
 
@@ -55,6 +57,7 @@ PORT = int(
 )
 
 VIEWER_PATH = "/reconcile_tiers/web/viewer-tiers.html"
+CORNER_GRAPH_VIEWER_PATH = "/reconcile_tiers/web/viewer-corner-graph.html"
 
 # Reasons the rater can attach to a low rating to label the dominant failure
 # mode. Captured optionally on rate-button click; feeds future calibration
@@ -135,6 +138,12 @@ class TierServerHandler(SimpleHTTPRequestHandler):
         parsed = urllib.parse.urlparse(self.path)
         if parsed.path in ("/", "/viewer-tiers.html"):
             self._redirect(VIEWER_PATH)
+            return
+        if parsed.path == "/viewer-corner-graph.html":
+            self._redirect(CORNER_GRAPH_VIEWER_PATH)
+            return
+        if parsed.path == "/room-postprocessing/graph":
+            self._handle_room_postprocessing_graph(parsed.query)
             return
         if parsed.path == "/flag-queues":
             self._handle_flag_queue_get(parsed.query)
@@ -291,6 +300,34 @@ class TierServerHandler(SimpleHTTPRequestHandler):
             )
             return
         self._send_json(HTTPStatus.OK, result)
+
+    # --- room postprocessing (corner graph) ------------------------------------
+
+    def _handle_room_postprocessing_graph(self, query: str) -> None:
+        params = urllib.parse.parse_qs(query)
+        building_uuid = (params.get("uuid") or [""])[0]
+        if not _is_safe_uuid(building_uuid):
+            self.send_error(HTTPStatus.BAD_REQUEST, "uuid query param required")
+            return
+        tol_raw = (params.get("corner_tol") or ["0.05"])[0]
+        try:
+            corner_tol = float(tol_raw)
+        except (TypeError, ValueError):
+            self.send_error(HTTPStatus.BAD_REQUEST, "corner_tol must be a number")
+            return
+
+        from reconcile_tiers.room_postprocessing.export import build_corner_graph
+
+        payload_path = WORKSPACE_ROOT / "pipeline-outputs" / building_uuid / "tier_payload.json"
+        if not payload_path.is_file():
+            self.send_error(HTTPStatus.NOT_FOUND, "tier_payload.json not found")
+            return
+        try:
+            payload = json.loads(payload_path.read_text())
+        except json.JSONDecodeError:
+            self.send_error(HTTPStatus.INTERNAL_SERVER_ERROR, "Invalid tier_payload.json")
+            return
+        self._send_json(HTTPStatus.OK, build_corner_graph(payload, corner_tol=corner_tol))
 
     # --- flag-queue endpoints --------------------------------------------------
 
