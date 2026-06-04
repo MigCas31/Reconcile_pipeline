@@ -18,6 +18,7 @@ const currentMeta = document.querySelector("#current-meta");
 const openTiers = document.querySelector("#open-tiers");
 const status3d = document.querySelector("#status3d");
 const graphPanel = document.querySelector("#graphPanel");
+const graphModeInputs = document.querySelectorAll('input[name="graph-mode"]');
 const canvas = document.querySelector("#view3d");
 const prevBuilding = document.querySelector("#prev-building");
 const nextBuilding = document.querySelector("#next-building");
@@ -31,13 +32,18 @@ const KIND_COLORS = {
   knee_wall: 0xca8a04,
 };
 
-/** 3D highlight: gold = picked node, cyan = corner-sharing neighbors. */
-const HIGHLIGHT_SELECTED = 0xfbbf24;
-const HIGHLIGHT_NEIGHBOR = 0x22d3ee;
-const EDGE_DIM = 0x1e293b;
+/** 3D highlight: gold = picked node, cyan = junction/approx segment group. */
+const HIGHLIGHT_SELECTED = 0xf59e0b;
+const HIGHLIGHT_CONNECTED = 0x0ea5e9;
+const EDGE_DEFAULT = 0x475569;
+const EDGE_DIM = 0x94a3b8;
+const SEGMENT_RADIUS = 0.02;
+const SEGMENT_RADIUS_CONNECTED = 0.05;
+const SEGMENT_RADIUS_SELECTED = 0.07;
+const SEGMENT_UP = new THREE.Vector3(0, 1, 0);
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x1a2129);
+scene.background = new THREE.Color(0xffffff);
 
 const camera = new THREE.PerspectiveCamera(45, 1, 0.05, 500);
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -48,27 +54,67 @@ controls.enableDamping = true;
 controls.dampingFactor = 0.08;
 controls.addEventListener("change", requestRender);
 
-scene.add(new THREE.HemisphereLight(0xffffff, 0x8899aa, 1.4));
-const keyLight = new THREE.DirectionalLight(0xffffff, 1.6);
+scene.add(new THREE.HemisphereLight(0xffffff, 0xe2e8f0, 1.2));
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.4);
 keyLight.position.set(4, 8, 6);
 scene.add(keyLight);
+const fillLight = new THREE.DirectionalLight(0xf8fafc, 0.6);
+fillLight.position.set(-5, 2, -4);
+scene.add(fillLight);
 
 const modelGroup = new THREE.Group();
 const edgeGroup = new THREE.Group();
 const isolatedEdgeGroup = new THREE.Group();
+const roomFloorGroup = new THREE.Group();
 scene.add(modelGroup);
 scene.add(edgeGroup);
 scene.add(isolatedEdgeGroup);
+scene.add(roomFloorGroup);
 
 const meshById = new Map();
 const edgeLinesById = new Map();
+const segmentLineById = new Map();
 const isolatedLinesById = new Map();
 const kindById = new Map();
+const groupIdToSegmentIds = new Map();
+const roomIdToWallIds = new Map();
+const roomIdToSegmentIds = new Map();
 let rows = [];
 let graphData = null;
 let cy = null;
 let selectedId = null;
+let graphMode = "all";
 let renderQueued = false;
+
+function activeGraph() {
+  if (!graphData) return { nodes: [], edges: [] };
+  if (graphMode === "rooms" && graphData.segment_room_graph) {
+    return graphData.segment_room_graph;
+  }
+  if (graphMode === "segments" && graphData.wall_segment_graph) {
+    return graphData.wall_segment_graph;
+  }
+  if (graphMode === "walls" && graphData.wall_graph) {
+    return graphData.wall_graph;
+  }
+  return { nodes: graphData.nodes || [], edges: graphData.edges || [] };
+}
+
+function rebuildSegmentMaps() {
+  groupIdToSegmentIds.clear();
+  for (const node of graphData?.wall_segment_graph?.nodes || []) {
+    groupIdToSegmentIds.set(node.id, node.segment_ids || []);
+  }
+}
+
+function rebuildRoomMaps() {
+  roomIdToWallIds.clear();
+  roomIdToSegmentIds.clear();
+  for (const node of graphData?.segment_room_graph?.nodes || []) {
+    roomIdToWallIds.set(node.id, node.wall_ids || []);
+    roomIdToSegmentIds.set(node.id, node.segment_ids || []);
+  }
+}
 
 function requestRender() {
   if (renderQueued) return;
@@ -104,14 +150,14 @@ function materialForKind(kind, role = "default") {
       depthWrite: true,
     });
   }
-  if (role === "neighbor") {
+  if (role === "connected") {
     return new THREE.MeshStandardMaterial({
-      color: HIGHLIGHT_NEIGHBOR,
+      color: HIGHLIGHT_CONNECTED,
       transparent: true,
-      opacity: 0.82,
+      opacity: 0.88,
       side: THREE.DoubleSide,
-      emissive: HIGHLIGHT_NEIGHBOR,
-      emissiveIntensity: 0.28,
+      emissive: HIGHLIGHT_CONNECTED,
+      emissiveIntensity: 0.22,
       depthWrite: true,
     });
   }
@@ -119,7 +165,7 @@ function materialForKind(kind, role = "default") {
     return new THREE.MeshStandardMaterial({
       color: base,
       transparent: true,
-      opacity: 0.1,
+      opacity: 0.42,
       side: THREE.DoubleSide,
       depthWrite: false,
     });
@@ -127,25 +173,44 @@ function materialForKind(kind, role = "default") {
   return new THREE.MeshStandardMaterial({
     color: base,
     transparent: true,
-    opacity: 0.45,
+    opacity: 0.72,
     side: THREE.DoubleSide,
     depthWrite: false,
   });
 }
 
-function neighborsOf(elementId) {
-  const neighbors = new Set();
-  if (!graphData?.edges) return neighbors;
-  for (const edge of graphData.edges) {
-    if (edge.source === elementId) neighbors.add(edge.target);
-    if (edge.target === elementId) neighbors.add(edge.source);
+function _bfsComponent(elementId, edges, includeEdge) {
+  const adj = new Map();
+  for (const edge of edges) {
+    if (!includeEdge(edge)) continue;
+    if (!adj.has(edge.source)) adj.set(edge.source, []);
+    adj.get(edge.source).push(edge.target);
+    if (!adj.has(edge.target)) adj.set(edge.target, []);
+    adj.get(edge.target).push(edge.source);
   }
-  return neighbors;
+  const component = new Set([elementId]);
+  const queue = [elementId];
+  let head = 0;
+  while (head < queue.length) {
+    const cur = queue[head++];
+    for (const next of adj.get(cur) || []) {
+      if (!component.has(next)) {
+        component.add(next);
+        queue.push(next);
+      }
+    }
+  }
+  return component;
 }
 
-function highlightRole(elementId, selectedId, neighbors) {
+function connectedComponentOf(elementId) {
+  const { edges } = activeGraph();
+  return _bfsComponent(elementId, edges, () => true);
+}
+
+function highlightRole(elementId, selectedId, connected) {
   if (elementId === selectedId) return "selected";
-  if (neighbors.has(elementId)) return "neighbor";
+  if (connected.has(elementId)) return "connected";
   if (selectedId) return "dim";
   return "default";
 }
@@ -198,16 +263,62 @@ function clearScene() {
   }
   meshById.clear();
   edgeLinesById.clear();
+  segmentLineById.clear();
   isolatedLinesById.clear();
   kindById.clear();
+}
+
+function createSegmentCylinderMesh(start, end, radius, color, opacity) {
+  const a = cornerVec(start);
+  const b = cornerVec(end);
+  const dir = b.clone().sub(a);
+  const length = dir.length();
+  if (length < 1e-6) return null;
+  const geometry = new THREE.CylinderGeometry(radius, radius, length, 8);
+  const material = new THREE.MeshBasicMaterial({
+    color,
+    transparent: true,
+    opacity,
+    depthTest: true,
+  });
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.position.copy(a).add(b).multiplyScalar(0.5);
+  mesh.quaternion.setFromUnitVectors(SEGMENT_UP, dir.normalize());
+  mesh.userData.segmentLength = length;
+  mesh.userData.baseRadius = radius;
+  return mesh;
+}
+
+function setSegmentCylinderRadius(mesh, radius) {
+  const length = mesh.userData.segmentLength;
+  if (!length) return;
+  mesh.geometry.dispose();
+  mesh.geometry = new THREE.CylinderGeometry(radius, radius, length, 8);
+}
+
+function buildVerticalSegmentLines(segmentGraph) {
+  for (const seg of segmentGraph.segments || []) {
+    const mesh = createSegmentCylinderMesh(
+      seg.start,
+      seg.end,
+      SEGMENT_RADIUS,
+      EDGE_DEFAULT,
+      0.9,
+    );
+    if (!mesh) continue;
+    mesh.userData.segmentId = seg.id;
+    mesh.userData.wallId = seg.wall_id;
+    edgeGroup.add(mesh);
+    segmentLineById.set(seg.id, mesh);
+  }
 }
 
 function build3D(data) {
   clearScene();
   const wallEdgeMaterial = new THREE.LineBasicMaterial({
-    color: 0x334155,
+    color: EDGE_DEFAULT,
     transparent: true,
-    opacity: 0.7,
+    opacity: 0.85,
   });
   const isolatedMaterial = new THREE.LineBasicMaterial({
     color: 0xff00ff,
@@ -260,60 +371,97 @@ function build3D(data) {
     isolatedLinesById.set(seg.element_id, list);
   }
 
+  if (graphData?.wall_segment_graph) {
+    buildVerticalSegmentLines(graphData.wall_segment_graph);
+  }
+
   frameToNodes(data.nodes);
   requestRender();
 }
 
 function nodeLabel(node) {
+  if (graphMode === "rooms") {
+    const w = node.wall_ids?.length ?? 0;
+    const area = node.area_m2 != null ? `${node.area_m2.toFixed(0)}m²` : "";
+    const short = node.id.split("::").pop();
+    return area ? `${short} · ${w}w · ${area}` : `${short} · ${w}w`;
+  }
+  if (graphMode === "segments") {
+    const n = node.segment_count ?? node.segment_ids?.length ?? 0;
+    const w = node.wall_ids?.length ?? 0;
+    return `${n} seg · ${w}w`;
+  }
+  if (graphMode === "walls") {
+    const room = node.room_index != null ? `r${node.room_index}` : "wall";
+    const short = node.id.includes("::") ? node.id.split("::").pop() : node.id;
+    return `${room} ${short}`;
+  }
   const room = node.room_index != null ? ` r${node.room_index}` : "";
   return `${node.kind}${room}`;
 }
 
-function buildGraph(data) {
-  if (cy) {
-    cy.destroy();
-    cy = null;
-  }
-  const elements = [];
-  for (const node of data.nodes) {
-    elements.push({
-      data: {
-        id: node.id,
-        label: nodeLabel(node),
-        kind: node.kind,
-        degree: node.degree ?? 0,
+function cytoscapeStyles() {
+  const styles = [
+    {
+      selector: "node",
+      style: {
+        label: "data(label)",
+        "font-size": 9,
+        "text-valign": "center",
+        "text-halign": "center",
+        width: graphMode === "rooms" ? 40 : graphMode === "segments" ? 32 : graphMode === "walls" ? 36 : 28,
+        height: graphMode === "rooms" ? 40 : graphMode === "segments" ? 32 : graphMode === "walls" ? 36 : 28,
+        "background-color": graphMode === "rooms" ? "#16a34a" : "#3b82f6",
+        color: "#0f1419",
+        "text-wrap": "wrap",
+        "text-max-width": 100,
       },
-    });
-  }
-  for (const edge of data.edges) {
-    elements.push({
-      data: {
-        id: `${edge.source}--${edge.target}`,
-        source: edge.source,
-        target: edge.target,
+    },
+    {
+      selector: "node[degree = 0]",
+      style: {
+        "border-width": 3,
+        "border-color": "#e11d48",
       },
-    });
-  }
-
-  cy = cytoscape({
-    container: graphPanel,
-    elements,
-    style: [
+    },
       {
-        selector: "node",
+        selector: "node.connected",
         style: {
-          label: "data(label)",
-          "font-size": 9,
-          "text-valign": "center",
-          "text-halign": "center",
-          width: 28,
-          height: 28,
-          "background-color": "#94a3b8",
-          color: "#0f1419",
-          "text-wrap": "wrap",
-          "text-max-width": 80,
+          "border-width": 3,
+          "border-color": "#0ea5e9",
+          "background-color": "#7dd3fc",
+          opacity: 1,
         },
       },
+      {
+        selector: "node.faded",
+        style: {
+          opacity: 0.45,
+          "background-color": "#cbd5e1",
+          "border-width": 1,
+          "border-color": "#94a3b8",
+        },
+      },
+      {
+        selector: "node:selected",
+        style: {
+          "border-width": 4,
+          "border-color": "#f59e0b",
+          "background-color": "#fde047",
+          opacity: 1,
+        },
+      },
+    {
+      selector: "edge",
+      style: {
+        width: 2,
+        "line-color": "#64748b",
+        "curve-style": "bezier",
+      },
+    },
+  ];
+  if (graphMode === "all") {
+    styles.splice(1, 0,
       {
         selector: "node[kind = 'floor']",
         style: { "background-color": "#16a34a" },
@@ -327,37 +475,55 @@ function buildGraph(data) {
         style: { "background-color": "#f97316" },
       },
       {
-        selector: "node[degree = 0]",
-        style: {
-          "border-width": 3,
-          "border-color": "#e11d48",
-        },
+        selector: "node[kind = 'visual_shell']",
+        style: { "background-color": "#a855f7" },
       },
       {
-        selector: "node.neighbor",
-        style: {
-          "border-width": 3,
-          "border-color": "#22d3ee",
-          "background-color": "#67e8f9",
-        },
+        selector: "node[kind = 'gable_closure']",
+        style: { "background-color": "#0f766e" },
       },
       {
-        selector: "node:selected",
-        style: {
-          "border-width": 4,
-          "border-color": "#fbbf24",
-          "background-color": "#fde047",
-        },
+        selector: "node[kind = 'knee_wall']",
+        style: { "background-color": "#ca8a04" },
       },
-      {
-        selector: "edge",
-        style: {
-          width: 2,
-          "line-color": "#64748b",
-          "curve-style": "bezier",
-        },
+    );
+  }
+  return styles;
+}
+
+function rebuildGraph() {
+  if (!graphData) return;
+  const { nodes, edges } = activeGraph();
+  if (cy) {
+    cy.destroy();
+    cy = null;
+  }
+  const elements = [];
+  for (const node of nodes) {
+    elements.push({
+      data: {
+        id: node.id,
+        label: nodeLabel(node),
+        kind: node.kind,
+        wall_id: node.wall_id,
+        degree: node.degree ?? 0,
       },
-    ],
+    });
+  }
+  for (const edge of edges) {
+    elements.push({
+      data: {
+        id: `${edge.source}--${edge.target}`,
+        source: edge.source,
+        target: edge.target,
+      },
+    });
+  }
+
+  cy = cytoscape({
+    container: graphPanel,
+    elements,
+    style: cytoscapeStyles(),
     layout: { name: "cose", animate: false, padding: 24 },
   });
 
@@ -367,85 +533,288 @@ function buildGraph(data) {
   cy.on("tap", (evt) => {
     if (evt.target === cy) clearSelection();
   });
+
+  if (selectedId && cy.getElementById(selectedId).length) {
+    selectElement(selectedId);
+  } else {
+    clearSelection();
+  }
 }
 
-function apply3DHighlight(elementId) {
-  const neighbors = neighborsOf(elementId);
+function setGraphMode(mode) {
+  if (mode !== "all" && mode !== "walls" && mode !== "segments" && mode !== "rooms") return;
+  graphMode = mode;
+  clearSelection();
+  rebuildGraph();
+  updateGraphMeta();
+}
+
+function updateGraphMeta() {
+  if (!graphData || !currentUuid) return;
+  const allN = graphData.nodes?.length ?? 0;
+  const allE = graphData.edges?.length ?? 0;
+  const wallN = graphData.wall_graph?.nodes?.length ?? 0;
+  const wallE = graphData.wall_graph?.edges?.length ?? 0;
+  const segCount = graphData.wall_segment_graph?.segments?.length ?? 0;
+  const grpN = graphData.wall_segment_graph?.nodes?.length ?? 0;
+  const segE = graphData.wall_segment_graph?.edges?.length ?? 0;
+  const roomN = graphData.segment_room_graph?.nodes?.length ?? 0;
+  const roomE = graphData.segment_room_graph?.edges?.length ?? 0;
+  const view = graphMode === "rooms"
+    ? `${roomN} rooms · ${roomE} adjacency edges`
+    : graphMode === "segments"
+      ? `${segCount} segments · ${grpN} approx groups · ${segE} edges`
+      : graphMode === "walls"
+        ? `walls ${wallN} nodes · ${wallE} edges`
+        : `all ${allN} nodes · ${allE} edges`;
+  const adj = graphData.adjacency_tol ?? 0.5;
+  currentMeta.textContent =
+    `${view} · corner ${graphData.corner_tol} m · adjacency ${adj} m`;
+}
+
+function wallMatchesSet(meshId, wallIds) {
+  if (wallIds.has(meshId)) return true;
+  for (const wid of wallIds) {
+    if (meshId.startsWith(`${wid}::split::`)) return true;
+  }
+  return false;
+}
+
+function apply3DWallHighlightSets(selectedWallIds, connectedWallIds) {
+  const hasSelection = selectedWallIds && selectedWallIds.size > 0;
+  const connected = connectedWallIds || new Set();
   for (const [id, mesh] of meshById) {
-    const role = highlightRole(id, elementId, neighbors);
+    let role = "default";
+    if (hasSelection && wallMatchesSet(id, selectedWallIds)) role = "selected";
+    else if (wallMatchesSet(id, connected)) role = "connected";
+    else if (hasSelection) role = "dim";
     const mat = materialForKind(kindById.get(id) ?? "wall", role);
     mesh.material.dispose();
     mesh.material = mat;
   }
   for (const [id, lines] of edgeLinesById) {
-    const role = highlightRole(id, elementId, neighbors);
+    let role = "default";
+    if (hasSelection && wallMatchesSet(id, selectedWallIds)) role = "selected";
+    else if (wallMatchesSet(id, connected)) role = "connected";
+    else if (hasSelection) role = "dim";
     if (role === "selected") {
       lines.material.opacity = 1;
       lines.material.color.setHex(HIGHLIGHT_SELECTED);
-    } else if (role === "neighbor") {
-      lines.material.opacity = 0.9;
-      lines.material.color.setHex(HIGHLIGHT_NEIGHBOR);
+    } else if (role === "connected") {
+      lines.material.opacity = 0.95;
+      lines.material.color.setHex(HIGHLIGHT_CONNECTED);
     } else {
-      lines.material.opacity = role === "dim" ? 0.15 : 0.35;
-      lines.material.color.setHex(EDGE_DIM);
+      lines.material.opacity = role === "dim" ? 0.5 : 0.85;
+      lines.material.color.setHex(role === "dim" ? EDGE_DIM : EDGE_DEFAULT);
     }
   }
   for (const [id, lines] of isolatedLinesById) {
-    const role = highlightRole(id, elementId, neighbors);
+    let role = "default";
+    if (hasSelection && wallMatchesSet(id, selectedWallIds)) role = "selected";
+    else if (wallMatchesSet(id, connected)) role = "connected";
+    else if (hasSelection) role = "dim";
     for (const line of lines) {
       if (role === "selected") {
         line.material.opacity = 1;
         line.material.color.setHex(0xff00ff);
-      } else if (role === "neighbor") {
-        line.material.opacity = 0.85;
+      } else if (role === "connected") {
+        line.material.opacity = 0.9;
         line.material.color.setHex(0xff66ff);
       } else {
-        line.material.opacity = role === "dim" ? 0.12 : 0.4;
+        line.material.opacity = role === "dim" ? 0.45 : 0.65;
         line.material.color.setHex(0xff00ff);
       }
     }
   }
 }
 
-function selectElement(elementId) {
-  selectedId = elementId;
-  const neighbors = neighborsOf(elementId);
-  apply3DHighlight(elementId);
-  if (cy) {
-    cy.nodes().removeClass("neighbor");
-    cy.nodes().unselect();
-    const node = cy.getElementById(elementId);
-    if (node.length) node.select();
-    for (const nid of neighbors) {
-      cy.getElementById(nid).addClass("neighbor");
+function apply3DWallHighlight(selectedWallId, connectedWallIds) {
+  const selected = selectedWallId ? new Set([selectedWallId]) : new Set();
+  apply3DWallHighlightSets(selected, connectedWallIds);
+}
+
+function clearRoomFloorLoop() {
+  while (roomFloorGroup.children.length) {
+    const child = roomFloorGroup.children.pop();
+    child.geometry?.dispose?.();
+    child.material?.dispose?.();
+  }
+}
+
+function updateRoomFloorLoop(roomId) {
+  clearRoomFloorLoop();
+  if (!roomId || !graphData?.segment_room_graph) return;
+  const room = graphData.segment_room_graph.nodes?.find((n) => n.id === roomId);
+  const poly = room?.polygon_xz;
+  if (!poly || poly.length < 3) return;
+
+  const segmentsById = new Map(
+    (graphData.wall_segment_graph?.segments || []).map((s) => [s.id, s]),
+  );
+  let floorY = Infinity;
+  for (const segId of room.segment_ids || []) {
+    const seg = segmentsById.get(segId);
+    if (!seg) continue;
+    floorY = Math.min(floorY, seg.start.y, seg.end.y);
+  }
+  if (!Number.isFinite(floorY)) floorY = 0;
+
+  const positions = [];
+  for (const p of poly) {
+    positions.push(p.x, floorY + 0.02, p.z);
+  }
+  positions.push(poly[0].x, floorY + 0.02, poly[0].z);
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(positions, 3),
+  );
+  const line = new THREE.Line(
+    geometry,
+    new THREE.LineBasicMaterial({
+      color: HIGHLIGHT_SELECTED,
+      transparent: true,
+      opacity: 0.85,
+    }),
+  );
+  roomFloorGroup.add(line);
+}
+
+/** Segment mode: keep building context muted; only vertical segment lines carry selection. */
+function apply3DBuildingMuted(muted) {
+  for (const [id, mesh] of meshById) {
+    const mat = materialForKind(kindById.get(id) ?? "wall", muted ? "dim" : "default");
+    mesh.material.dispose();
+    mesh.material = mat;
+  }
+  for (const [, lines] of edgeLinesById) {
+    lines.material.opacity = muted ? 0.35 : 0.85;
+    lines.material.color.setHex(muted ? EDGE_DIM : EDGE_DEFAULT);
+  }
+  for (const [, lines] of isolatedLinesById) {
+    for (const line of lines) {
+      line.material.opacity = muted ? 0.35 : 0.65;
+      line.material.color.setHex(0xff00ff);
     }
   }
-  const n = neighbors.size;
-  status3d.textContent = n
-    ? `${elementId} · ${n} connected`
-    : elementId;
+}
+
+function apply3DSegmentLineHighlight(selectedSegmentIds, connectedSegmentIds) {
+  const hasSelection = selectedSegmentIds && selectedSegmentIds.size > 0;
+  const connected = connectedSegmentIds || new Set();
+  for (const [segId, mesh] of segmentLineById) {
+    let role = "default";
+    if (hasSelection && selectedSegmentIds.has(segId)) role = "selected";
+    else if (connected.has(segId)) role = "connected";
+    else if (hasSelection) role = "dim";
+    let radius = SEGMENT_RADIUS;
+    let color = EDGE_DEFAULT;
+    let opacity = 0.9;
+    if (role === "selected") {
+      radius = SEGMENT_RADIUS_SELECTED;
+      color = HIGHLIGHT_SELECTED;
+      opacity = 1;
+    } else if (role === "connected") {
+      radius = SEGMENT_RADIUS_CONNECTED;
+      color = HIGHLIGHT_CONNECTED;
+      opacity = 0.98;
+    } else if (role === "dim") {
+      radius = SEGMENT_RADIUS * 0.65;
+      color = EDGE_DIM;
+      opacity = 0.3;
+    }
+    setSegmentCylinderRadius(mesh, radius);
+    mesh.material.opacity = opacity;
+    mesh.material.color.setHex(color);
+  }
+}
+
+function apply3DHighlight(elementId, connected) {
+  if (graphMode === "rooms") {
+    apply3DBuildingMuted(!!elementId);
+    const selectedWalls = new Set(roomIdToWallIds.get(elementId) || []);
+    const connectedWalls = new Set();
+    const selectedSegs = new Set(roomIdToSegmentIds.get(elementId) || []);
+    const connectedSegs = new Set();
+    for (const rid of connected) {
+      if (rid === elementId) continue;
+      for (const wid of roomIdToWallIds.get(rid) || []) connectedWalls.add(wid);
+      for (const sid of roomIdToSegmentIds.get(rid) || []) connectedSegs.add(sid);
+    }
+    apply3DWallHighlightSets(selectedWalls, connectedWalls);
+    apply3DSegmentLineHighlight(selectedSegs, connectedSegs);
+    updateRoomFloorLoop(elementId);
+    return;
+  }
+  clearRoomFloorLoop();
+  if (graphMode === "segments") {
+    apply3DBuildingMuted(!!elementId);
+    const selectedSegs = new Set(groupIdToSegmentIds.get(elementId) || []);
+    const connectedSegs = new Set();
+    for (const gid of connected) {
+      if (gid === elementId) continue;
+      for (const sid of groupIdToSegmentIds.get(gid) || []) {
+        connectedSegs.add(sid);
+      }
+    }
+    apply3DSegmentLineHighlight(selectedSegs, connectedSegs);
+    return;
+  }
+  apply3DBuildingMuted(false);
+  apply3DWallHighlight(elementId, connected);
+  apply3DSegmentLineHighlight(null, new Set());
+}
+
+function selectElement(elementId) {
+  selectedId = elementId;
+  const connected = connectedComponentOf(elementId);
+  apply3DHighlight(elementId, connected);
+  if (cy) {
+    cy.nodes().removeClass("connected faded");
+    cy.nodes().unselect();
+    for (const node of cy.nodes()) {
+      const id = node.id();
+      if (id === elementId) {
+        node.select();
+      } else if (connected.has(id)) {
+        node.addClass("connected");
+      } else {
+        node.addClass("faded");
+      }
+    }
+  }
+  const n = connected.size;
+  if (graphMode === "rooms") {
+    const room = graphData?.segment_room_graph?.nodes?.find((node) => node.id === elementId);
+    const w = room?.wall_ids?.length ?? 0;
+    const area = room?.area_m2 != null ? `${room.area_m2.toFixed(1)} m²` : "";
+    status3d.textContent = n > 1
+      ? `room · ${w} walls · ${area} · ${n} rooms in component`
+      : `room · ${w} walls · ${area}`;
+  } else if (graphMode === "segments") {
+    const grp = graphData?.wall_segment_graph?.nodes?.find((node) => node.id === elementId);
+    const segCount = grp?.segment_count ?? grp?.segment_ids?.length ?? 0;
+    status3d.textContent = n > 1
+      ? `approx group · ${segCount} segments · ${n} groups in component`
+      : `approx group · ${segCount} segments`;
+  } else {
+    status3d.textContent = n > 1
+      ? `${elementId} · ${n} in component`
+      : elementId;
+  }
   requestRender();
 }
 
 function clearSelection() {
   selectedId = null;
-  for (const [id, mesh] of meshById) {
-    const mat = materialForKind(kindById.get(id) ?? "wall", "default");
-    mesh.material.dispose();
-    mesh.material = mat;
-  }
-  for (const [, lines] of edgeLinesById) {
-    lines.material.opacity = 0.7;
-    lines.material.color.setHex(0x334155);
-  }
-  for (const [, lines] of isolatedLinesById) {
-    for (const line of lines) {
-      line.material.opacity = 0.5;
-      line.material.color.setHex(0xff00ff);
-    }
+  apply3DBuildingMuted(false);
+  apply3DSegmentLineHighlight(null, new Set());
+  clearRoomFloorLoop();
+  if (graphMode !== "rooms") {
+    apply3DWallHighlightSets(new Set(), new Set());
   }
   if (cy) {
-    cy.nodes().removeClass("neighbor");
+    cy.nodes().removeClass("connected faded");
     cy.nodes().unselect();
   }
   status3d.textContent = "Click a graph node to highlight";
@@ -453,7 +822,8 @@ function clearSelection() {
 }
 
 async function fetchGraph(uuid) {
-  const url = `${GRAPH_API}?uuid=${encodeURIComponent(uuid)}&corner_tol=0.05`;
+  const url =
+    `${GRAPH_API}?uuid=${encodeURIComponent(uuid)}&corner_tol=0.05&adjacency_tol=0.5`;
   const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) {
     throw new Error(`Graph API ${response.status} for ${uuid}`);
@@ -535,10 +905,11 @@ async function loadBuilding(uuid) {
 
   try {
     graphData = await fetchGraph(uuid);
-    currentMeta.textContent =
-      `${graphData.element_count} elements · ${graphData.edges.length} edges · tol ${graphData.corner_tol} m`;
+    rebuildSegmentMaps();
+    rebuildRoomMaps();
     build3D(graphData);
-    buildGraph(graphData);
+    rebuildGraph();
+    updateGraphMeta();
     status3d.textContent = "Click a graph node to highlight";
   } catch (err) {
     currentMeta.textContent = String(err.message || err);
@@ -563,6 +934,12 @@ search.addEventListener("keydown", (event) => {
 
 prevBuilding.addEventListener("click", () => stepBuilding(-1));
 nextBuilding.addEventListener("click", () => stepBuilding(1));
+
+for (const input of graphModeInputs) {
+  input.addEventListener("change", () => {
+    if (input.checked) setGraphMode(input.value);
+  });
+}
 
 window.addEventListener("resize", resize);
 

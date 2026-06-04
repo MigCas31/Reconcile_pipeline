@@ -9,6 +9,9 @@ import numpy as np
 
 from reconcile_tiers.room_postprocessing.models import BuildingElement
 
+# ~2× WALL_HALF_M in reconcile_tiers/extract/gaps.py — typical scan gap at junctions.
+DEFAULT_ADJACENCY_TOL_M = 0.5
+
 
 def cluster_element_corners(
     elements: Sequence[BuildingElement],
@@ -79,6 +82,45 @@ def element_adjacency_pairs(
                 a, b = sorted_indices[i], sorted_indices[j]
                 pairs.add((a, b))
     return sorted(pairs)
+
+
+def approx_element_adjacency_pairs(
+    elements: Sequence[BuildingElement],
+    adjacency_tol: float,
+) -> list[tuple[int, int]]:
+    """Element pairs with any corner pair within adjacency_tol (3D Euclidean)."""
+
+    n_elem = len(elements)
+    if n_elem < 2:
+        return []
+    tol_sq = adjacency_tol * adjacency_tol
+    pairs: set[tuple[int, int]] = set()
+    for i in range(n_elem):
+        corners_i = elements[i].corners
+        if not corners_i:
+            continue
+        arr_i = np.array(corners_i, dtype=float)
+        for j in range(i + 1, n_elem):
+            corners_j = elements[j].corners
+            if not corners_j:
+                continue
+            arr_j = np.array(corners_j, dtype=float)
+            for ci in arr_i:
+                diffs = arr_j - ci
+                d2 = np.einsum("ij,ij->i", diffs, diffs)
+                if np.any(d2 <= tol_sq):
+                    pairs.add((i, j))
+                    break
+    return sorted(pairs)
+
+
+def merge_adjacency_pairs(
+    strict: Sequence[tuple[int, int]],
+    approx: Sequence[tuple[int, int]],
+) -> list[tuple[int, int]]:
+    """Union of strict (shared cluster) and approximate (near corner) adjacency."""
+
+    return sorted(set(strict) | set(approx))
 
 
 def isolated_wall_edges(

@@ -40,7 +40,27 @@
         <canvas id="view3d"></canvas>
         <div id="status3d">Loading…</div>
       </div>
-      <div id="graphPanel"></div>
+      <div id="graphPane">
+        <div id="graph-toolbar" role="group" aria-label="Graph view">
+          <label class="graph-mode">
+            <input type="radio" name="graph-mode" value="all" checked>
+            All elements
+          </label>
+          <label class="graph-mode">
+            <input type="radio" name="graph-mode" value="walls">
+            Walls only
+          </label>
+          <label class="graph-mode">
+            <input type="radio" name="graph-mode" value="segments">
+            Wall segments
+          </label>
+          <label class="graph-mode">
+            <input type="radio" name="graph-mode" value="rooms">
+            Rooms (cycles)
+          </label>
+        </div>
+        <div id="graphPanel"></div>
+      </div>
     </div>
   </section>
   <script type="module" src="./viewer-corner-graph-main.js"></script>

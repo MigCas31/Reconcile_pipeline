@@ -15375,3 +15375,28 @@ The previous full-building metric and viewer treated all support domains as requ
 - **What changed**: `flatten_tier_payload` no longer appends `tier_payload.ceiling[]`; test renamed to assert ceilings are omitted.
 - **Why**: Ceiling tiles add corner links at wall tops that obscure floor–wall shell connectivity for this diagnostic step.
 - **Result**: 3/3 `test_corner_graph.py` pass.
+
+## 2026-05-24 - Corner graph viewer: wall-only graph + toggle
+- **What changed**: API `wall_graph` (walls as nodes, wall–wall corner adjacency only); viewer toolbar toggles All elements / Walls only; selection neighbors follow active graph.
+- **Why**: Floor/shell links obscure wall–wall connectivity; wall-only view is the diagnostic for shared corners between walls.
+- **Result**: 4/4 `test_corner_graph.py` pass.
+
+## 2026-06-04 - Corner graph: wide adjacency_tol (wall-thickness junctions)
+- **What changed**: `approx_element_adjacency_pairs` + `merge_adjacency_pairs` in `corner_graph.py` (default `adjacency_tol=0.5` m); graph edges = strict 5 cm clusters ∪ near-corner pairs for all element kinds; API/viewer param; tests for three-wall near-miss.
+- **Why**: Scan walls stop short at junctions (~0.25 m/side); strict clustering left physically connected walls (e.g. orange vs green/blue) disconnected in the graph.
+- **Result**: 6/6 `room_postprocessing` tests pass. Reload corner-graph viewer — junction walls should share one connected component.
+
+## 2026-06-04 - Corner graph: wall vertical-segment graph
+- **What changed**: `wall_segment_graph.py` — nodes = vertical wall edges; edges = strict corner clusters + `adjacency_tol` approx + intra-wall pairs. API `wall_segment_graph`; viewer third mode “Wall segments” with per-segment 3D line highlight.
+- **Why**: Junction diagnostics need segment-level links when corners do not touch within 5 cm but are within wall thickness (~0.5 m).
+- **Result**: 9/9 `room_postprocessing` tests pass.
+
+## 2026-06-04 - Segment graph: room cycles + viewer mode
+- **What changed**: `segment_room_cycles.py` — per-story bounded faces on junction graph (wall-span edges between approx groups); API `segment_room_graph`; `wall_junction_split.py` splits walls through multi-wall junctions. Viewer fourth mode “Rooms (cycles)” — click room highlights boundary walls, segment cylinders, floor XZ loop; room adjacency in Cytoscape.
+- **Why**: Enclosed rooms should appear as cycles in the segment graph; walls crossing junctions must split so corners share junction segments.
+- **Result**: 13/13 `room_postprocessing` tests pass.
+
+## 2026-06-04 - Approx segment groups scoped per storey
+- **What changed**: `_approx_segment_pairs` in `wall_segment_graph.py` only links segments with the same `story`; test `test_approx_groups_do_not_merge_across_stories`.
+- **Why**: Vertically stacked junction segments (same XZ, within `adjacency_tol` in 3D) were merged into one approx group across floors.
+- **Result**: 14/14 `room_postprocessing` tests pass.

@@ -119,8 +119,110 @@ def test_shared_corner_walls_adjacent_not_isolated_on_shared_edge() -> None:
     assert any(not s["isolated"] for s in shared_edge_segments)
 
 
+def test_wall_graph_only_walls_and_wall_adjacency() -> None:
+    graph = build_corner_graph(_shared_corner_payload(), corner_tol=0.05)
+    wg = graph["wall_graph"]
+    assert all(n["kind"] == "wall" for n in wg["nodes"])
+    assert len(wg["nodes"]) == 2
+    assert len(wg["edges"]) == 1
+    pair = {wg["edges"][0]["source"], wg["edges"][0]["target"]}
+    assert pair == {"b::tier-wall::a", "b::tier-wall::b"}
+
+
+def _near_miss_three_wall_payload() -> dict[str, Any]:
+    """Green/blue corners cluster; orange offset ~0.28 m — needs adjacency_tol."""
+
+    junction = _pt(2.0, 0.0, 2.0)
+    return {
+        "uuid": "near-miss",
+        "rooms": [
+            {
+                "story": 0,
+                "floor": {
+                    "corners": [
+                        _pt(0, 0, 0),
+                        _pt(3, 0, 0),
+                        _pt(3, 0, 3),
+                        _pt(0, 0, 3),
+                    ]
+                },
+                "walls": [
+                    {
+                        "locator_id": "w-orange",
+                        "corners": [
+                            _pt(0, 0, 0),
+                            _pt(1.72, 0.0, 2.0),
+                            _pt(1.72, 2.0, 2.0),
+                            _pt(0, 2, 0),
+                        ],
+                    },
+                    {
+                        "locator_id": "w-green",
+                        "corners": [
+                            junction,
+                            _pt(2.06, 0.0, 2.0),
+                            _pt(2.06, 2.0, 2.0),
+                            _pt(2.0, 2.0, 2.0),
+                        ],
+                    },
+                    {
+                        "locator_id": "w-blue",
+                        "corners": [
+                            _pt(2.06, 0.0, 2.0),
+                            _pt(3.0, 0.0, 2.0),
+                            _pt(3.0, 2.0, 2.0),
+                            _pt(2.0, 2.0, 2.0),
+                        ],
+                    },
+                ],
+            }
+        ],
+    }
+
+
+def test_near_miss_three_walls_connect_with_adjacency_tol() -> None:
+    payload = _near_miss_three_wall_payload()
+    graph = build_corner_graph(payload, corner_tol=0.05, adjacency_tol=0.5)
+    wg = graph["wall_graph"]
+    ids = {n["id"] for n in wg["nodes"]}
+    assert ids == {"w-orange", "w-green", "w-blue"}
+
+    graph_tight = build_corner_graph(payload, corner_tol=0.05, adjacency_tol=0.05)
+    tight_orange_wall = [
+        e
+        for e in graph_tight["wall_graph"]["edges"]
+        if "w-orange" in (e["source"], e["target"])
+    ]
+    assert len(tight_orange_wall) == 0
+
+    assert len(wg["edges"]) == 3
+    for a, b in (
+        ("w-orange", "w-green"),
+        ("w-orange", "w-blue"),
+        ("w-green", "w-blue"),
+    ):
+        assert any(
+            {e["source"], e["target"]} == {a, b} for e in wg["edges"]
+        )
+
+
+def test_strict_shared_corner_still_connects() -> None:
+    graph = build_corner_graph(_shared_corner_payload(), corner_tol=0.05)
+    wall_edges = [
+        e
+        for e in graph["edges"]
+        if e["source"].startswith("b::tier-wall")
+        and e["target"].startswith("b::tier-wall")
+    ]
+    assert len(wall_edges) == 1
+
+
 def test_floating_wall_degree_zero_all_edges_isolated() -> None:
-    graph = build_corner_graph(_floating_wall_payload(), corner_tol=0.05)
+    graph = build_corner_graph(
+        _floating_wall_payload(),
+        corner_tol=0.05,
+        adjacency_tol=0.5,
+    )
     wall_nodes = [n for n in graph["nodes"] if n["kind"] == "wall"]
     assert len(wall_nodes) == 1
     assert wall_nodes[0]["degree"] == 0

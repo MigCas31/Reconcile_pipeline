@@ -15,7 +15,7 @@ APIs the viewer calls into:
                                        (gated by GEMINI_API_KEY)
     GET  /jobs/<id>                 →  status + log_tail of a dev_tools job
     GET  /room-postprocessing/graph →  corner-sharing element graph JSON
-                                       (?uuid=, optional corner_tol=)
+                                       (?uuid=, corner_tol=, adjacency_tol=)
 
 Run:
 
@@ -310,10 +310,21 @@ class TierServerHandler(SimpleHTTPRequestHandler):
             self.send_error(HTTPStatus.BAD_REQUEST, "uuid query param required")
             return
         tol_raw = (params.get("corner_tol") or ["0.05"])[0]
+        adj_raw = (params.get("adjacency_tol") or ["0.5"])[0]
         try:
             corner_tol = float(tol_raw)
+            adjacency_tol = float(adj_raw)
         except (TypeError, ValueError):
-            self.send_error(HTTPStatus.BAD_REQUEST, "corner_tol must be a number")
+            self.send_error(
+                HTTPStatus.BAD_REQUEST,
+                "corner_tol and adjacency_tol must be numbers",
+            )
+            return
+        if not (0.05 <= adjacency_tol <= 2.0):
+            self.send_error(
+                HTTPStatus.BAD_REQUEST,
+                "adjacency_tol must be between 0.05 and 2.0",
+            )
             return
 
         from reconcile_tiers.room_postprocessing.export import build_corner_graph
@@ -327,7 +338,14 @@ class TierServerHandler(SimpleHTTPRequestHandler):
         except json.JSONDecodeError:
             self.send_error(HTTPStatus.INTERNAL_SERVER_ERROR, "Invalid tier_payload.json")
             return
-        self._send_json(HTTPStatus.OK, build_corner_graph(payload, corner_tol=corner_tol))
+        self._send_json(
+            HTTPStatus.OK,
+            build_corner_graph(
+                payload,
+                corner_tol=corner_tol,
+                adjacency_tol=adjacency_tol,
+            ),
+        )
 
     # --- flag-queue endpoints --------------------------------------------------
 

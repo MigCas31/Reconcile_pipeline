@@ -129,7 +129,7 @@ body {
   position: relative;
   min-width: 0;
   min-height: 0;
-  background: #1a2129;
+  background: #ffffff;
 }
 
 #view3d {
@@ -144,14 +144,43 @@ body {
   bottom: 10px;
   padding: 4px 8px;
   border-radius: 4px;
-  background: rgba(15, 20, 25, 0.85);
+  background: rgba(255, 255, 255, 0.92);
+  color: #334155;
+  border: 1px solid #e2e8f0;
   font-size: 0.75rem;
   pointer-events: none;
 }
 
-#graphPanel {
+#graphPane {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
   min-height: 0;
-  border-left: 1px solid #2a3542;
-  background: #f6f7f8;
+  border-left: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+#graph-toolbar {
+  display: flex;
+  gap: 12px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  font-size: 0.8rem;
+  color: #334155;
+  flex-shrink: 0;
+}
+
+.graph-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+#graphPanel {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
 }
