@@ -12,6 +12,9 @@ from reconcile_tiers.room_postprocessing.corner_graph import (
 from reconcile_tiers.room_postprocessing.flatten_payload import flatten_tier_payload
 from reconcile_tiers.room_postprocessing.models import BuildingElement
 from reconcile_tiers.room_postprocessing.room_floor_clip import attach_room_floor_polygons
+from reconcile_tiers.room_postprocessing.room_shell_closure import (
+    build_half_closed_room_shell,
+)
 from reconcile_tiers.room_postprocessing.segment_room_cycles import (
     build_segment_room_graph,
 )
@@ -23,13 +26,15 @@ from reconcile_tiers.room_postprocessing.wall_near_segment_split import (
 )
 from reconcile_tiers.room_postprocessing.wall_segment_graph import build_wall_segment_graph
 
+HALF_CLOSED_SHELL = "half_closed_floor_walls"
+
 
 def _postprocess_elements(
     payload: Mapping[str, Any],
     *,
     corner_tol: float,
     adjacency_tol: float,
-) -> tuple[list[BuildingElement], dict[str, Any]]:
+) -> tuple[list[BuildingElement], dict[str, Any], dict[str, Any]]:
     elements = flatten_tier_payload(payload)
     elements = split_walls_at_approx_junctions(
         elements,
@@ -53,16 +58,21 @@ def _postprocess_elements(
         corner_tol=corner_tol,
     )
     attach_room_floor_polygons(segment_room_graph, elements)
-    return elements, segment_room_graph
+    return elements, segment_room_graph, wall_segment_graph
 
 
-def _wall_dict_from_element(el: BuildingElement) -> dict[str, Any]:
-    return {
-        "locator_id": el.locator_id or el.id,
-        "corners": [
-            {"x": c[0], "y": c[1], "z": c[2]} for c in el.corners
-        ],
-    }
+def _wall_element_for_id(
+    wall_id: str,
+    wall_by_id: Mapping[str, BuildingElement],
+) -> BuildingElement | None:
+    el = wall_by_id.get(wall_id)
+    if el is not None:
+        return el
+    prefix = f"{wall_id}::split::"
+    for key, candidate in wall_by_id.items():
+        if key.startswith(prefix):
+            return candidate
+    return None
 
 
 def _floor_y_for_room(
@@ -73,7 +83,7 @@ def _floor_y_for_room(
 ) -> float | None:
     ys: list[float] = []
     for wid in wall_ids:
-        el = wall_by_id.get(wid)
+        el = _wall_element_for_id(wid, wall_by_id)
         if el is None:
             continue
         ys.extend(c[1] for c in el.corners)
@@ -86,31 +96,19 @@ def _floor_y_for_room(
     return min(ys) if ys else None
 
 
-def _floor_ring_3d(
-    poly_xz: Sequence[Mapping[str, float]],
-    floor_y: float,
-) -> list[dict[str, float]] | None:
-    if len(poly_xz) < 3:
-        return None
-    return [
-        {"x": float(p["x"]), "y": floor_y, "z": float(p["z"])}
-        for p in poly_xz
-    ]
-
-
 def _segment_room_to_tier_room(
     seg_room: Mapping[str, Any],
     *,
     room_index: int,
     wall_by_id: Mapping[str, BuildingElement],
     elements: Sequence[BuildingElement],
+    segments_by_id: Mapping[str, dict[str, Any]],
 ) -> dict[str, Any] | None:
-    # ``wall_ids`` / ``segment_ids`` are already representative-only from room cycles.
     wall_ids = list(dict.fromkeys(seg_room.get("wall_ids") or []))
     if len(wall_ids) < 3:
         return None
 
-    poly_xz = seg_room.get("floor_polygon_xz") or seg_room.get("polygon_xz")
+    poly_xz = seg_room.get("polygon_xz")
     if not poly_xz or len(poly_xz) < 3:
         return None
 
@@ -120,17 +118,12 @@ def _segment_room_to_tier_room(
     if floor_y is None:
         return None
 
-    floor_corners = _floor_ring_3d(poly_xz, floor_y)
-    if floor_corners is None:
-        return None
-
-    walls: list[dict[str, Any]] = []
-    for wid in wall_ids:
-        el = wall_by_id.get(wid)
-        if el is None or el.kind != "wall":
-            continue
-        walls.append(_wall_dict_from_element(el))
-    if len(walls) < 3:
+    shell = build_half_closed_room_shell(
+        seg_room,
+        segments_by_id,
+        floor_y=floor_y,
+    )
+    if shell is None:
         return None
 
     room_id = str(seg_room.get("id") or f"room_cycle::{story}::{room_index}")
@@ -141,10 +134,10 @@ def _segment_room_to_tier_room(
         "floor": [
             {
                 "locator_id": f"{room_id}::floor",
-                "corners": floor_corners,
+                "corners": shell["floor_corners"],
             }
         ],
-        "walls": walls,
+        "walls": shell["walls"],
         "doors": [],
         "windows": [],
     }
@@ -158,16 +151,20 @@ def build_segment_room_tier_payload(
 ) -> dict[str, Any]:
     """Return a tier_payload copy whose ``rooms`` are segment-room cycles.
 
-    Uses the same wall splits and floor clips as :func:`build_corner_graph`.
-    Building-level ``ceiling``, shells, and metadata are preserved from the input.
+    Each room uses a half-closed floor+wall shell (shared junction corners).
+    Building-level ``ceiling``, ``visual_shells``, and ``gable_closures`` are
+    preserved from the input for polyhedron tile collection.
     """
 
-    elements, segment_room_graph = _postprocess_elements(
+    elements, segment_room_graph, wall_segment_graph = _postprocess_elements(
         payload,
         corner_tol=corner_tol,
         adjacency_tol=adjacency_tol,
     )
     wall_by_id = {el.id: el for el in elements if el.kind == "wall"}
+    segments_by_id = {
+        s["id"]: s for s in (wall_segment_graph.get("segments") or [])
+    }
 
     tier_rooms: list[dict[str, Any]] = []
     for node in segment_room_graph.get("nodes") or []:
@@ -178,6 +175,7 @@ def build_segment_room_tier_payload(
             room_index=len(tier_rooms),
             wall_by_id=wall_by_id,
             elements=elements,
+            segments_by_id=segments_by_id,
         )
         if tier_room is not None:
             tier_rooms.append(tier_room)
@@ -188,6 +186,7 @@ def build_segment_room_tier_payload(
         "corner_tol": corner_tol,
         "adjacency_tol": adjacency_tol,
         "segment_room_count": len(tier_rooms),
+        "shell": HALF_CLOSED_SHELL,
     }
     out["segment_room_graph"] = segment_room_graph
     return out

@@ -15431,6 +15431,31 @@ The previous full-building metric and viewer treated all support domains as requ
 - **Why**: A stub wall’s free-end group can sit on a spurious planar face and stay blue in the viewer even though it only has one graph edge and cannot close a room loop.
 - **Result**: 17/17 `room_postprocessing` tests pass.
 
+## 2026-05-24 - Remove --room-source segment (synthesized shell export path)
+- **What changed**: `corpus_trace_export.export_manifold_repair_steps_traces` — dropped `segment` CLI choice and `build_segment_room_tier_payload` wiring; only `tier` and `segment-tier` remain (default `segment-tier`). Removed `test_manifold_steps_export_segment_rooms`; updated cheatsheet.
+- **Why**: Synthesized half-closed shell mode caused watertightness regressions; segment-tier supersedes it for polyhedron input.
+- **Result**: trace export tests pass. `segment_room_payload.py` retained for unit tests only.
+
+## 2026-05-24 - room-source segment-tier (cycle classification + tier geometry)
+- **What changed**: `segment_tier_room_payload.py` — `build_segment_tier_room_payload()` detects segment-room cycles via `build_corner_graph`, assigns verbatim tier `walls`/`floor`/`doors`/`windows` by rim-on-boundary + `wall_ids` hints and floor XZ overlap. `corpus_trace_export` adds `--room-source segment-tier` (new default), writes `tier_payload_segment_tier_rooms.json`. Tests `test_segment_tier_room_payload.py`, `test_manifold_steps_export_segment_tier_rooms`.
+- **Why**: Segment cycles improve room membership; synthesized `build_half_closed_room_shell` geometry broke watertightness with tier ceilings. segment-tier keeps tier scan meshes, only re-groups elements per cycle.
+- **Result**: room_postprocessing + segment trace export tests pass.
+
+## 2026-05-24 - Segment shell: keep building ceilings in polyhedron input
+- **What changed**: Reverted clearing `ceiling` / `visual_shells` / `gable_closures` in `build_segment_room_tier_payload` and the early return in `collect_room_tiles` that skipped ceiling collection. Half-closed floor+wall room geometry unchanged. Test renamed `test_segment_payload_preserves_building_ceilings`.
+- **Why**: User wants ceiling and sloped ceiling (visual shell) tiles to remain in the final segment-room polyhedron input, not only the open-top wall shell.
+- **Result**: room_postprocessing tests pass.
+
+## 2026-05-24 - Half-closed segment-room shell for polyhedron input
+- **What changed**: `room_shell_closure.py` — floor ring and wall quads share exact cycle-junction coordinates; per-junction top Y from representative segments (open top). `segment_room_payload.py` uses shell builder; clears `ceiling` / `visual_shells` / `gable_closures`; sets `room_postprocessing_source.shell = half_closed_floor_walls`. `manifold_repair.collect_room_tiles` skips building ceilings when that shell flag is set. Tests `test_room_shell_closure.py`, updates `test_segment_room_payload.py`.
+- **Why**: Polyhedron trace input showed gaps between floor, walls, and unwanted sloped ceiling tiles; manifold needs a touching floor+wall shell without roof faces.
+- **Result**: room_postprocessing + segment trace export tests pass.
+
+## 2026-05-24 - Segment-room polyhedron input: perimeter walls, no double tiles
+- **What changed**: `segment_group_representative.py` — `perimeter_sides_for_cycle()`, `dedupe_perimeter_sides_by_base()`, `wall_dict_from_perimeter_side()` (junction-to-junction quads from segment endpoints). `segment_room_cycles.py` stores `perimeter_sides` and base `wall_ids` (one per physical wall). `segment_room_payload.py` builds tier `rooms[].walls` from perimeter sides, not full post-split scan quads; `_wall_element_for_id` resolves split pieces for floor Y. Tests in `test_segment_group_representative.py`, `test_segment_room_payload.py`.
+- **Why**: Representative segments fixed graph references but polyhedron trace input still emitted one full wall mesh per split piece (`w-long::split::0` + `::split::1`), causing overlapping double walls in the viewer.
+- **Result**: 28/28 room_postprocessing + segment trace export tests pass.
+
 ## 2026-05-24 - Near-segment wall split (segment close to passing wall)
 - **What changed**: `wall_near_segment_split.py` — when a vertical segment endpoint is within `adjacency_tol` of another wall's **floor rim** (XZ projection), insert a corner on that wall via `_find_horizontal_splits` / `_apply_wall_splits`. Anchors use rim-projected 3D points; skip targets that already have a corner or vertical segment at the site (XZ); only unsplit walls (`::split::` not in id). `wall_junction_split.py`: `_wall_has_corner_near_xz`, `_apply_wall_splits` uses `corner_tol` for rim distance. Wired in `export.py` after approx junction split. Test `test_wall_near_segment_split.py`.
 - **Why**: A junction wall can have a vertical segment while a crossing wall has no corner there — room/segment graph needs the passing wall split so a vertical edge links the two sub-meshes.

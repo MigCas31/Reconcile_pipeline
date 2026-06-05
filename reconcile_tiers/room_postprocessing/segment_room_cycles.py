@@ -7,6 +7,8 @@ from collections import defaultdict
 from typing import Any
 
 from reconcile_tiers.room_postprocessing.segment_group_representative import (
+    base_wall_id,
+    perimeter_sides_for_cycle,
     representative_segments_for_cycle,
 )
 
@@ -458,14 +460,24 @@ def build_segment_room_graph(
         faces = _filter_faces(faces, part_positions, min_room_area_m2)
 
         for cycle in faces:
-            rep_segment_ids, rep_wall_ids, by_group = representative_segments_for_cycle(
+            rep_segment_ids, _, by_group = representative_segments_for_cycle(
                 cycle,
                 part_edges,
                 segment_ids_by_group,
                 segments_by_id,
                 part_positions,
             )
-            if len(rep_wall_ids) < 3:
+            perimeter_sides = perimeter_sides_for_cycle(
+                cycle,
+                part_edges,
+                segment_ids_by_group,
+                segments_by_id,
+                part_positions,
+            )
+            perimeter_wall_ids = sorted(
+                {base_wall_id(s["wall_id"]) for s in perimeter_sides}
+            )
+            if len(perimeter_wall_ids) < 3:
                 continue
 
             poly = [part_positions[g] for g in cycle if g in part_positions]
@@ -479,7 +491,8 @@ def build_segment_room_graph(
                     "kind": "segment_room",
                     "story": story,
                     "group_ids": list(cycle),
-                    "wall_ids": rep_wall_ids,
+                    "wall_ids": perimeter_wall_ids,
+                    "perimeter_sides": perimeter_sides,
                     "segment_ids": rep_segment_ids,
                     "representative_by_group": by_group,
                     "polygon_xz": [{"x": x, "z": z} for x, z in poly],

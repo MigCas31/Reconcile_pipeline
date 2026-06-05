@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from reconcile_tiers.room_postprocessing.export import build_corner_graph
 from reconcile_tiers.room_postprocessing.segment_group_representative import (
+    base_wall_id,
+    perimeter_sides_for_cycle,
     representative_segments_for_cycle,
 )
 from tests.reconcile_tiers.room_postprocessing.test_segment_room_cycles import (
@@ -100,10 +102,50 @@ def test_corner_group_gets_two_reps_for_two_incident_walls() -> None:
     assert set(wall_ids) >= {"w-east", "w-north"}
 
 
+def test_perimeter_sides_dedupe_split_pieces_to_one_physical_wall() -> None:
+    cycle = ["g0", "g1", "g2", "g3"]
+    part_edges = [
+        {"source": "g0", "target": "g1", "wall_id": "w-long::split::0"},
+        {"source": "g1", "target": "g2", "wall_id": "w-long::split::1"},
+        {"source": "g2", "target": "g3", "wall_id": "w-east"},
+        {"source": "g3", "target": "g0", "wall_id": "w-north"},
+    ]
+    segment_ids_by_group = {
+        gid: [f"s-{gid}-long", f"s-{gid}-other"]
+        for gid in cycle
+    }
+    segments_by_id = {}
+    for gid in cycle:
+        x = float(cycle.index(gid))
+        segments_by_id[f"s-{gid}-long"] = {
+            "id": f"s-{gid}-long",
+            "wall_id": "w-long::split::0" if gid in ("g0", "g1") else "w-long::split::1",
+            "start": {"x": x, "y": 0.0, "z": 0.0},
+            "end": {"x": x, "y": 2.0, "z": 0.0},
+        }
+        segments_by_id[f"s-{gid}-other"] = {
+            "id": f"s-{gid}-other",
+            "wall_id": "w-east" if gid == "g2" else "w-north",
+            "start": {"x": x, "y": 0.0, "z": 4.0},
+            "end": {"x": x, "y": 2.0, "z": 4.0},
+        }
+    positions = {gid: (float(cycle.index(gid)), 0.0) for gid in cycle}
+    sides = perimeter_sides_for_cycle(
+        cycle,
+        part_edges,
+        segment_ids_by_group,
+        segments_by_id,
+        positions,
+    )
+    long_sides = [s for s in sides if base_wall_id(s["wall_id"]) == "w-long"]
+    assert len(long_sides) == 1
+
+
 def test_four_wall_room_one_rep_per_incident_wall_per_corner() -> None:
     graph = build_corner_graph(_four_wall_room_payload(), corner_tol=0.05)
     room = graph["segment_room_graph"]["nodes"][0]
     assert len(room["wall_ids"]) == 4
+    assert len(room["perimeter_sides"]) == 4
     assert len(room["segment_ids"]) == 8
     for gid in room["group_ids"]:
         reps = room["representative_by_group"][gid]

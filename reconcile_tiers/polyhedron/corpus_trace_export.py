@@ -601,7 +601,7 @@ def export_manifold_repair_steps_traces(
     corner_tol: float = 0.02,
     coord_tol: float = 1e-3,
     snap_tol: float = 0.05,
-    room_source: str = "segment",
+    room_source: str = "segment-tier",
     segment_corner_tol: float = 0.05,
     segment_adjacency_tol: float = 0.5,
     write_segment_payload: bool = True,
@@ -616,11 +616,11 @@ def export_manifold_repair_steps_traces(
         SELECTION,
         build_manifold_repair_room_trace,
     )
-    from reconcile_tiers.room_postprocessing.segment_room_payload import (
-        build_segment_room_tier_payload,
+    from reconcile_tiers.room_postprocessing.segment_tier_room_payload import (
+        build_segment_tier_room_payload,
     )
 
-    use_segment_rooms = room_source == "segment"
+    use_segment_tier = room_source == "segment-tier"
     output_dir.mkdir(parents=True, exist_ok=True)
     trace_dir = output_dir / "traces"
     trace_dir.mkdir(exist_ok=True)
@@ -638,9 +638,9 @@ def export_manifold_repair_steps_traces(
             continue
 
         trace_payload = payload
-        if use_segment_rooms:
+        if use_segment_tier:
             try:
-                trace_payload = build_segment_room_tier_payload(
+                trace_payload = build_segment_tier_room_payload(
                     payload,
                     corner_tol=segment_corner_tol,
                     adjacency_tol=segment_adjacency_tol,
@@ -649,7 +649,9 @@ def export_manifold_repair_steps_traces(
                 failure_counts[_error_key(exc)] += 1
                 continue
             if write_segment_payload:
-                segment_path = payload_path.parent / "tier_payload_segment_rooms.json"
+                segment_path = (
+                    payload_path.parent / "tier_payload_segment_tier_rooms.json"
+                )
                 to_write = {
                     k: v
                     for k, v in trace_payload.items()
@@ -696,7 +698,7 @@ def export_manifold_repair_steps_traces(
                 "story": viewer_trace.get("story"),
                 "room_source": room_source,
             }
-            if use_segment_rooms:
+            if use_segment_tier:
                 record["segment_room_locator_id"] = room.get("locator_id")
                 seg_graph = trace_payload.get("segment_room_graph") or {}
                 seg_node = next(
@@ -1444,9 +1446,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-candidates", type=int, default=500)
     parser.add_argument(
         "--room-source",
-        choices=("tier", "segment"),
-        default="segment",
-        help="Room list for manifold-repair-steps: tier_payload rooms or segment cycles.",
+        choices=("tier", "segment-tier"),
+        default="segment-tier",
+        help=(
+            "Room list for manifold-repair-steps: original tier_payload rooms "
+            "(tier) or segment cycles with tier scan geometry (segment-tier)."
+        ),
     )
     parser.add_argument(
         "--segment-corner-tol",

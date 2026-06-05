@@ -4,8 +4,10 @@ from __future__ import annotations
 
 from typing import Any
 
+from reconcile_tiers.room_postprocessing.segment_group_representative import (
+    base_wall_id,
+)
 from reconcile_tiers.room_postprocessing.segment_room_payload import (
-    _postprocess_elements,
     build_segment_room_tier_payload,
 )
 from tests.reconcile_tiers.room_postprocessing.test_segment_room_cycles import (
@@ -27,6 +29,7 @@ def test_four_wall_yields_one_segment_room_with_four_walls() -> None:
     wall_ids = {w["locator_id"] for w in room["walls"]}
     assert wall_ids == {"w-south", "w-east", "w-north", "w-west"}
     assert out["room_postprocessing_source"]["segment_room_count"] == 1
+    assert out["room_postprocessing_source"]["shell"] == "half_closed_floor_walls"
 
 
 def test_two_adjacent_rooms_yield_at_least_two_segment_rooms() -> None:
@@ -41,14 +44,38 @@ def test_two_adjacent_rooms_yield_at_least_two_segment_rooms() -> None:
     assert "w-shared" in all_walls
 
 
-def test_postprocess_splits_walls_for_junction_payload() -> None:
-    """Junction split runs before segment rooms; split ids must exist on elements."""
+def test_junction_split_room_one_tile_per_physical_wall() -> None:
+    """Split pieces along one long wall must not duplicate tiles in tier payload."""
 
-    elements, _ = _postprocess_elements(
+    out = build_segment_room_tier_payload(
         _passing_wall_junction_payload(),
         corner_tol=0.05,
         adjacency_tol=0.5,
     )
-    wall_ids = {el.id for el in elements if el.kind == "wall"}
-    assert "w-long::split::0" in wall_ids
-    assert "w-long::split::1" in wall_ids
+    rooms = out["rooms"]
+    if not rooms:
+        return
+    room = rooms[0]
+    locator_ids = [w["locator_id"] for w in room["walls"]]
+    assert len(locator_ids) == len(set(locator_ids))
+    long_count = sum(1 for lid in locator_ids if lid == "w-long")
+    assert long_count <= 1
+    bases = {base_wall_id(lid) for lid in locator_ids}
+    assert len(locator_ids) == len(bases)
+
+
+def test_floor_ring_uses_cycle_polygon_not_clipped_scan() -> None:
+    """Shell floor follows wall-delineated cycle, matching wall bottom corners."""
+
+    out = build_segment_room_tier_payload(_four_wall_room_payload(), corner_tol=0.05)
+    room_node = next(
+        n
+        for n in out["segment_room_graph"]["nodes"]
+        if n.get("kind") == "segment_room"
+    )
+    tier_room = out["rooms"][0]
+    floor_xz = {(c["x"], c["z"]) for c in tier_room["floor"][0]["corners"]}
+    cycle_xz = {
+        (float(p["x"]), float(p["z"])) for p in room_node["polygon_xz"]
+    }
+    assert floor_xz == cycle_xz
