@@ -601,6 +601,10 @@ def export_manifold_repair_steps_traces(
     corner_tol: float = 0.02,
     coord_tol: float = 1e-3,
     snap_tol: float = 0.05,
+    room_source: str = "segment-tier",
+    segment_corner_tol: float = 0.05,
+    segment_adjacency_tol: float = 0.5,
+    write_segment_payload: bool = True,
 ) -> dict[str, Any]:
     """Export per-room manifold-repair pipeline frames for the traces viewer.
 
@@ -612,7 +616,11 @@ def export_manifold_repair_steps_traces(
         SELECTION,
         build_manifold_repair_room_trace,
     )
+    from reconcile_tiers.room_postprocessing.segment_tier_room_payload import (
+        build_segment_tier_room_payload,
+    )
 
+    use_segment_tier = room_source == "segment-tier"
     output_dir.mkdir(parents=True, exist_ok=True)
     trace_dir = output_dir / "traces"
     trace_dir.mkdir(exist_ok=True)
@@ -628,11 +636,36 @@ def export_manifold_repair_steps_traces(
         except Exception as exc:
             failure_counts[_error_key(exc)] += 1
             continue
-        rooms = payload.get("rooms") or []
+
+        trace_payload = payload
+        if use_segment_tier:
+            try:
+                trace_payload = build_segment_tier_room_payload(
+                    payload,
+                    corner_tol=segment_corner_tol,
+                    adjacency_tol=segment_adjacency_tol,
+                )
+            except Exception as exc:
+                failure_counts[_error_key(exc)] += 1
+                continue
+            if write_segment_payload:
+                segment_path = (
+                    payload_path.parent / "tier_payload_segment_tier_rooms.json"
+                )
+                to_write = {
+                    k: v
+                    for k, v in trace_payload.items()
+                    if k != "segment_room_graph"
+                }
+                segment_path.write_text(
+                    json.dumps(to_write, indent=2, sort_keys=True)
+                )
+
+        rooms = trace_payload.get("rooms") or []
         for room_index, room in enumerate(rooms):
             try:
                 viewer_trace = build_manifold_repair_room_trace(
-                    payload,
+                    trace_payload,
                     room,
                     corner_tol=corner_tol,
                     coord_tol=coord_tol,
@@ -648,24 +681,38 @@ def export_manifold_repair_steps_traces(
                 json.dumps(viewer_trace, indent=2, sort_keys=True)
             )
             repair_summary = viewer_trace.get("repair_summary") or {}
-            records.append(
-                {
-                    "uuid": uuid,
-                    "room_index": room_index,
-                    "part_index": room_index,
-                    "locator_id": f"manifold-repair-steps:{room_index}",
-                    "trace": trace_path.relative_to(output_dir).as_posix(),
-                    "stop_reason": stop_reason,
-                    "step_count": len(viewer_trace["frames"]),
-                    "frame_count": len(viewer_trace["frames"]),
-                    "initial_counts": viewer_trace["frames"][0]["counts"],
-                    "final_counts": viewer_trace["frames"][-1]["counts"],
-                    "coherence_ok": repair_summary.get("coherence_ok"),
-                    "roof_clip_clipped": repair_summary.get("roof_clip_clipped"),
-                    "fillers_applied": repair_summary.get("fillers_applied"),
-                    "story": viewer_trace.get("story"),
-                }
-            )
+            record: dict[str, Any] = {
+                "uuid": uuid,
+                "room_index": room_index,
+                "part_index": room_index,
+                "locator_id": f"manifold-repair-steps:{room_index}",
+                "trace": trace_path.relative_to(output_dir).as_posix(),
+                "stop_reason": stop_reason,
+                "step_count": len(viewer_trace["frames"]),
+                "frame_count": len(viewer_trace["frames"]),
+                "initial_counts": viewer_trace["frames"][0]["counts"],
+                "final_counts": viewer_trace["frames"][-1]["counts"],
+                "coherence_ok": repair_summary.get("coherence_ok"),
+                "roof_clip_clipped": repair_summary.get("roof_clip_clipped"),
+                "fillers_applied": repair_summary.get("fillers_applied"),
+                "story": viewer_trace.get("story"),
+                "room_source": room_source,
+            }
+            if use_segment_tier:
+                record["segment_room_locator_id"] = room.get("locator_id")
+                seg_graph = trace_payload.get("segment_room_graph") or {}
+                seg_node = next(
+                    (
+                        n
+                        for n in seg_graph.get("nodes") or []
+                        if n.get("id") == room.get("locator_id")
+                    ),
+                    None,
+                )
+                if seg_node:
+                    record["segment_room_area_m2"] = seg_node.get("area_m2")
+                    record["floor_area_m2"] = seg_node.get("floor_area_m2")
+            records.append(record)
 
     index = {
         "schema_version": 1,
@@ -678,6 +725,9 @@ def export_manifold_repair_steps_traces(
             "corner_tol": corner_tol,
             "coord_tol": coord_tol,
             "snap_tol": snap_tol,
+            "room_source": room_source,
+            "segment_corner_tol": segment_corner_tol,
+            "segment_adjacency_tol": segment_adjacency_tol,
         },
         "summary": {
             "buildings": len(payload_paths),
@@ -1394,6 +1444,27 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--time-budget-seconds", type=float, default=0.5)
     parser.add_argument("--max-intersections", type=int, default=10_000)
     parser.add_argument("--max-candidates", type=int, default=500)
+    parser.add_argument(
+        "--room-source",
+        choices=("tier", "segment-tier"),
+        default="segment-tier",
+        help=(
+            "Room list for manifold-repair-steps: original tier_payload rooms "
+            "(tier) or segment cycles with tier scan geometry (segment-tier)."
+        ),
+    )
+    parser.add_argument(
+        "--segment-corner-tol",
+        type=float,
+        default=0.05,
+        help="Corner tol for segment-room detection (room postprocessing).",
+    )
+    parser.add_argument(
+        "--segment-adjacency-tol",
+        type=float,
+        default=0.5,
+        help="Adjacency tol for segment-room detection (room postprocessing).",
+    )
     args = parser.parse_args(argv)
 
     if args.domain in ("envelope", "envelope-cell-selector"):
@@ -1431,6 +1502,9 @@ def main(argv: list[str] | None = None) -> int:
             max_buildings=args.max_buildings,
             corner_tol=args.corner_tol,
             coord_tol=args.coord_tol,
+            room_source=args.room_source,
+            segment_corner_tol=args.segment_corner_tol,
+            segment_adjacency_tol=args.segment_adjacency_tol,
         )
     elif args.domain == "manifold-repair-building":
         index = export_manifold_repair_building_traces(

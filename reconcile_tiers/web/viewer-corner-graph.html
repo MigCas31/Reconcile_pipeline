@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Corner-sharing graph</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./viewer-corner-graph.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+        "cytoscape": "https://cdn.jsdelivr.net/npm/cytoscape@3.30.2/dist/cytoscape.esm.mjs"
+      }
+    }
+  </script>
+</head>
+<body>
+  <aside id="sidebar">
+    <header>
+      <h1>Corner graph</h1>
+      <input id="search" placeholder="UUID" autocomplete="off">
+      <div id="sidebar-stats">Loading buildings…</div>
+    </header>
+    <div id="building-list"></div>
+  </aside>
+  <section id="workspace">
+    <div id="top-bar">
+      <button class="icon-btn" id="prev-building" title="Previous building">↑</button>
+      <button class="icon-btn" id="next-building" title="Next building">↓</button>
+      <div id="current">
+        <div id="current-title">Select a building</div>
+        <div id="current-meta"></div>
+      </div>
+      <a id="open-tiers" class="link-btn" href="#" target="_blank" rel="noreferrer">Tiers</a>
+    </div>
+    <div id="panes">
+      <div id="viewport3d">
+        <canvas id="view3d"></canvas>
+        <div id="status3d">Loading…</div>
+      </div>
+      <div id="graphPane">
+        <div id="graph-toolbar" role="group" aria-label="Graph view">
+          <label class="graph-mode">
+            <input type="radio" name="graph-mode" value="all" checked>
+            All elements
+          </label>
+          <label class="graph-mode">
+            <input type="radio" name="graph-mode" value="walls">
+            Walls only
+          </label>
+          <label class="graph-mode">
+            <input type="radio" name="graph-mode" value="segments">
+            Wall segments
+          </label>
+          <label class="graph-mode">
+            <input type="radio" name="graph-mode" value="rooms">
+            Rooms (cycles)
+          </label>
+        </div>
+        <div id="graphPanel"></div>
+      </div>
+    </div>
+  </section>
+  <script type="module" src="./viewer-corner-graph-main.js"></script>
+</body>
+</html>

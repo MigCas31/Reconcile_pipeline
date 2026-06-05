@@ -46,6 +46,7 @@ __all__ = [
     "extract_hole_chains",
     "hypothesise_fillers",
     "hypothesise_neighbor_plane_extension_fillers",
+    "hypothesise_original_tile_fillers",
     "hypothesise_single_face_fillers",
     "prepare_room_tiles",
     "repair_room",
@@ -983,6 +984,8 @@ def _find_closed_chain(
 # Increment 3: filler hypothesis + ILP picking
 # ---------------------------------------------------------------------------
 
+CEILING_TILE_SOURCES = frozenset({"ceiling", "visual_shell", "gable_closure"})
+
 
 @dataclass(frozen=True, slots=True)
 class FillerCandidate:
@@ -1009,6 +1012,89 @@ class FillerSelection:
     unfilled_hole_ids: list[int] = field(default_factory=list)
     objective: float = 0.0
     solver_status: str = "not_solved"
+
+
+def _filler_from_plane_on_hole(
+    *,
+    hole_id: int,
+    coords: Sequence[tuple[float, float, float]],
+    plane: Plane,
+    face_id: int,
+    derivation: str,
+) -> FillerCandidate | None:
+    """Project a hole vertex ring onto ``plane``; return None if degenerate."""
+    if len(coords) < 3:
+        return None
+    snapped = tuple(_project_onto_plane(c, plane) for c in coords)
+    snapped = tuple(reversed(snapped))
+    area = _polygon_area_3d(snapped)
+    if area <= 1e-9:
+        return None
+    return FillerCandidate(
+        face_id=face_id,
+        parent_hole_id=hole_id,
+        corners=snapped,
+        plane=plane,
+        derivation=derivation,
+        area=float(area),
+    )
+
+
+def _catalog_tiles_by_locator(
+    all_tiles: Sequence[TileFace],
+    skipped_tiles: Sequence[tuple[TileFace, str]] = (),
+) -> dict[str, TileFace]:
+    """Deduplicate input tiles by ``locator_id`` (skipped entries win)."""
+    catalog: dict[str, TileFace] = {tile.locator_id: tile for tile in all_tiles}
+    for tile, _reason in skipped_tiles:
+        catalog[tile.locator_id] = tile
+    return catalog
+
+
+def _ceiling_tiles_lost_before_build(
+    *,
+    tiles_raw: Sequence[TileFace],
+    tiles_clipped: Sequence[TileFace],
+    build_tiles: Sequence[TileFace],
+) -> list[TileFace]:
+    """Ceiling tiles dropped by roof XZ clip or connectivity filter before build.
+
+    For trace diagnostics only — not used as filler candidates.
+    """
+    in_build = {
+        tile.locator_id
+        for tile in build_tiles
+        if tile.source in CEILING_TILE_SOURCES
+    }
+    out: dict[str, TileFace] = {}
+    for tile in tiles_clipped:
+        if tile.source not in CEILING_TILE_SOURCES:
+            continue
+        if tile.locator_id in in_build:
+            continue
+        out[tile.locator_id] = tile
+    for tile in tiles_raw:
+        if tile.source not in CEILING_TILE_SOURCES:
+            continue
+        if tile.locator_id in in_build:
+            continue
+        out.setdefault(tile.locator_id, tile)
+    return list(out.values())
+
+
+def _filler_ceiling_catalog(
+    all_tiles: Sequence[TileFace],
+    skipped_tiles: Sequence[tuple[TileFace, str]],
+) -> list[TileFace]:
+    """Ceiling tiles from the mesh input and build skips (not clip/filter drops)."""
+    catalog: dict[str, TileFace] = {}
+    for tile in all_tiles:
+        if tile.source in CEILING_TILE_SOURCES:
+            catalog[tile.locator_id] = tile
+    for tile, _reason in skipped_tiles:
+        if tile.source in CEILING_TILE_SOURCES:
+            catalog[tile.locator_id] = tile
+    return list(catalog.values())
 
 
 def hypothesise_single_face_fillers(
@@ -1054,11 +1140,46 @@ def hypothesise_single_face_fillers(
     return out
 
 
+def hypothesise_original_tile_fillers(
+    build: RoomPolyhedronBuild,
+    extraction: HoleChainExtraction,
+    *,
+    first_face_id: int,
+    all_tiles: Sequence[TileFace],
+    skipped_tiles: Sequence[tuple[TileFace, str]] = (),
+) -> list[FillerCandidate]:
+    """tier_payload ceiling tiles as filler candidates per hole.
+
+    Includes tiles that failed half-edge insertion (``skipped_tiles``).
+    Ceilings removed by roof XZ clip or connectivity filter are ignored.
+    """
+    catalog = _filler_ceiling_catalog(all_tiles, skipped_tiles)
+    out: list[FillerCandidate] = []
+    next_id = first_face_id
+    for hole_id, chain in enumerate(extraction.closed_chains):
+        coords = [build.vertex_coords[vid] for vid in chain.vertex_ids]
+        for tile in catalog:
+            cand = _filler_from_plane_on_hole(
+                hole_id=hole_id,
+                coords=coords,
+                plane=tile.plane,
+                face_id=next_id,
+                derivation=f"original_tile:{tile.locator_id}",
+            )
+            if cand is None:
+                continue
+            out.append(cand)
+            next_id += 1
+    return out
+
+
 def hypothesise_neighbor_plane_extension_fillers(
     build: RoomPolyhedronBuild,
     extraction: HoleChainExtraction,
     *,
     first_face_id: int,
+    all_tiles: Sequence[TileFace] | None = None,
+    skipped_tiles: Sequence[tuple[TileFace, str]] = (),
 ) -> list[FillerCandidate]:
     """Neighbor-plane-extension candidates per closed hole chain.
 
@@ -1067,38 +1188,46 @@ def hypothesise_neighbor_plane_extension_fillers(
     that face's plane. The corners are the chain's vertex ring projected
     onto the chosen plane.
 
+    When ``all_tiles`` is provided, also emit hypotheses from every
+    non-ceiling input tile plane (walls/floors). Ceiling planes are
+    handled by ``hypothesise_original_tile_fillers``.
+
     These hypotheses produce fillers that are coplanar with an
     existing tile — a wall-floor seam hole gets a filler at the floor's
     plane (visually merges into the floor), or at the wall's plane
     (visually merges into the wall). The ILP picks based on energy.
     """
+    input_planes: dict[str, Plane] = {}
+    if all_tiles is not None:
+        for tile in _catalog_tiles_by_locator(all_tiles, skipped_tiles).values():
+            if tile.source in CEILING_TILE_SOURCES:
+                continue
+            input_planes[f"input_tile:{tile.locator_id}"] = tile.plane
+
     out: list[FillerCandidate] = []
     next_id = first_face_id
     for hole_id, chain in enumerate(extraction.closed_chains):
         coords = [build.vertex_coords[vid] for vid in chain.vertex_ids]
         if len(coords) < 3:
             continue
-        neighbor_planes: dict[int, Plane] = {}
+        plane_by_derivation: dict[str, Plane] = dict(input_planes)
         for he in chain.half_edges:
             if he.face is None:
                 continue
-            neighbor_planes.setdefault(he.face.id, he.face.plane)
-        for face_id, plane in neighbor_planes.items():
-            snapped = tuple(_project_onto_plane(c, plane) for c in coords)
-            snapped = tuple(reversed(snapped))
-            area = _polygon_area_3d(snapped)
-            if area <= 1e-9:
-                continue
-            out.append(
-                FillerCandidate(
-                    face_id=next_id,
-                    parent_hole_id=hole_id,
-                    corners=snapped,
-                    plane=plane,
-                    derivation=f"neighbor_extension:face_{face_id}",
-                    area=float(area),
-                )
+            plane_by_derivation[f"neighbor_extension:face_{he.face.id}"] = (
+                he.face.plane
             )
+        for derivation, plane in plane_by_derivation.items():
+            cand = _filler_from_plane_on_hole(
+                hole_id=hole_id,
+                coords=coords,
+                plane=plane,
+                face_id=next_id,
+                derivation=derivation,
+            )
+            if cand is None:
+                continue
+            out.append(cand)
             next_id += 1
     return out
 
@@ -1108,17 +1237,37 @@ def hypothesise_fillers(
     extraction: HoleChainExtraction,
     *,
     first_face_id: int,
+    all_tiles: Sequence[TileFace] | None = None,
+    skipped_tiles: Sequence[tuple[TileFace, str]] = (),
 ) -> list[FillerCandidate]:
-    """Generate the union of single-face + neighbor-plane-extension
-    candidates per hole. The ILP picks exactly one per hole."""
+    """Generate filler candidates per hole for the ILP.
+
+    Union of best-fit plane, tier_payload ceiling tiles on the mesh (plus
+    build skips), and neighbor / input-tile plane extensions. Tiles removed
+    before build (roof clip, connectivity filter) are not candidates.
+    """
     single = hypothesise_single_face_fillers(
         build, extraction, first_face_id=first_face_id
     )
     next_id = first_face_id + len(single)
+    original: list[FillerCandidate] = []
+    if all_tiles is not None:
+        original = hypothesise_original_tile_fillers(
+            build,
+            extraction,
+            first_face_id=next_id,
+            all_tiles=all_tiles,
+            skipped_tiles=skipped_tiles,
+        )
+        next_id += len(original)
     neighbour = hypothesise_neighbor_plane_extension_fillers(
-        build, extraction, first_face_id=next_id
+        build,
+        extraction,
+        first_face_id=next_id,
+        all_tiles=all_tiles,
+        skipped_tiles=skipped_tiles,
     )
-    return single + neighbour
+    return single + original + neighbour
 
 
 def select_fillers(
@@ -1169,12 +1318,16 @@ def select_fillers(
         lambda_f, _lambda_m, lambda_c = weights
         residual = cand_residual(cand)
         area_norm = cand.area / total_area if total_area > 0 else 0.0
-        # Strong bias for neighbour-plane: reuses an existing plane (no
-        # new face plane introduced), which the Geniet edit-loop and
-        # downstream consumers prefer.
-        complexity_bonus = (
-            0.0 if cand.derivation.startswith("neighbor_extension") else 1.0
-        )
+        # Prefer reusing tier_payload / mesh planes over synthesising a
+        # new best-fit plane.
+        if cand.derivation.startswith("original_tile:"):
+            complexity_bonus = 0.0
+        elif cand.derivation.startswith(
+            ("neighbor_extension", "input_tile:", "skipped_tile:")
+        ):
+            complexity_bonus = 0.15
+        else:
+            complexity_bonus = 1.0
         return (
             float(lambda_f) * residual
             + float(lambda_c) * area_norm
@@ -1466,20 +1619,21 @@ def repair_room(
     """
     story = room.get("story")
     room_idx = _room_index(room)
-    tiles = collect_room_tiles(payload, room, corner_tol=corner_tol)
-    if len(tiles) >= 4:
+    tiles_raw = collect_room_tiles(payload, room, corner_tol=corner_tol)
+    tiles = tiles_raw
+    if len(tiles_raw) >= 4:
         from reconcile_tiers.polyhedron.roof_xz_clip import clip_roof_tiles_to_floor_xz
         from reconcile_tiers.polyhedron.tile_coherence import (
             filter_unconnected_ceiling_tiles,
         )
 
-        clip = clip_roof_tiles_to_floor_xz(tiles)
-        tiles = list(clip.tiles)
-        tiles, _dropped = filter_unconnected_ceiling_tiles(
-            tiles, corner_tol=corner_tol
+        clip = clip_roof_tiles_to_floor_xz(tiles_raw)
+        tiles_clipped = list(clip.tiles)
+        tiles_filtered, _dropped = filter_unconnected_ceiling_tiles(
+            tiles_clipped, corner_tol=corner_tol
         )
         tiles = prepare_room_tiles(
-            tiles,
+            tiles_filtered,
             coord_tol=coord_tol,
             snap_tol=corner_tol,
             merge_coplanar=True,
@@ -1504,7 +1658,11 @@ def repair_room(
     extraction = extract_hole_chains(build)
     next_face_id = max((f.id for f in build.poly.faces), default=-1) + 1
     fillers = hypothesise_fillers(
-        build, extraction, first_face_id=next_face_id
+        build,
+        extraction,
+        first_face_id=next_face_id,
+        all_tiles=tiles,
+        skipped_tiles=build.skipped_tiles,
     )
     selection = select_fillers(build, extraction, fillers)
     fillers_applied = apply_fillers(build, extraction, selection.selected)

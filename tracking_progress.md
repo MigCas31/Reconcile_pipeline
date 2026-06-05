@@ -15351,3 +15351,112 @@ The previous full-building metric and viewer treated all support domains as requ
 - **What changed**: `filter_unconnected_ceiling_tiles` in `tile_coherence.py` now keeps a ceiling when it meets wall tops **or** shares a polygon edge (corner_tol) with another ceiling that is transitively wall-anchored. Tests in `test_tile_coherence.py` cover oblique+flat hybrid and ceiling-only islands.
 - **Why**: Hybrid rooms dropped oblique/flat lids that visually met each other and walls but only the flat piece passed per-tile `ceiling_connects_to_walls`; sloped tiles attached to an anchored flat were removed at step 4.
 - **Result**: 6/6 `test_tile_coherence.py` pass. Re-export `manifold-repair-steps` traces to see frame 4 retain chained ceilings.
+
+## 2026-05-24 - Original ceiling tiles as filler candidates
+- **What changed**: `manifold_repair.py` — added `hypothesise_original_tile_fillers` (tier_payload `ceiling` / `visual_shell` / `gable_closure` tiles, including `build.skipped_tiles`) and extended `hypothesise_neighbor_plane_extension_fillers` with `all_tiles` for wall/floor planes (`input_tile:` derivations). `hypothesise_fillers`, `repair_room`, and `manifold_repair_trace` pass the merged tile list + skipped tiles into the ILP pool. ILP scoring prefers `original_tile:` over `best_fit_plane`. Test `test_hypothesise_fillers_includes_original_ceiling_tiles`.
+- **Why**: Ceiling tiles visible at step 4 but skipped at half-edge build were never offered to the filler ILP — holes were patched only with synthetic best-fit / mesh-neighbor planes, not scan ceilings.
+- **Result**: 23/23 `test_manifold_repair.py` pass. Re-export `manifold-repair-steps` traces to see `original_tile:` candidates at frame 7.
+
+## 2026-05-24 - Filler catalog: ceilings dropped at clip/filter (step 4)
+- **What changed**: `manifold_repair.py` — `_ceiling_tiles_lost_before_build` collects ceiling tiles present in `tiles_raw` / `tiles_clipped` but absent from build input; `_filler_ceiling_catalog` merges them with mesh + `skipped_tiles` for `hypothesise_original_tile_fillers`. `hypothesise_fillers(..., pre_filter_ceilings=...)`; `repair_room` and `manifold_repair_trace` pass the catalog. Tests `test_ceiling_tiles_lost_before_build_includes_filter_drops`, `test_hypothesise_fillers_includes_filter_dropped_ceiling`.
+- **Why**: Step-4 `filter_unconnected_ceiling_tiles` and roof XZ clip removed scan ceilings from `all_tiles` before hypothesising — only half-edge `skipped_tiles` were recovered, not filter/clip drops.
+- **Result**: 25/25 `test_manifold_repair.py` pass. Re-export traces to pick up filter-dropped ceilings as `original_tile:` at frame 7.
+
+## 2026-05-24 - Corner-sharing graph viewer (room_postprocessing)
+- **What changed**:
+  - `reconcile_tiers/room_postprocessing/` — `flatten_tier_payload`, `cluster_element_corners`, `element_adjacency_pairs`, `isolated_wall_edges`, `build_corner_graph` export.
+  - `reconcile_tiers/server.py` — `GET /room-postprocessing/graph?uuid=&corner_tol=`; redirect `/viewer-corner-graph.html`.
+  - `reconcile_tiers/web/viewer-corner-graph.{html,css,main.js}` — dual-pane Three.js + Cytoscape; graph node click highlights element; isolated wall edges in magenta.
+  - `tests/reconcile_tiers/room_postprocessing/test_corner_graph.py`; cheatsheet entry.
+- **Why**: Per-room mental model hides building-wide corner connectivity; need to see which elements share corners and which wall rim segments are geometrically isolated before room repair work.
+- **Result**: 3/3 `test_corner_graph.py` pass. Open tier server → `viewer-corner-graph.html?uuid=<uuid>` to verify shared-corner walls connect in the graph and floating walls show degree 0 + magenta edges.
+
+## 2026-05-24 - Corner graph: exclude ceilings from flatten input
+- **What changed**: `flatten_tier_payload` no longer appends `tier_payload.ceiling[]`; test renamed to assert ceilings are omitted.
+- **Why**: Ceiling tiles add corner links at wall tops that obscure floor–wall shell connectivity for this diagnostic step.
+- **Result**: 3/3 `test_corner_graph.py` pass.
+
+## 2026-05-24 - Corner graph viewer: wall-only graph + toggle
+- **What changed**: API `wall_graph` (walls as nodes, wall–wall corner adjacency only); viewer toolbar toggles All elements / Walls only; selection neighbors follow active graph.
+- **Why**: Floor/shell links obscure wall–wall connectivity; wall-only view is the diagnostic for shared corners between walls.
+- **Result**: 4/4 `test_corner_graph.py` pass.
+
+## 2026-06-04 - Corner graph: wide adjacency_tol (wall-thickness junctions)
+- **What changed**: `approx_element_adjacency_pairs` + `merge_adjacency_pairs` in `corner_graph.py` (default `adjacency_tol=0.5` m); graph edges = strict 5 cm clusters ∪ near-corner pairs for all element kinds; API/viewer param; tests for three-wall near-miss.
+- **Why**: Scan walls stop short at junctions (~0.25 m/side); strict clustering left physically connected walls (e.g. orange vs green/blue) disconnected in the graph.
+- **Result**: 6/6 `room_postprocessing` tests pass. Reload corner-graph viewer — junction walls should share one connected component.
+
+## 2026-06-04 - Corner graph: wall vertical-segment graph
+- **What changed**: `wall_segment_graph.py` — nodes = vertical wall edges; edges = strict corner clusters + `adjacency_tol` approx + intra-wall pairs. API `wall_segment_graph`; viewer third mode “Wall segments” with per-segment 3D line highlight.
+- **Why**: Junction diagnostics need segment-level links when corners do not touch within 5 cm but are within wall thickness (~0.5 m).
+- **Result**: 9/9 `room_postprocessing` tests pass.
+
+## 2026-06-04 - Segment graph: room cycles + viewer mode
+- **What changed**: `segment_room_cycles.py` — per-story bounded faces on junction graph (wall-span edges between approx groups); API `segment_room_graph`; `wall_junction_split.py` splits walls through multi-wall junctions. Viewer fourth mode “Rooms (cycles)” — click room highlights boundary walls, segment cylinders, floor XZ loop; room adjacency in Cytoscape.
+- **Why**: Enclosed rooms should appear as cycles in the segment graph; walls crossing junctions must split so corners share junction segments.
+- **Result**: 13/13 `room_postprocessing` tests pass.
+
+## 2026-06-04 - Approx segment groups scoped per storey
+- **What changed**: `_approx_segment_pairs` in `wall_segment_graph.py` only links segments with the same `story`; test `test_approx_groups_do_not_merge_across_stories`.
+- **Why**: Vertically stacked junction segments (same XZ, within `adjacency_tol` in 3D) were merged into one approx group across floors.
+- **Result**: 14/14 `room_postprocessing` tests pass.
+
+## 2026-06-04 - Segment graph orphan groups (no room cycle)
+- **What changed**: `segment_room_cycles.py` — discovery pass marks groups on bounded faces; room graph built only from participating groups; `annotate_orphan_segment_groups` sets `orphan` / `in_room_cycle` on `wall_segment_graph` nodes. Viewer: red Cytoscape nodes for orphans in Wall segments mode.
+- **Why**: Dead-end / open junction groups are not part of any room cycle but should remain visible and excluded from room detection.
+- **Result**: 15/15 `room_postprocessing` tests pass.
+
+## 2026-05-24 - Segment rooms: one representative segment per group per incident wall
+- **What changed**: `segment_group_representative.py` — `representative_segments_for_cycle()` picks one segment per wall that appears on a cycle span edge at that group (bottom endpoint nearest junction XZ). `segment_room_cycles.py` sets `segment_ids`, `wall_ids`, `representative_by_group` from that step. Tests `test_segment_group_representative.py`.
+- **Why**: Approx groups can merge segments from many walls; rooms and polyhedron input should only use the wall(s) that bound the room at that junction, not every wall in the cluster.
+- **Result**: room_postprocessing + polyhedron segment trace tests pass.
+
+## 2026-05-24 - Manifold repair: ignore removed tiles as filler candidates
+- **What changed**: `manifold_repair.py` — `_filler_ceiling_catalog` / `hypothesise_original_tile_fillers` / `hypothesise_fillers` no longer take `pre_filter_ceilings` (roof XZ clip + connectivity drops). `_ceiling_tiles_lost_before_build` kept for trace diagnostics only. Test renamed `test_hypothesise_fillers_ignores_filter_dropped_ceiling`.
+- **Why**: Tiles deliberately removed before the half-edge build should not re-enter as `original_tile` filler hypotheses.
+- **Result**: 25/25 `test_manifold_repair.py` pass.
+
+## 2026-05-24 - Segment rooms as polyhedron trace input (manifold-repair-steps)
+- **What changed**: `segment_room_payload.py` — `build_segment_room_tier_payload()` (post-split walls + clipped floor → tier-shaped `rooms[]`). `corpus_trace_export.export_manifold_repair_steps_traces` defaults to `--room-source segment`, writes `tier_payload_segment_rooms.json` per building, traces one room per segment cycle. CLI: `--room-source`, `--segment-corner-tol`, `--segment-adjacency-tol`. Tests `test_segment_room_payload.py`, `test_segment_room_trace_export.py`.
+- **Why**: Polyhedron manifold repair should run on wall-delineated segment rooms from the corner-graph pipeline, not raw tier_payload room groupings.
+- **Result**: 23/23 room_postprocessing + segment trace export tests pass.
+
+## 2026-05-24 - Room highlight: floor clipped to wall delineation
+- **What changed**: `room_floor_clip.py` — `floor_polygon_xz` / `floor_area_m2` per room (scan floor ∩ room cycle polygon); `export.py` wires it. Corner-graph viewer: translucent green floor fill + gold outline + scan floor meshes inside polygon highlighted. Test `test_room_floor_polygon_clipped_to_wall_delineation`.
+- **Why**: Room selection should show the floor area inside the wall-bounded cycle, not only walls/segments.
+- **Result**: 18/18 `room_postprocessing` tests pass.
+
+## 2026-05-24 - Orphan segment groups: junction-graph leaves (dead ends)
+- **What changed**: `segment_room_cycles.py` — orphan if not in room cycle **or** junction degree ≤ 1 (dead-end stub); leaf groups excluded from room-cycle participation; `junction_degree` on segment graph nodes. Test `test_dead_end_stub_group_is_orphan`.
+- **Why**: A stub wall’s free-end group can sit on a spurious planar face and stay blue in the viewer even though it only has one graph edge and cannot close a room loop.
+- **Result**: 17/17 `room_postprocessing` tests pass.
+
+## 2026-05-24 - Remove --room-source segment (synthesized shell export path)
+- **What changed**: `corpus_trace_export.export_manifold_repair_steps_traces` — dropped `segment` CLI choice and `build_segment_room_tier_payload` wiring; only `tier` and `segment-tier` remain (default `segment-tier`). Removed `test_manifold_steps_export_segment_rooms`; updated cheatsheet.
+- **Why**: Synthesized half-closed shell mode caused watertightness regressions; segment-tier supersedes it for polyhedron input.
+- **Result**: trace export tests pass. `segment_room_payload.py` retained for unit tests only.
+
+## 2026-05-24 - room-source segment-tier (cycle classification + tier geometry)
+- **What changed**: `segment_tier_room_payload.py` — `build_segment_tier_room_payload()` detects segment-room cycles via `build_corner_graph`, assigns verbatim tier `walls`/`floor`/`doors`/`windows` by rim-on-boundary + `wall_ids` hints and floor XZ overlap. `corpus_trace_export` adds `--room-source segment-tier` (new default), writes `tier_payload_segment_tier_rooms.json`. Tests `test_segment_tier_room_payload.py`, `test_manifold_steps_export_segment_tier_rooms`.
+- **Why**: Segment cycles improve room membership; synthesized `build_half_closed_room_shell` geometry broke watertightness with tier ceilings. segment-tier keeps tier scan meshes, only re-groups elements per cycle.
+- **Result**: room_postprocessing + segment trace export tests pass.
+
+## 2026-05-24 - Segment shell: keep building ceilings in polyhedron input
+- **What changed**: Reverted clearing `ceiling` / `visual_shells` / `gable_closures` in `build_segment_room_tier_payload` and the early return in `collect_room_tiles` that skipped ceiling collection. Half-closed floor+wall room geometry unchanged. Test renamed `test_segment_payload_preserves_building_ceilings`.
+- **Why**: User wants ceiling and sloped ceiling (visual shell) tiles to remain in the final segment-room polyhedron input, not only the open-top wall shell.
+- **Result**: room_postprocessing tests pass.
+
+## 2026-05-24 - Half-closed segment-room shell for polyhedron input
+- **What changed**: `room_shell_closure.py` — floor ring and wall quads share exact cycle-junction coordinates; per-junction top Y from representative segments (open top). `segment_room_payload.py` uses shell builder; clears `ceiling` / `visual_shells` / `gable_closures`; sets `room_postprocessing_source.shell = half_closed_floor_walls`. `manifold_repair.collect_room_tiles` skips building ceilings when that shell flag is set. Tests `test_room_shell_closure.py`, updates `test_segment_room_payload.py`.
+- **Why**: Polyhedron trace input showed gaps between floor, walls, and unwanted sloped ceiling tiles; manifold needs a touching floor+wall shell without roof faces.
+- **Result**: room_postprocessing + segment trace export tests pass.
+
+## 2026-05-24 - Segment-room polyhedron input: perimeter walls, no double tiles
+- **What changed**: `segment_group_representative.py` — `perimeter_sides_for_cycle()`, `dedupe_perimeter_sides_by_base()`, `wall_dict_from_perimeter_side()` (junction-to-junction quads from segment endpoints). `segment_room_cycles.py` stores `perimeter_sides` and base `wall_ids` (one per physical wall). `segment_room_payload.py` builds tier `rooms[].walls` from perimeter sides, not full post-split scan quads; `_wall_element_for_id` resolves split pieces for floor Y. Tests in `test_segment_group_representative.py`, `test_segment_room_payload.py`.
+- **Why**: Representative segments fixed graph references but polyhedron trace input still emitted one full wall mesh per split piece (`w-long::split::0` + `::split::1`), causing overlapping double walls in the viewer.
+- **Result**: 28/28 room_postprocessing + segment trace export tests pass.
+
+## 2026-05-24 - Near-segment wall split (segment close to passing wall)
+- **What changed**: `wall_near_segment_split.py` — when a vertical segment endpoint is within `adjacency_tol` of another wall's **floor rim** (XZ projection), insert a corner on that wall via `_find_horizontal_splits` / `_apply_wall_splits`. Anchors use rim-projected 3D points; skip targets that already have a corner or vertical segment at the site (XZ); only unsplit walls (`::split::` not in id). `wall_junction_split.py`: `_wall_has_corner_near_xz`, `_apply_wall_splits` uses `corner_tol` for rim distance. Wired in `export.py` after approx junction split. Test `test_wall_near_segment_split.py`.
+- **Why**: A junction wall can have a vertical segment while a crossing wall has no corner there — room/segment graph needs the passing wall split so a vertical edge links the two sub-meshes.
+- **Result**: 16/16 `room_postprocessing` tests pass.

@@ -16,6 +16,7 @@ from reconcile_tiers.polyhedron.manifold_repair import (
     FillerCandidate,
     RoomPolyhedronBuild,
     TileFace,
+    _ceiling_tiles_lost_before_build,
     apply_fillers,
     build_room_polyhedron,
     collect_room_tiles,
@@ -312,6 +313,11 @@ def build_manifold_repair_room_trace(
     tiles_merged = prepare_room_tiles(
         tiles_filtered, coord_tol=coord_tol, snap_tol=snap_tol, merge_coplanar=True
     )
+    pre_filter_ceilings = _ceiling_tiles_lost_before_build(
+        tiles_raw=tiles_raw,
+        tiles_clipped=tiles_clipped,
+        build_tiles=tiles_merged,
+    )
     frames.append(
         _pipeline_frame(
             4,
@@ -361,7 +367,13 @@ def build_manifold_repair_room_trace(
     )
 
     next_face_id = max((f.id for f in build.poly.faces), default=-1) + 1
-    fillers = hypothesise_fillers(build, extraction, first_face_id=next_face_id)
+    fillers = hypothesise_fillers(
+        build,
+        extraction,
+        first_face_id=next_face_id,
+        all_tiles=tiles_merged,
+        skipped_tiles=build.skipped_tiles,
+    )
     selection = select_fillers(build, extraction, fillers)
 
     frames.append(
