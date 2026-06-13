@@ -583,8 +583,9 @@ function updateGraphMeta() {
         ? `walls ${wallN} nodes · ${wallE} edges`
         : `all ${allN} nodes · ${allE} edges`;
   const adj = graphData.adjacency_tol ?? 0.5;
+  const bridge = graphData.leaf_bridge_gap ?? 0.75;
   currentMeta.textContent =
-    `${view} · corner ${graphData.corner_tol} m · adjacency ${adj} m`;
+    `${view} · corner ${graphData.corner_tol} m · adjacency ${adj} m · bridge ${bridge} m`;
 }
 
 function wallMatchesSet(meshId, wallIds) {
@@ -920,7 +921,7 @@ function clearSelection() {
 
 async function fetchGraph(uuid) {
   const url =
-    `${GRAPH_API}?uuid=${encodeURIComponent(uuid)}&corner_tol=0.05&adjacency_tol=0.5`;
+    `${GRAPH_API}?uuid=${encodeURIComponent(uuid)}&corner_tol=0.05&adjacency_tol=0.5&leaf_bridge_gap=0.75`;
   const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) {
     throw new Error(`Graph API ${response.status} for ${uuid}`);

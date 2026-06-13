@@ -15431,6 +15431,31 @@ The previous full-building metric and viewer treated all support domains as requ
 - **Why**: A stub wall’s free-end group can sit on a spurious planar face and stay blue in the viewer even though it only has one graph edge and cannot close a room loop.
 - **Result**: 17/17 `room_postprocessing` tests pass.
 
+## 2026-05-24 - Default leaf_bridge_gap 0.75 m (was adjacency_tol 0.5 m)
+- **What changed**: `corner_graph.py` — `DEFAULT_LEAF_BRIDGE_GAP_M = 0.75`. `wall_segment_graph` / `export` use it when `leaf_bridge_gap` omitted. Corner-graph API + viewer: `leaf_bridge_gap` query param (default 0.75). Cheatsheet updated.
+- **Why**: Near-miss stub endpoints can be >0.5 m apart in 3D while still visually closable; leaf bridge should reach slightly farther than approx merge without merging groups.
+- **Result**: room_postprocessing tests pass.
+
+## 2026-05-24 - Revert segment-tier wall selection to tier meshes
+- **What changed**: `segment_tier_room_payload.py` — restored wall assignment via `wall_ids` hints + `wall_on_cycle_boundary` with verbatim tier scan corners; `geometry_source` back to `"tier"`. `viewer-corner-graph-main.js` — room mode highlights full tier wall meshes by `wall_id` again (removed ephemeral `perimeter_wall_quads` overlay). Tests/cheatsheet reverted for tier wall corners.
+- **Why**: User preferred prior wall selection behavior (full tier meshes) over junction-spanning perimeter quads for segment-tier export and viewer highlight.
+- **Result**: room_postprocessing tests pass. Min-area representative picking and `perimeter_wall_quads` on graph nodes retained for other paths.
+
+## 2026-05-24 - Min-area representative segments and perimeter-only walls
+- **What changed**: `segment_group_representative.py` — `_side_quad_area`, `_pick_segment_pair_min_area`; perimeter sides pick min-area segment pairs per cycle edge; `representatives_from_perimeter_sides` derives segment ids from sides; `_merge_sides_for_base` keeps smallest-area side (was farthest junction pair). `segment_room_cycles.py` — `perimeter_wall_quads` on each `segment_room` node; `segment_ids` from perimeter sides only. `segment_tier_room_payload.py` — walls only from `perimeter_wall_quads`; `geometry_source` = `perimeter_walls` (floors still verbatim tier). `viewer-corner-graph-main.js` — ephemeral `roomWallHighlightGroup` from `perimeter_wall_quads`; room mode dims full building walls, no `wall_id` mesh highlight. Tests updated in `test_segment_group_representative.py`, `test_segment_tier_room_payload.py`, `test_segment_room_cycles.py`.
+- **Why**: Closest-to-junction representative picks and full tier wall meshes by `wall_id` caused yellow overhang past cycle corners; room boundary should be smallest junction-spanning quads per cycle side.
+- **Result**: 38/38 `room_postprocessing` tests pass.
+
+## 2026-05-24 - MCB room cycle detection (replaces CCW face walk)
+- **What changed**: `minimum_cycle_basis.py` — de Pina / Kavitha MCB (self-contained, no NetworkX). `segment_room_cycles.py` — room graph = wall span edges + `leaf_bridge` edges from `wall_segment_graph`; `build_segment_room_graph` uses MCB per story with geometric XZ edge weights, `_order_cycle_nodes`, min-area filter (no drop-largest — MCB basis cycles are rooms, not exterior). Removed CCW `_find_faces` / `_walk_face`. `segment_group_representative.py` — `leaf_bridge` perimeter sides via closest segments; excluded from `wall_ids`. `annotate_orphan_segment_groups`: `orphan = not in_cycle`. `export.py` passes `leaf_bridge_gap` to room graph builder. Tests `test_minimum_cycle_basis.py`, `test_near_miss_leaf_bridge_closes_room_cycle` (gap-square fixture).
+- **Why**: CCW planar walk fails on leaf-bridge chords and does not close near-miss gaps; MCB isolates shortest independent loops (individual rooms) without enumerating the exterior perimeter.
+- **Result**: 36/36 `room_postprocessing` tests pass.
+
+## 2026-05-24 - Leaf-bridge edges for degree-1 segment graph stubs
+- **What changed**: `wall_segment_graph.py` — `_leaf_bridge_segment_pairs()` / `_apply_leaf_bridges_to_group_graph()` add `leaf_bridge` group edges when a degree-1 approx group has an endpoint within `leaf_bridge_gap` of a foreign segment (without merging groups). `build_wall_segment_graph(..., leaf_bridge_gap=None)` defaults gap to `adjacency_tol`. `export.build_corner_graph` passes `leaf_bridge_gap` through. Test `test_leaf_bridge_connects_degree_one_group_when_gap_within_bridge_tol` on near-miss three-wall fixture.
+- **Why**: Scanned walls can end near another segment with no physical wall between them (dead-end stub); the segment graph should approximate that connection for viewer topology and junction degree, without forcing approx-group merge.
+- **Result**: 33/33 `room_postprocessing` tests pass. Leaf bridges are segment-graph only (not span edges for planar face walk — chords break CCW cycle detection).
+
 ## 2026-05-24 - Remove --room-source segment (synthesized shell export path)
 - **What changed**: `corpus_trace_export.export_manifold_repair_steps_traces` — dropped `segment` CLI choice and `build_segment_room_tier_payload` wiring; only `tier` and `segment-tier` remain (default `segment-tier`). Removed `test_manifold_steps_export_segment_rooms`; updated cheatsheet.
 - **Why**: Synthesized half-closed shell mode caused watertightness regressions; segment-tier supersedes it for polyhedron input.

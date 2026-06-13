@@ -6,11 +6,16 @@ import math
 from collections import defaultdict
 from typing import Any
 
+from reconcile_tiers.room_postprocessing.minimum_cycle_basis import (
+    minimum_cycle_basis,
+)
 from reconcile_tiers.room_postprocessing.segment_group_representative import (
     base_wall_id,
     perimeter_sides_for_cycle,
+    perimeter_wall_quads_for_sides,
     representative_segments_for_cycle,
 )
+
 
 def _segment_bottom_xz(seg: dict[str, Any]) -> tuple[float, float]:
     s = seg["start"]
@@ -102,7 +107,6 @@ def _wall_span_edges(
         if len(group_bottoms) < 2:
             continue
 
-        # Order groups along wall bottom using horizontal edge direction when possible
         ordered = _order_groups_on_wall(wall_segs, group_bottoms, corner_tol)
         for i in range(len(ordered) - 1):
             a, b = ordered[i], ordered[i + 1]
@@ -131,8 +135,6 @@ def _order_groups_on_wall(
     if len(points) <= 2:
         return [g for g, _ in sorted(points, key=lambda item: (item[1][0], item[1][1]))]
 
-    # Infer bottom rim direction from horizontal polygon edges on this wall
-    rim_dirs: list[tuple[float, float]] = []
     corners: list[tuple[float, float, float]] = []
     for seg in wall_segs:
         for key in ("start", "end"):
@@ -142,7 +144,6 @@ def _order_groups_on_wall(
     y_min = min(c[1] for c in corners)
     bottom = [(c[0], c[2]) for c in corners if abs(c[1] - y_min) <= corner_tol]
     if len(bottom) >= 2:
-        # Use farthest pair on bottom as axis
         best = 0.0
         axis_a, axis_b = bottom[0], bottom[1]
         for i in range(len(bottom)):
@@ -166,58 +167,92 @@ def _order_groups_on_wall(
     return [g for g, _ in sorted(points, key=lambda item: (item[1][0], item[1][1]))]
 
 
-def _angle(x: float, z: float) -> float:
-    return math.atan2(z, x)
+def _room_graph_edges(
+    span_edges: list[dict[str, Any]],
+    wall_segment_graph: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """Wall-span edges plus leaf-bridge group edges for room MCB."""
 
+    pair_seen: set[tuple[str, str]] = set()
+    out: list[dict[str, Any]] = []
 
-def _next_ccw_neighbor(
-    node: str,
-    prev: str,
-    neighbors: list[str],
-    positions: dict[str, tuple[float, float]],
-) -> str:
-    """Next neighbor clockwise around node when entering from prev."""
-
-    cx, cz = positions[node]
-    px, pz = positions[prev]
-    in_angle = _angle(px - cx, pz - cz)
-
-    best: str | None = None
-    best_delta = math.tau
-    for nxt in neighbors:
-        if nxt == prev:
+    for edge in span_edges:
+        a, b = edge["source"], edge["target"]
+        key = (min(a, b), max(a, b))
+        if key in pair_seen:
             continue
-        nx, nz = positions[nxt]
-        out_angle = _angle(nx - cx, nz - cz)
-        delta = (in_angle - out_angle) % math.tau
-        if 1e-9 < delta < best_delta:
-            best_delta = delta
-            best = nxt
-    if best is None:
-        raise ValueError(f"no ccw neighbor at {node} from {prev}")
-    return best
+        pair_seen.add(key)
+        out.append(dict(edge))
+
+    for edge in wall_segment_graph.get("edges") or []:
+        if edge.get("kind") != "leaf_bridge":
+            continue
+        a, b = edge["source"], edge["target"]
+        key = (min(a, b), max(a, b))
+        if key in pair_seen:
+            continue
+        pair_seen.add(key)
+        out.append(
+            {
+                "source": a,
+                "target": b,
+                "wall_id": "leaf_bridge",
+                "kind": "leaf_bridge",
+            }
+        )
+    return out
 
 
-def _walk_face(
-    start: str,
-    nxt: str,
-    adj: dict[str, list[str]],
+def _edge_weight(
+    a: str,
+    b: str,
     positions: dict[str, tuple[float, float]],
-) -> list[str] | None:
-    """Traverse one face from directed edge start→nxt; return vertex cycle or None."""
+) -> float:
+    pa = positions.get(a)
+    pb = positions.get(b)
+    if pa is None or pb is None:
+        return 1.0
+    return math.hypot(pb[0] - pa[0], pb[1] - pa[1])
 
-    path = [start, nxt]
-    prev, cur = start, nxt
-    for _ in range(len(adj) * 4):
-        neighbors = adj.get(cur, [])
-        if len(neighbors) < 2:
-            return None
-        nxt_node = _next_ccw_neighbor(cur, prev, neighbors, positions)
-        if nxt_node == start and len(path) >= 3:
-            return path
-        path.append(nxt_node)
-        prev, cur = cur, nxt_node
-    return None
+
+def _order_cycle_nodes(
+    cycle_nodes: list[str],
+    room_edges: list[dict[str, Any]],
+) -> list[str]:
+    """Order MCB cycle nodes into a closed walk along room-graph edges."""
+
+    node_set = set(cycle_nodes)
+    if len(node_set) < 3:
+        return list(cycle_nodes)
+
+    adj: dict[str, list[str]] = defaultdict(list)
+    for edge in room_edges:
+        a, b = edge["source"], edge["target"]
+        if a in node_set and b in node_set:
+            adj[a].append(b)
+            adj[b].append(a)
+
+    start = cycle_nodes[0]
+    if start not in adj or len(adj[start]) < 2:
+        for n in cycle_nodes:
+            if n in adj and len(adj[n]) >= 2:
+                start = n
+                break
+
+    ordered = [start]
+    prev: str | None = None
+    cur = start
+    for _ in range(len(node_set) + 1):
+        neighbors = [n for n in adj.get(cur, []) if n != prev]
+        if not neighbors:
+            break
+        nxt = neighbors[0]
+        if nxt == start and len(ordered) >= 3:
+            break
+        ordered.append(nxt)
+        prev, cur = cur, nxt
+
+    return ordered if len(ordered) >= 3 else list(cycle_nodes)
 
 
 def _polygon_area_xz(vertices: list[tuple[float, float]]) -> float:
@@ -230,77 +265,71 @@ def _polygon_area_xz(vertices: list[tuple[float, float]]) -> float:
     return abs(area) * 0.5
 
 
-def _find_faces(
+def _connected_components_from_edges(
     group_ids: list[str],
-    span_edges: list[dict[str, Any]],
-    positions: dict[str, tuple[float, float]],
-) -> list[list[str]]:
-    """Enumerate bounded face cycles via CCW planar walk."""
-
+    room_edges: list[dict[str, Any]],
+) -> list[set[str]]:
     adj: dict[str, list[str]] = defaultdict(list)
-    for edge in span_edges:
+    for edge in room_edges:
         a, b = edge["source"], edge["target"]
-        if a not in positions or b not in positions:
+        adj[a].append(b)
+        adj[b].append(a)
+
+    seen: set[str] = set()
+    components: list[set[str]] = []
+    for gid in group_ids:
+        if gid in seen:
             continue
-        if b not in adj[a]:
-            adj[a].append(b)
-        if a not in adj[b]:
-            adj[b].append(a)
-
-    for node in adj:
-        adj[node].sort(
-            key=lambda n: _angle(
-                positions[n][0] - positions[node][0],
-                positions[n][1] - positions[node][1],
-            ),
-        )
-
-    seen_directed: set[tuple[str, str]] = set()
-    faces: list[list[str]] = []
-
-    for edge in span_edges:
-        a, b = edge["source"], edge["target"]
-        if (a, b) in seen_directed:
-            continue
-        cycle = _walk_face(a, b, adj, positions)
-        if not cycle:
-            continue
-        for i in range(len(cycle)):
-            u = cycle[i]
-            v = cycle[(i + 1) % len(cycle)]
-            seen_directed.add((u, v))
-        faces.append(cycle)
-
-    return faces
+        comp: set[str] = set()
+        queue = [gid]
+        head = 0
+        while head < len(queue):
+            cur = queue[head]
+            head += 1
+            if cur in seen:
+                continue
+            seen.add(cur)
+            comp.add(cur)
+            for nxt in adj.get(cur, []):
+                if nxt not in seen:
+                    queue.append(nxt)
+        if comp:
+            components.append(comp)
+    return components
 
 
-def _filter_faces(
-    faces: list[list[str]],
+def _filter_mcb_cycles(
+    cycles: list[list[str]],
+    room_edges: list[dict[str, Any]],
     positions: dict[str, tuple[float, float]],
     min_room_area_m2: float,
 ) -> list[list[str]]:
-    if not faces:
-        return []
-    scored: list[tuple[float, list[str]]] = []
-    for cycle in faces:
-        if len(cycle) < 3:
+    """Order cycles, apply min-area filter, drop largest per connected component."""
+
+    components = _connected_components_from_edges(list(positions), room_edges)
+    comp_for_node: dict[str, int] = {}
+    for idx, comp in enumerate(components):
+        for n in comp:
+            comp_for_node[n] = idx
+
+    by_component: dict[int, list[tuple[float, list[str]]]] = defaultdict(list)
+    for cycle_nodes in cycles:
+        ordered = _order_cycle_nodes(cycle_nodes, room_edges)
+        if len(set(ordered)) < 3:
             continue
-        poly = [positions[g] for g in cycle if g in positions]
+        poly = [positions[g] for g in ordered if g in positions]
         if len(poly) < 3:
             continue
         area = _polygon_area_xz(poly)
         if area < min_room_area_m2:
             continue
-        scored.append((area, cycle))
+        comp_idx = comp_for_node.get(ordered[0], 0)
+        by_component[comp_idx].append((area, ordered))
 
-    if not scored:
-        return []
-
-    scored.sort(key=lambda item: item[0], reverse=True)
-    # Drop largest face (exterior)
-    if len(scored) > 1:
-        scored = scored[1:]
-    return [cycle for _, cycle in scored]
+    accepted: list[list[str]] = []
+    for scored in by_component.values():
+        accepted.extend(cycle for _, cycle in scored)
+    return accepted
 
 
 def _room_adjacency_edges(
@@ -331,31 +360,25 @@ def _room_adjacency_edges(
     return edges
 
 
-def _filter_span_edges_to_groups(
-    span_edges: list[dict[str, Any]],
+def _filter_edges_to_groups(
+    edges: list[dict[str, Any]],
     allowed: set[str],
 ) -> list[dict[str, Any]]:
     return [
         edge
-        for edge in span_edges
+        for edge in edges
         if edge["source"] in allowed and edge["target"] in allowed
     ]
 
 
-def _groups_in_bounded_faces(
-    group_ids: list[str],
-    span_edges: list[dict[str, Any]],
-    positions: dict[str, tuple[float, float]],
-    min_room_area_m2: float,
-) -> set[str]:
-    """Junction groups that appear on at least one bounded room face (discovery pass)."""
-
-    faces = _find_faces(group_ids, span_edges, positions)
-    faces = _filter_faces(faces, positions, min_room_area_m2)
-    in_cycle: set[str] = set()
-    for cycle in faces:
-        in_cycle.update(cycle)
-    return in_cycle
+def _physical_wall_ids(perimeter_sides: list[dict[str, Any]]) -> list[str]:
+    return sorted(
+        {
+            base_wall_id(str(s["wall_id"]))
+            for s in perimeter_sides
+            if s.get("wall_id") and s["wall_id"] != "leaf_bridge"
+        }
+    )
 
 
 def _junction_degrees(wall_segment_graph: dict[str, Any]) -> dict[str, int]:
@@ -376,21 +399,15 @@ def annotate_orphan_segment_groups(
     wall_segment_graph: dict[str, Any],
     groups_in_room_cycle: set[str],
 ) -> None:
-    """Mark approx groups not used in any room cycle (orphans) on segment graph nodes.
-
-    Groups with junction degree ≤ 1 are dead ends (stub walls): they cannot lie on a
-    closed room loop and are always orphans even if a spurious planar face includes them.
-    """
+    """Mark approx groups not used in any room cycle (orphans) on segment graph nodes."""
 
     junction_degree = _junction_degrees(wall_segment_graph)
     for node in wall_segment_graph.get("nodes") or []:
         gid = node["id"]
-        deg = junction_degree.get(gid, 0)
         in_cycle = gid in groups_in_room_cycle
-        is_leaf = deg <= 1
-        node["junction_degree"] = deg
+        node["junction_degree"] = junction_degree.get(gid, 0)
         node["in_room_cycle"] = in_cycle
-        node["orphan"] = not in_cycle or is_leaf
+        node["orphan"] = not in_cycle
 
 
 def build_segment_room_graph(
@@ -398,14 +415,11 @@ def build_segment_room_graph(
     *,
     corner_tol: float = 0.05,
     min_room_area_m2: float = 1.0,
+    leaf_bridge_gap: float | None = None,
 ) -> dict[str, Any]:
-    """Rooms as bounded cycles of junction groups connected by wall-span edges.
+    """Rooms as minimum cycle basis loops on wall-span + leaf-bridge edges."""
 
-    Groups that do not lie on any bounded face, or that are junction-graph leaves
-    (degree ≤ 1 — dead-end stubs), are orphans: excluded from room detection and
-    flagged on ``wall_segment_graph`` nodes via :func:`annotate_orphan_segment_groups`.
-    """
-
+    _ = leaf_bridge_gap  # bridges read from wall_segment_graph edges
     group_nodes = wall_segment_graph.get("nodes") or []
     segments = wall_segment_graph.get("segments") or []
     if not group_nodes or not segments:
@@ -423,7 +437,6 @@ def build_segment_room_graph(
         groups_by_story[story_by_group.get(node["id"])].append(node)
 
     segment_ids_by_group = _segment_ids_by_group(group_nodes)
-    junction_degree = _junction_degrees(wall_segment_graph)
     groups_in_room_cycle: set[str] = set()
     room_nodes: list[dict[str, Any]] = []
     room_index = 0
@@ -440,33 +453,26 @@ def build_segment_room_graph(
             if story_by_group.get(seg_to_group.get(s["id"], "")) == story
         ]
         span_edges = _wall_span_edges(story_segments, seg_to_group, corner_tol)
-        story_in_cycle = _groups_in_bounded_faces(
+        room_edges = _room_graph_edges(span_edges, wall_segment_graph)
+
+        edge_pairs = [(e["source"], e["target"]) for e in room_edges]
+        mcb_cycles = minimum_cycle_basis(
             group_ids,
-            span_edges,
+            edge_pairs,
+            weight_fn=lambda a, b: _edge_weight(a, b, positions),
+        )
+        faces = _filter_mcb_cycles(
+            mcb_cycles,
+            room_edges,
             positions,
             min_room_area_m2,
         )
-        participating = {
-            g
-            for g in story_in_cycle
-            if junction_degree.get(g, 0) > 1
-        }
-        groups_in_room_cycle |= participating
-        if len(participating) < 3:
-            continue
-        part_positions = {g: positions[g] for g in participating if g in positions}
-        part_edges = _filter_span_edges_to_groups(span_edges, participating)
-        faces = _find_faces(list(participating), part_edges, part_positions)
-        faces = _filter_faces(faces, part_positions, min_room_area_m2)
 
         for cycle in faces:
-            rep_segment_ids, _, by_group = representative_segments_for_cycle(
-                cycle,
-                part_edges,
-                segment_ids_by_group,
-                segments_by_id,
-                part_positions,
-            )
+            groups_in_room_cycle.update(cycle)
+            part_positions = {g: positions[g] for g in cycle if g in positions}
+            part_edges = _filter_edges_to_groups(room_edges, set(cycle))
+
             perimeter_sides = perimeter_sides_for_cycle(
                 cycle,
                 part_edges,
@@ -474,9 +480,20 @@ def build_segment_room_graph(
                 segments_by_id,
                 part_positions,
             )
-            perimeter_wall_ids = sorted(
-                {base_wall_id(s["wall_id"]) for s in perimeter_sides}
+            rep_segment_ids, _, by_group = representative_segments_for_cycle(
+                cycle,
+                part_edges,
+                segment_ids_by_group,
+                segments_by_id,
+                part_positions,
+                perimeter_sides=perimeter_sides,
             )
+            perimeter_wall_quads = perimeter_wall_quads_for_sides(
+                perimeter_sides,
+                segments_by_id,
+                part_positions,
+            )
+            perimeter_wall_ids = _physical_wall_ids(perimeter_sides)
             if len(perimeter_wall_ids) < 3:
                 continue
 
@@ -493,6 +510,7 @@ def build_segment_room_graph(
                     "group_ids": list(cycle),
                     "wall_ids": perimeter_wall_ids,
                     "perimeter_sides": perimeter_sides,
+                    "perimeter_wall_quads": perimeter_wall_quads,
                     "segment_ids": rep_segment_ids,
                     "representative_by_group": by_group,
                     "polygon_xz": [{"x": x, "z": z} for x, z in poly],
