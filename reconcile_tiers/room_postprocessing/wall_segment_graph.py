@@ -10,7 +10,10 @@ from typing import Any
 
 import numpy as np
 
-from reconcile_tiers.room_postprocessing.corner_graph import merge_adjacency_pairs
+from reconcile_tiers.room_postprocessing.corner_graph import (
+    DEFAULT_LEAF_BRIDGE_GAP_M,
+    merge_adjacency_pairs,
+)
 from reconcile_tiers.room_postprocessing.models import BuildingElement
 
 
@@ -197,11 +200,95 @@ def _pair_key(a: int, b: int) -> tuple[int, int]:
     return (a, b) if a < b else (b, a)
 
 
+def _endpoint_distance_sq(
+    a: tuple[float, float, float],
+    b: tuple[float, float, float],
+) -> float:
+    dx, dy, dz = a[0] - b[0], a[1] - b[1], a[2] - b[2]
+    return dx * dx + dy * dy + dz * dz
+
+
+def _leaf_bridge_segment_pairs(
+    segments: Sequence[WallVerticalSegment],
+    seg_to_group: dict[int, int],
+    group_degree: dict[int, int],
+    *,
+    bridge_gap: float,
+) -> set[tuple[int, int]]:
+    """Cross-group links for degree-1 junction groups to nearby foreign segments.
+
+    When a stub or near-miss free end has no wall between it and another segment
+    but endpoints are within ``bridge_gap``, add a graph edge without merging
+    the approx groups.
+    """
+
+    leaf_groups = {g for g, deg in group_degree.items() if deg == 1}
+    if not leaf_groups or bridge_gap <= 0.0:
+        return set()
+
+    tol_sq = bridge_gap * bridge_gap
+    pairs: set[tuple[int, int]] = set()
+    for seg_index, seg in enumerate(segments):
+        group_a = seg_to_group.get(seg_index)
+        if group_a is None or group_a not in leaf_groups:
+            continue
+        endpoints_a = (seg.start, seg.end)
+        for other_index, other in enumerate(segments):
+            if other_index == seg_index:
+                continue
+            group_b = seg_to_group.get(other_index)
+            if group_b is None or group_b == group_a:
+                continue
+            if not _same_story(seg.story, other.story):
+                continue
+            for pa in endpoints_a:
+                for pb in (other.start, other.end):
+                    if _endpoint_distance_sq(pa, pb) <= tol_sq:
+                        pairs.add(_pair_key(seg_index, other_index))
+                        break
+                else:
+                    continue
+                break
+    return pairs
+
+
+def _apply_leaf_bridges_to_group_graph(
+    segments: Sequence[WallVerticalSegment],
+    seg_to_group: dict[int, int],
+    group_pair_kinds: dict[tuple[int, int], str],
+    group_degree: dict[int, int],
+    *,
+    bridge_gap: float,
+) -> set[tuple[int, int]]:
+    """Add ``leaf_bridge`` group edges; return new segment pairs."""
+
+    bridge_pairs = _leaf_bridge_segment_pairs(
+        segments,
+        seg_to_group,
+        group_degree,
+        bridge_gap=bridge_gap,
+    )
+    for a, b in bridge_pairs:
+        ga = seg_to_group[a]
+        gb = seg_to_group[b]
+        if ga == gb:
+            continue
+        gkey = _pair_key(ga, gb)
+        if gkey in group_pair_kinds:
+            continue
+        group_pair_kinds[gkey] = "leaf_bridge"
+        group_degree[ga] = group_degree.get(ga, 0) + 1
+        group_degree[gb] = group_degree.get(gb, 0) + 1
+    return bridge_pairs
+
+
 def build_wall_segment_graph(
     elements: Sequence[BuildingElement],
     corner_vids: list[list[int]],
     corner_tol: float,
     adjacency_tol: float,
+    *,
+    leaf_bridge_gap: float | None = None,
 ) -> dict[str, Any]:
     """Approx-connected segment clusters as graph nodes; segment geometry in ``segments``."""
 
@@ -261,6 +348,21 @@ def build_wall_segment_graph(
     for ga, gb in group_pair_kinds:
         group_degree[ga] += 1
         group_degree[gb] += 1
+
+    bridge_gap = (
+        DEFAULT_LEAF_BRIDGE_GAP_M if leaf_bridge_gap is None else leaf_bridge_gap
+    )
+    leaf_bridge_pairs = _apply_leaf_bridges_to_group_graph(
+        segments,
+        seg_to_group,
+        group_pair_kinds,
+        group_degree,
+        bridge_gap=bridge_gap,
+    )
+    for a, b in leaf_bridge_pairs:
+        key = _pair_key(a, b)
+        if key not in pair_kinds:
+            pair_kinds[key] = "leaf_bridge"
 
     for group_index, node in enumerate(group_nodes):
         node["degree"] = group_degree.get(group_index, 0)

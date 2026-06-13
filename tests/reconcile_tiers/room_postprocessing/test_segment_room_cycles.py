@@ -167,6 +167,7 @@ def test_four_wall_room_yields_one_cycle() -> None:
     room = rooms[0]
     assert len(room["group_ids"]) >= 3
     assert len(room["wall_ids"]) >= 3
+    assert len(room["perimeter_wall_quads"]) == len(room["perimeter_sides"])
     assert room["area_m2"] >= 1.0
 
 

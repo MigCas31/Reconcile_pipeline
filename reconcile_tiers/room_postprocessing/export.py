@@ -7,6 +7,7 @@ from typing import Any
 
 from reconcile_tiers.room_postprocessing.corner_graph import (
     DEFAULT_ADJACENCY_TOL_M,
+    DEFAULT_LEAF_BRIDGE_GAP_M,
     approx_element_adjacency_pairs,
     cluster_element_corners,
     element_adjacency_pairs,
@@ -50,10 +51,14 @@ def build_corner_graph(
     *,
     corner_tol: float = 0.05,
     adjacency_tol: float = DEFAULT_ADJACENCY_TOL_M,
+    leaf_bridge_gap: float | None = None,
 ) -> dict[str, Any]:
     """Flatten tier_payload, cluster corners, and export element graph + wall edges."""
 
     building_uuid = str(payload.get("uuid") or "")
+    bridge_gap = (
+        DEFAULT_LEAF_BRIDGE_GAP_M if leaf_bridge_gap is None else leaf_bridge_gap
+    )
     elements = flatten_tier_payload(payload)
     elements = split_walls_at_approx_junctions(
         elements,
@@ -115,10 +120,12 @@ def build_corner_graph(
         corner_vids,
         corner_tol,
         adjacency_tol,
+        leaf_bridge_gap=bridge_gap,
     )
     segment_room_graph = build_segment_room_graph(
         wall_segment_graph,
         corner_tol=corner_tol,
+        leaf_bridge_gap=bridge_gap,
     )
     attach_room_floor_polygons(segment_room_graph, elements)
     annotate_orphan_segment_groups(
@@ -137,6 +144,7 @@ def build_corner_graph(
         "building_uuid": export.building_uuid,
         "corner_tol": export.corner_tol,
         "adjacency_tol": adjacency_tol,
+        "leaf_bridge_gap": bridge_gap,
         "element_count": len(elements),
         "nodes": export.nodes,
         "edges": export.edges,

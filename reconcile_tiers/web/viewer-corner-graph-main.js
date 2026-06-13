@@ -66,10 +66,12 @@ const modelGroup = new THREE.Group();
 const edgeGroup = new THREE.Group();
 const isolatedEdgeGroup = new THREE.Group();
 const roomFloorGroup = new THREE.Group();
+const roomWallHighlightGroup = new THREE.Group();
 scene.add(modelGroup);
 scene.add(edgeGroup);
 scene.add(isolatedEdgeGroup);
 scene.add(roomFloorGroup);
+scene.add(roomWallHighlightGroup);
 
 const meshById = new Map();
 const edgeLinesById = new Map();
@@ -77,7 +79,6 @@ const segmentLineById = new Map();
 const isolatedLinesById = new Map();
 const kindById = new Map();
 const groupIdToSegmentIds = new Map();
-const roomIdToWallIds = new Map();
 const roomIdToSegmentIds = new Map();
 let rows = [];
 let graphData = null;
@@ -108,10 +109,8 @@ function rebuildSegmentMaps() {
 }
 
 function rebuildRoomMaps() {
-  roomIdToWallIds.clear();
   roomIdToSegmentIds.clear();
   for (const node of graphData?.segment_room_graph?.nodes || []) {
-    roomIdToWallIds.set(node.id, node.wall_ids || []);
     roomIdToSegmentIds.set(node.id, node.segment_ids || []);
   }
 }
@@ -381,7 +380,7 @@ function build3D(data) {
 
 function nodeLabel(node) {
   if (graphMode === "rooms") {
-    const w = node.wall_ids?.length ?? 0;
+    const w = node.perimeter_wall_quads?.length ?? node.wall_ids?.length ?? 0;
     const area = node.area_m2 != null ? `${node.area_m2.toFixed(0)}m²` : "";
     const short = node.id.split("::").pop();
     return area ? `${short} · ${w}w · ${area}` : `${short} · ${w}w`;
@@ -583,8 +582,9 @@ function updateGraphMeta() {
         ? `walls ${wallN} nodes · ${wallE} edges`
         : `all ${allN} nodes · ${allE} edges`;
   const adj = graphData.adjacency_tol ?? 0.5;
+  const bridge = graphData.leaf_bridge_gap ?? 0.75;
   currentMeta.textContent =
-    `${view} · corner ${graphData.corner_tol} m · adjacency ${adj} m`;
+    `${view} · corner ${graphData.corner_tol} m · adjacency ${adj} m · bridge ${bridge} m`;
 }
 
 function wallMatchesSet(meshId, wallIds) {
@@ -653,6 +653,43 @@ function clearRoomFloorHighlight() {
     const child = roomFloorGroup.children.pop();
     child.geometry?.dispose?.();
     child.material?.dispose?.();
+  }
+}
+
+function clearRoomWallHighlight() {
+  while (roomWallHighlightGroup.children.length) {
+    const child = roomWallHighlightGroup.children.pop();
+    child.geometry?.dispose?.();
+    child.material?.dispose?.();
+  }
+}
+
+function addPerimeterWallQuad(corners, role) {
+  if (!corners || corners.length < 4) return;
+  const pts = corners.map((c) => ({ x: c.x, y: c.y, z: c.z }));
+  const geometry = trianglesFromCorners(pts);
+  if (!geometry) return;
+  const mesh = new THREE.Mesh(geometry, materialForKind("wall", role));
+  roomWallHighlightGroup.add(mesh);
+}
+
+function updateRoomWallHighlight(roomId, connectedRoomIds) {
+  clearRoomWallHighlight();
+  if (!roomId || !graphData?.segment_room_graph) return;
+  const rooms = graphData.segment_room_graph.nodes || [];
+  const room = rooms.find((n) => n.id === roomId);
+  if (room) {
+    for (const quad of room.perimeter_wall_quads || []) {
+      addPerimeterWallQuad(quad.corners, "selected");
+    }
+  }
+  for (const rid of connectedRoomIds || []) {
+    if (rid === roomId) continue;
+    const other = rooms.find((n) => n.id === rid);
+    if (!other) continue;
+    for (const quad of other.perimeter_wall_quads || []) {
+      addPerimeterWallQuad(quad.corners, "connected");
+    }
   }
 }
 
@@ -829,21 +866,22 @@ function apply3DSegmentLineHighlight(selectedSegmentIds, connectedSegmentIds) {
 function apply3DHighlight(elementId, connected) {
   if (graphMode === "rooms") {
     apply3DBuildingMuted(!!elementId);
-    const selectedWalls = new Set(roomIdToWallIds.get(elementId) || []);
-    const connectedWalls = new Set();
     const selectedSegs = new Set(roomIdToSegmentIds.get(elementId) || []);
     const connectedSegs = new Set();
+    const connectedRooms = [];
     for (const rid of connected) {
       if (rid === elementId) continue;
-      for (const wid of roomIdToWallIds.get(rid) || []) connectedWalls.add(wid);
+      connectedRooms.push(rid);
       for (const sid of roomIdToSegmentIds.get(rid) || []) connectedSegs.add(sid);
     }
-    apply3DWallHighlightSets(selectedWalls, connectedWalls);
+    apply3DWallHighlightSets(new Set(), new Set());
+    updateRoomWallHighlight(elementId, connectedRooms);
     apply3DSegmentLineHighlight(selectedSegs, connectedSegs);
     updateRoomFloorHighlight(elementId);
     return;
   }
   clearRoomFloorHighlight();
+  clearRoomWallHighlight();
   if (graphMode === "segments") {
     apply3DBuildingMuted(!!elementId);
     const selectedSegs = new Set(groupIdToSegmentIds.get(elementId) || []);
@@ -883,11 +921,11 @@ function selectElement(elementId) {
   const n = connected.size;
   if (graphMode === "rooms") {
     const room = graphData?.segment_room_graph?.nodes?.find((node) => node.id === elementId);
-    const w = room?.wall_ids?.length ?? 0;
+    const w = room?.perimeter_wall_quads?.length ?? room?.wall_ids?.length ?? 0;
     const area = room?.area_m2 != null ? `${room.area_m2.toFixed(1)} m²` : "";
     status3d.textContent = n > 1
-      ? `room · ${w} walls · ${area} · ${n} rooms in component`
-      : `room · ${w} walls · ${area}`;
+      ? `room · ${w} perimeter walls · ${area} · ${n} rooms in component`
+      : `room · ${w} perimeter walls · ${area}`;
   } else if (graphMode === "segments") {
     const grp = graphData?.wall_segment_graph?.nodes?.find((node) => node.id === elementId);
     const segCount = grp?.segment_count ?? grp?.segment_ids?.length ?? 0;
@@ -907,6 +945,7 @@ function clearSelection() {
   apply3DBuildingMuted(false);
   apply3DSegmentLineHighlight(null, new Set());
   clearRoomFloorHighlight();
+  clearRoomWallHighlight();
   if (graphMode !== "rooms") {
     apply3DWallHighlightSets(new Set(), new Set());
   }
@@ -920,7 +959,7 @@ function clearSelection() {
 
 async function fetchGraph(uuid) {
   const url =
-    `${GRAPH_API}?uuid=${encodeURIComponent(uuid)}&corner_tol=0.05&adjacency_tol=0.5`;
+    `${GRAPH_API}?uuid=${encodeURIComponent(uuid)}&corner_tol=0.05&adjacency_tol=0.5&leaf_bridge_gap=0.75`;
   const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) {
     throw new Error(`Graph API ${response.status} for ${uuid}`);

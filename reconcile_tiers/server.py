@@ -15,7 +15,7 @@ APIs the viewer calls into:
                                        (gated by GEMINI_API_KEY)
     GET  /jobs/<id>                 →  status + log_tail of a dev_tools job
     GET  /room-postprocessing/graph →  corner-sharing element graph JSON
-                                       (?uuid=, corner_tol=, adjacency_tol=)
+                                       (?uuid=, corner_tol=, adjacency_tol=, leaf_bridge_gap=)
 
 Run:
 
@@ -311,19 +311,27 @@ class TierServerHandler(SimpleHTTPRequestHandler):
             return
         tol_raw = (params.get("corner_tol") or ["0.05"])[0]
         adj_raw = (params.get("adjacency_tol") or ["0.5"])[0]
+        bridge_raw = (params.get("leaf_bridge_gap") or ["0.75"])[0]
         try:
             corner_tol = float(tol_raw)
             adjacency_tol = float(adj_raw)
+            leaf_bridge_gap = float(bridge_raw)
         except (TypeError, ValueError):
             self.send_error(
                 HTTPStatus.BAD_REQUEST,
-                "corner_tol and adjacency_tol must be numbers",
+                "corner_tol, adjacency_tol, and leaf_bridge_gap must be numbers",
             )
             return
         if not (0.05 <= adjacency_tol <= 2.0):
             self.send_error(
                 HTTPStatus.BAD_REQUEST,
                 "adjacency_tol must be between 0.05 and 2.0",
+            )
+            return
+        if not (0.05 <= leaf_bridge_gap <= 2.0):
+            self.send_error(
+                HTTPStatus.BAD_REQUEST,
+                "leaf_bridge_gap must be between 0.05 and 2.0",
             )
             return
 
@@ -344,6 +352,7 @@ class TierServerHandler(SimpleHTTPRequestHandler):
                 payload,
                 corner_tol=corner_tol,
                 adjacency_tol=adjacency_tol,
+                leaf_bridge_gap=leaf_bridge_gap,
             ),
         )
 

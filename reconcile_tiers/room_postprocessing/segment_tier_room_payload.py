@@ -1,4 +1,4 @@
-"""Classify tier_payload elements into segment-room cycles (geometry unchanged)."""
+"""Classify tier_payload elements into segment-room cycles."""
 
 from __future__ import annotations
 
@@ -17,6 +17,7 @@ from reconcile_tiers.room_postprocessing.segment_group_representative import (
 )
 
 SEGMENT_TIER_SHELL = "segment_tier_classification"
+SEGMENT_TIER_GEOMETRY_SOURCE = "perimeter_walls"
 
 _DEFAULT_BOUNDARY_TOL_M = 0.12
 _DEFAULT_FLOOR_OVERLAP_MIN = 0.20
@@ -152,7 +153,7 @@ def assign_tier_elements_to_cycle(
     boundary_tol: float = _DEFAULT_BOUNDARY_TOL_M,
     floor_overlap_min: float = _DEFAULT_FLOOR_OVERLAP_MIN,
 ) -> dict[str, Any] | None:
-    """Pick verbatim tier walls/floors for one segment-room cycle."""
+    """Pick perimeter wall quads + verbatim tier floors/doors/windows for one cycle."""
 
     cycle_poly = _cycle_polygon(seg_room)
     if cycle_poly is None:
@@ -160,13 +161,19 @@ def assign_tier_elements_to_cycle(
 
     story_raw = seg_room.get("story")
     story = int(story_raw) if story_raw is not None else 0
-    wall_hints = {str(w) for w in (seg_room.get("wall_ids") or [])}
 
     walls: list[dict[str, Any]] = []
+    for quad in seg_room.get("perimeter_wall_quads") or []:
+        if not isinstance(quad, Mapping):
+            continue
+        corners = quad.get("corners")
+        if not isinstance(corners, list) or len(corners) < 4:
+            continue
+        walls.append(copy.deepcopy(dict(quad)))
+
     floors: list[dict[str, Any]] = []
     doors: list[dict[str, Any]] = []
     windows: list[dict[str, Any]] = []
-    seen_walls: set[str] = set()
     seen_floors: set[str] = set()
     contributing_tier_rooms: list[int] = []
 
@@ -178,22 +185,6 @@ def assign_tier_elements_to_cycle(
             continue
 
         room_contributed = False
-        for wall in tier_room.get("walls") or []:
-            if not isinstance(wall, Mapping):
-                continue
-            locator = str(wall.get("locator_id") or "")
-            if locator and locator in seen_walls:
-                continue
-            if not _locator_matches_wall_hints(locator, wall_hints) and not wall_on_cycle_boundary(
-                wall,
-                cycle_poly,
-                boundary_tol=boundary_tol,
-            ):
-                continue
-            walls.append(copy.deepcopy(dict(wall)))
-            if locator:
-                seen_walls.add(locator)
-            room_contributed = True
 
         floor_raw = tier_room.get("floor")
         floor_pieces: list[Mapping[str, Any]] = []
@@ -254,7 +245,7 @@ def build_segment_tier_room_payload(
     boundary_tol: float = _DEFAULT_BOUNDARY_TOL_M,
     floor_overlap_min: float = _DEFAULT_FLOOR_OVERLAP_MIN,
 ) -> dict[str, Any]:
-    """Segment cycles for room list; tier_payload scan geometry for each room."""
+    """Segment cycles for room list; perimeter walls + tier floors/doors/windows."""
 
     graph = build_corner_graph(
         payload,
@@ -285,7 +276,7 @@ def build_segment_tier_room_payload(
         "adjacency_tol": adjacency_tol,
         "segment_room_count": len(tier_rooms),
         "shell": SEGMENT_TIER_SHELL,
-        "geometry_source": "tier",
+        "geometry_source": SEGMENT_TIER_GEOMETRY_SOURCE,
     }
     out["segment_room_graph"] = segment_room_graph
     return out

@@ -11,6 +11,8 @@ from reconcile_tiers.room_postprocessing.models import BuildingElement
 
 # ~2× WALL_HALF_M in reconcile_tiers/extract/gaps.py — typical scan gap at junctions.
 DEFAULT_ADJACENCY_TOL_M = 0.5
+# Leaf-bridge stub links: slightly wider than approx merge (floor-rim gaps can exceed 0.5 m).
+DEFAULT_LEAF_BRIDGE_GAP_M = 0.75
 
 
 def cluster_element_corners(

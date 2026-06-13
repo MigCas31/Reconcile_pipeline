@@ -214,6 +214,129 @@ def test_approx_groups_do_not_merge_across_stories() -> None:
     assert grp_l0["id"] != grp_l1["id"]
 
 
+def test_leaf_bridge_connects_degree_one_group_when_gap_within_bridge_tol() -> None:
+    """Tight approx groups stay separate; leaf bridge links a dead-end to a neighbor."""
+
+    from reconcile_tiers.room_postprocessing.corner_graph import (
+        cluster_element_corners,
+    )
+    from reconcile_tiers.room_postprocessing.flatten_payload import flatten_tier_payload
+    from reconcile_tiers.room_postprocessing.wall_segment_graph import (
+        build_wall_segment_graph,
+    )
+
+    payload = _near_miss_three_wall_payload()
+    elements = flatten_tier_payload(payload)
+    corner_vids = cluster_element_corners(elements, 0.05)
+    sg = build_wall_segment_graph(
+        elements,
+        corner_vids,
+        0.05,
+        0.05,
+        leaf_bridge_gap=0.5,
+    )
+    bridge_edges = [e for e in sg["edges"] if e.get("kind") == "leaf_bridge"]
+    assert bridge_edges
+
+    orange_tip_grp = _group_for_segment(sg, "w-orange::vseg::1")
+    assert orange_tip_grp is not None
+    orange_bridges = [
+        e
+        for e in bridge_edges
+        if orange_tip_grp["id"] in {e["source"], e["target"]}
+    ]
+    assert orange_bridges
+    assert orange_tip_grp["degree"] >= 2
+
+
+def _square_with_corner_gap_payload() -> dict[str, Any]:
+    """2×2 m square with a near-miss gap at the NW corner closed by leaf bridge."""
+
+    return {
+        "uuid": "gap-square",
+        "rooms": [
+            {
+                "story": 0,
+                "walls": [
+                    {
+                        "locator_id": "w-s",
+                        "corners": [
+                            _pt(0, 0, 0),
+                            _pt(2, 0, 0),
+                            _pt(2, 2, 0),
+                            _pt(0, 2, 0),
+                        ],
+                    },
+                    {
+                        "locator_id": "w-e",
+                        "corners": [
+                            _pt(2, 0, 0),
+                            _pt(2, 0, 2),
+                            _pt(2, 2, 2),
+                            _pt(2, 2, 0),
+                        ],
+                    },
+                    {
+                        "locator_id": "w-n",
+                        "corners": [
+                            _pt(2, 0, 2),
+                            _pt(0.2, 0, 2),
+                            _pt(0.2, 2, 2),
+                            _pt(2, 2, 2),
+                        ],
+                    },
+                    {
+                        "locator_id": "w-w",
+                        "corners": [
+                            _pt(0, 0, 1.8),
+                            _pt(0, 0, 0),
+                            _pt(0, 2, 0),
+                            _pt(0, 2, 1.8),
+                        ],
+                    },
+                ],
+            }
+        ],
+    }
+
+
+def test_near_miss_leaf_bridge_closes_room_cycle() -> None:
+    """Tight approx groups + leaf bridge should close a segment room cycle."""
+
+    payload = _square_with_corner_gap_payload()
+    graph = build_corner_graph(
+        payload,
+        corner_tol=0.05,
+        adjacency_tol=0.05,
+        leaf_bridge_gap=0.5,
+    )
+    bridge_edges = [
+        e
+        for e in graph["wall_segment_graph"]["edges"]
+        if e.get("kind") == "leaf_bridge"
+    ]
+    assert bridge_edges
+
+    rooms = [
+        n
+        for n in graph["segment_room_graph"]["nodes"]
+        if n["kind"] == "segment_room"
+    ]
+    assert len(rooms) == 1
+    assert rooms[0]["area_m2"] >= 3.0
+
+    bridged_groups = {
+        gid
+        for e in bridge_edges
+        for gid in (e["source"], e["target"])
+    }
+    assert bridged_groups.issubset(set(rooms[0]["group_ids"]))
+    for gid in bridged_groups:
+        node = next(n for n in graph["wall_segment_graph"]["nodes"] if n["id"] == gid)
+        assert node.get("in_room_cycle") is True
+        assert node.get("orphan") is False
+
+
 def test_near_miss_junction_segments_merge_into_one_approx_group() -> None:
     payload = _near_miss_three_wall_payload()
     graph = build_corner_graph(payload, corner_tol=0.05, adjacency_tol=0.5)

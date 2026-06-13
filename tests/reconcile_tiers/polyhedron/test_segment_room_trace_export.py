@@ -124,8 +124,10 @@ def test_manifold_steps_export_segment_tier_rooms(tmp_path: Path) -> None:
     segment_path = building_dir / "tier_payload_segment_tier_rooms.json"
     assert segment_path.is_file()
     segment_payload = json.loads(segment_path.read_text())
-    assert segment_payload["room_postprocessing_source"]["geometry_source"] == "tier"
-    tier_south = _four_wall_tier_payload()["rooms"][0]["walls"][0]
-    out_south = segment_payload["rooms"][0]["walls"][0]
-    assert out_south["locator_id"] == "w-south"
-    assert out_south["corners"] == tier_south["corners"]
+    assert segment_payload["room_postprocessing_source"]["geometry_source"] == "perimeter_walls"
+    room = segment_payload["rooms"][0]
+    assert len(room["walls"]) >= 3
+    wall_ids = {w["locator_id"] for w in room["walls"]}
+    assert wall_ids == {"w-south", "w-east", "w-north", "w-west"}
+    for wall in room["walls"]:
+        assert len(wall.get("corners") or []) == 4
