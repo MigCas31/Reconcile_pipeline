@@ -15436,6 +15436,16 @@ The previous full-building metric and viewer treated all support domains as requ
 - **Why**: Near-miss stub endpoints can be >0.5 m apart in 3D while still visually closable; leaf bridge should reach slightly farther than approx merge without merging groups.
 - **Result**: room_postprocessing tests pass.
 
+## 2026-05-24 - Corner-graph viewer: highlight perimeter_wall_quads (matches export)
+- **What changed**: `viewer-corner-graph-main.js` — room mode draws ephemeral gold/cyan meshes from `perimeter_wall_quads`; dims full building walls instead of highlighting tier meshes by `wall_id`.
+- **Why**: Align 3D room highlight with segment-tier export / manifold input (junction-spanning quads, not full scan extent).
+- **Result**: viewer matches Option A export geometry.
+
+## 2026-05-24 - Segment-tier export: perimeter walls only (Option A)
+- **What changed**: `segment_tier_room_payload.py` — `assign_tier_elements_to_cycle` uses `perimeter_wall_quads` for `rooms[].walls`; floors/doors/windows still verbatim tier; `geometry_source` = `perimeter_walls`. Corner-graph viewer unchanged (full tier mesh highlight by `wall_id`).
+- **Why**: Full tier wall meshes extended past cycle corners into manifold/roof reconstruction input; perimeter quads match MCB cycle edges without clipping gable ceiling tiles.
+- **Result**: room_postprocessing + segment trace export tests pass.
+
 ## 2026-05-24 - Revert segment-tier wall selection to tier meshes
 - **What changed**: `segment_tier_room_payload.py` — restored wall assignment via `wall_ids` hints + `wall_on_cycle_boundary` with verbatim tier scan corners; `geometry_source` back to `"tier"`. `viewer-corner-graph-main.js` — room mode highlights full tier wall meshes by `wall_id` again (removed ephemeral `perimeter_wall_quads` overlay). Tests/cheatsheet reverted for tier wall corners.
 - **Why**: User preferred prior wall selection behavior (full tier meshes) over junction-spanning perimeter quads for segment-tier export and viewer highlight.

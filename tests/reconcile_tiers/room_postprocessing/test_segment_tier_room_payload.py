@@ -1,10 +1,11 @@
-"""Tests for segment-cycle classification with verbatim tier geometry."""
+"""Tests for segment-cycle classification with perimeter walls + tier floors."""
 
 from __future__ import annotations
 
 from typing import Any
 
 from reconcile_tiers.room_postprocessing.segment_tier_room_payload import (
+    SEGMENT_TIER_GEOMETRY_SOURCE,
     SEGMENT_TIER_SHELL,
     build_segment_tier_room_payload,
 )
@@ -14,18 +15,23 @@ from tests.reconcile_tiers.room_postprocessing.test_segment_room_cycles import (
 )
 
 
-def test_four_wall_preserves_tier_wall_corners() -> None:
+def test_four_wall_walls_match_perimeter_quads() -> None:
     tier_payload = _four_wall_room_with_floor()
-    original_south = tier_payload["rooms"][0]["walls"][0]
     out = build_segment_tier_room_payload(tier_payload, corner_tol=0.05)
     assert len(out["rooms"]) == 1
     assert out["room_postprocessing_source"]["shell"] == SEGMENT_TIER_SHELL
-    assert out["room_postprocessing_source"]["geometry_source"] == "tier"
+    assert (
+        out["room_postprocessing_source"]["geometry_source"]
+        == SEGMENT_TIER_GEOMETRY_SOURCE
+    )
 
     room = out["rooms"][0]
-    south = next(w for w in room["walls"] if w["locator_id"] == "w-south")
-    assert south["corners"] == original_south["corners"]
+    graph_room = out["segment_room_graph"]["nodes"][0]
+    assert len(room["walls"]) == len(graph_room["perimeter_wall_quads"])
+    assert {w["locator_id"] for w in room["walls"]} == set(graph_room["wall_ids"])
     assert room["floor"][0]["corners"] == tier_payload["rooms"][0]["floor"][0]["corners"]
+    for wall, quad in zip(room["walls"], graph_room["perimeter_wall_quads"]):
+        assert wall["corners"] == quad["corners"]
 
 
 def test_two_adjacent_cycles_get_tier_walls_per_room() -> None:
