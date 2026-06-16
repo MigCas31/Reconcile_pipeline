@@ -15,7 +15,7 @@ from tests.reconcile_tiers.room_postprocessing.test_segment_room_cycles import (
 )
 
 
-def test_four_wall_walls_match_perimeter_quads() -> None:
+def test_four_wall_walls_use_trimmed_tier_geometry() -> None:
     tier_payload = _four_wall_room_with_floor()
     out = build_segment_tier_room_payload(tier_payload, corner_tol=0.05)
     assert len(out["rooms"]) == 1
@@ -27,11 +27,18 @@ def test_four_wall_walls_match_perimeter_quads() -> None:
 
     room = out["rooms"][0]
     graph_room = out["segment_room_graph"]["nodes"][0]
-    assert len(room["walls"]) == len(graph_room["perimeter_wall_quads"])
+    assert len(room["walls"]) == len(graph_room["perimeter_sides"])
     assert {w["locator_id"] for w in room["walls"]} == set(graph_room["wall_ids"])
     assert room["floor"][0]["corners"] == tier_payload["rooms"][0]["floor"][0]["corners"]
-    for wall, quad in zip(room["walls"], graph_room["perimeter_wall_quads"]):
-        assert wall["corners"] == quad["corners"]
+
+    tier_walls = {w["locator_id"]: w for w in tier_payload["rooms"][0]["walls"]}
+    for wall in room["walls"]:
+        orig = tier_walls[wall["locator_id"]]
+        orig_ys = {c["y"] for c in orig["corners"]}
+        wall_ys = {c["y"] for c in wall["corners"]}
+        assert wall_ys == orig_ys
+        assert wall["corners"] == orig["corners"]
+        assert wall.get("source_wall_id") == wall["locator_id"]
 
 
 def test_two_adjacent_cycles_get_tier_walls_per_room() -> None:

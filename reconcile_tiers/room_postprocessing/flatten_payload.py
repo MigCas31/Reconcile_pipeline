@@ -60,6 +60,8 @@ def _append_piece(
         return
     locator_id = piece.get("locator_id")
     loc_str = str(locator_id) if locator_id else None
+    synthetic_raw = piece.get("synthetic", False)
+    synthetic = bool(synthetic_raw)
     elements.append(
         BuildingElement(
             id=_element_id(
@@ -73,6 +75,7 @@ def _append_piece(
             corners=corners,
             room_index=room_index,
             story=story,
+            synthetic=synthetic,
         )
     )
 

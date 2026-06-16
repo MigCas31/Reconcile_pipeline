@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scan cache viewer</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./viewer-scan-cache.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <aside id="sidebar">
+    <header>
+      <h1>Scan cache</h1>
+      <input id="search" placeholder="Address or UUID" autocomplete="off">
+      <div id="sidebar-stats">Loading…</div>
+    </header>
+    <div id="building-list"></div>
+  </aside>
+  <main>
+    <div id="top-bar">
+      <button class="icon-btn" id="prev-building" title="Previous building">↑</button>
+      <button class="icon-btn" id="next-building" title="Next building">↓</button>
+      <div id="current">
+        <div id="current-title">Select a building</div>
+        <div id="current-meta"></div>
+      </div>
+      <a id="open-tiers" class="link-btn" href="#" target="_blank" rel="noreferrer">Tiers</a>
+    </div>
+    <div id="view-controls">
+      <label class="check-row"><input id="toggle-walls" type="checkbox" checked> Walls</label>
+      <label class="check-row"><input id="toggle-floors" type="checkbox" checked> Floors</label>
+      <label class="check-row"><input id="toggle-ceilings" type="checkbox" checked> Ceilings</label>
+      <label class="check-row"><input id="toggle-doors" type="checkbox" checked> Doors</label>
+      <label class="check-row"><input id="toggle-windows" type="checkbox" checked> Windows</label>
+      <label class="check-row"><input id="toggle-edges" type="checkbox" checked> Edges</label>
+      <label class="check-row"><input id="toggle-color-by-room" type="checkbox" checked> Color by room</label>
+    </div>
+    <div id="pipeline-controls">
+      <span class="controls-label">Pipeline overlays (walls)</span>
+      <label class="check-row overlay-toggle" data-overlay="merged" title="Apple merged.json room walls">
+        <input id="toggle-merged-apple" type="checkbox">
+        <i class="legend-swatch merged"></i> merged.json
+      </label>
+      <label class="check-row overlay-toggle" data-overlay="reconciled" title="Trust-table reconciled.json room walls">
+        <input id="toggle-reconciled" type="checkbox">
+        <i class="legend-swatch reconciled"></i> reconciled.json
+      </label>
+      <label class="check-row overlay-toggle" data-overlay="tier_payload" title="Reconstructed tier_payload.json room walls">
+        <input id="toggle-tier-payload" type="checkbox">
+        <i class="legend-swatch tier"></i> tier_payload.json
+      </label>
+    </div>
+    <div id="viewport">
+      <canvas id="view"></canvas>
+      <aside id="room-panel">
+        <header>
+          <span>Rooms</span>
+          <span id="room-count">0</span>
+        </header>
+        <div id="room-list"></div>
+      </aside>
+      <div id="status">Loading…</div>
+    </div>
+  </main>
+  <script type="module" src="./viewer-scan-cache-main.js"></script>
+</body>
+</html>

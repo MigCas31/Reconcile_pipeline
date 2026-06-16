@@ -15,6 +15,9 @@ from reconcile_tiers.room_postprocessing.corner_graph import (
     merge_adjacency_pairs,
 )
 from reconcile_tiers.room_postprocessing.models import BuildingElement
+from reconcile_tiers.room_postprocessing.segment_group_representative import (
+    base_wall_id,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -50,6 +53,8 @@ def extract_wall_vertical_segments(
     segments: list[WallVerticalSegment] = []
     for elem_index, el in enumerate(elements):
         if el.kind != "wall":
+            continue
+        if getattr(el, "synthetic", False):
             continue
         vids = corner_vids[elem_index]
         n = len(el.corners)
@@ -155,6 +160,7 @@ def _segment_dict(seg: WallVerticalSegment) -> dict[str, Any]:
     return {
         "id": seg.id,
         "wall_id": seg.wall_id,
+        "initial_wall_id": base_wall_id(seg.wall_id),
         "kind": "wall_segment",
         "element_index": seg.element_index,
         "edge_index": seg.edge_index,
@@ -320,6 +326,7 @@ def build_wall_segment_graph(
             seg_to_group[seg_index] = group_index
         member_segments = [segments[i] for i in member_indices]
         wall_ids = sorted({s.wall_id for s in member_segments})
+        segment_dicts = [_segment_dict(s) for s in member_segments]
         group_id = f"approx_grp::{group_index}"
         group_nodes.append(
             {
@@ -327,6 +334,9 @@ def build_wall_segment_graph(
                 "kind": "approx_segment_group",
                 "segment_ids": [s.id for s in member_segments],
                 "wall_ids": wall_ids,
+                "initial_wall_by_segment": {
+                    sd["id"]: sd["initial_wall_id"] for sd in segment_dicts
+                },
                 "segment_count": len(member_segments),
                 "room_index": member_segments[0].room_index,
                 "story": member_segments[0].story,

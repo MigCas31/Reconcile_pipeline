@@ -15495,3 +15495,14 @@ The previous full-building metric and viewer treated all support domains as requ
 - **What changed**: `wall_near_segment_split.py` — when a vertical segment endpoint is within `adjacency_tol` of another wall's **floor rim** (XZ projection), insert a corner on that wall via `_find_horizontal_splits` / `_apply_wall_splits`. Anchors use rim-projected 3D points; skip targets that already have a corner or vertical segment at the site (XZ); only unsplit walls (`::split::` not in id). `wall_junction_split.py`: `_wall_has_corner_near_xz`, `_apply_wall_splits` uses `corner_tol` for rim distance. Wired in `export.py` after approx junction split. Test `test_wall_near_segment_split.py`.
 - **Why**: A junction wall can have a vertical segment while a crossing wall has no corner there — room/segment graph needs the passing wall split so a vertical edge links the two sub-meshes.
 - **Result**: 16/16 `room_postprocessing` tests pass.
+
+## 2026-06-13 - Kinetic ceiling reconstruction pipeline (Python KSR)
+- **What changed**: New package `reconcile_tiers/ceiling_reconstruction/` — `oriented_samples.py`, `plane_regularization.py`, `graph_cut.py` (s-t min-cut with Y-up interior boundary: y_max solid), `pipeline.py`, `trace_export.py` (7 frames), `corpus_trace_export.py` CLI (`--domain kinetic-ceiling-steps`). Viewer tweak in `viewer-polyhedron-traces-main.js` for `ceiling_extracted` / `kinetic_ceiling` roles. Tests `tests/reconcile_tiers/ceiling_reconstruction/test_pipeline.py`. Cheatsheet entry.
+- **Why**: Parallel evaluation path to polyhedron manifold-repair: Kinetic Shape Reconstruction from segment-tier wall perimeter (same input/CLI/viewer pattern, different step count) per implementation guide.
+- **Result**: 4/4 ceiling_reconstruction tests pass; smoke export on 1 building writes index + traces; viewer URL printed by CLI.
+
+## 2026-06-13 - Fix KSR pipeline: structure/evidence split, partition viz, tight bbox
+- **What changed**: `input_tiles.py` (new) — `collect_ksr_room_tiles()` splits wall+floor structure from ceiling/shell evidence; `room_bounding_prism()` builds Y-tight bbox from structure only. `pipeline.py` — partition on wall+floor planes only, evidence samples feed graph-cut, structure-only minimum tile check (≥3 walls). `plane_regularization.py` — wall orthogonal snap anchored to floor normal (not ceiling/shell). `trace_export.py` — Step 0/1 show structure tiles only; Step 4 renders clipped partition planes + chessboard cell interfaces (fixes empty/floating-slab viz). Tests expanded to 7 cases.
+- **Why**: Step 0 incorrectly showed ceiling/shell tiles; Step 4 labeled all cells inside so `cells_to_candidate_faces` returned ~0 faces; ceiling/shell planes inflated bbox and sliced outside room volume.
+- **Result**: 7/7 ceiling_reconstruction tests pass; smoke export to `.context/kinetic-ceiling-traces-fixed` — frame 0 labels wall/floor only, frame 4 has multiple partition faces when cells exist.
+

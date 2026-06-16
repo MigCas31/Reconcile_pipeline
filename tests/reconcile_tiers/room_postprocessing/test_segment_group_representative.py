@@ -9,6 +9,7 @@ from reconcile_tiers.room_postprocessing.segment_group_representative import (
     base_wall_id,
     perimeter_sides_for_cycle,
     representative_segments_for_cycle,
+    resolve_tier_wall_for_perimeter_side,
 )
 from tests.reconcile_tiers.room_postprocessing.test_segment_room_cycles import (
     _four_wall_room_payload,
@@ -274,6 +275,77 @@ def test_four_wall_room_one_rep_per_incident_wall_per_corner() -> None:
                 s for s in graph["wall_segment_graph"]["segments"] if s["id"] == seg_id
             )
             assert seg["wall_id"] in node["wall_ids"]
+
+
+def test_wall_segment_graph_tracks_initial_wall_per_segment() -> None:
+    graph = build_corner_graph(_four_wall_room_payload(), corner_tol=0.05)
+    wsg = graph["wall_segment_graph"]
+    for seg in wsg["segments"]:
+        assert seg["initial_wall_id"] == base_wall_id(seg["wall_id"])
+    for node in wsg["nodes"]:
+        by_seg = node["initial_wall_by_segment"]
+        assert set(by_seg) == set(node["segment_ids"])
+        for seg_id in node["segment_ids"]:
+            seg = next(s for s in wsg["segments"] if s["id"] == seg_id)
+            assert by_seg[seg_id] == seg["initial_wall_id"]
+
+
+def test_resolve_tier_wall_picks_closest_split_piece() -> None:
+    side = {
+        "source_group": "g0",
+        "target_group": "g1",
+        "wall_id": "w-long",
+        "segment_id_a": "s-g0-long",
+        "segment_id_b": "s-g1-long",
+    }
+    segments_by_id = {
+        "s-g0-long": {
+            "id": "s-g0-long",
+            "wall_id": "w-long::split::0",
+            "initial_wall_id": "w-long",
+            "start": {"x": 0.0, "y": 0.0, "z": 0.0},
+            "end": {"x": 0.0, "y": 2.0, "z": 0.0},
+        },
+        "s-g1-long": {
+            "id": "s-g1-long",
+            "wall_id": "w-long::split::0",
+            "initial_wall_id": "w-long",
+            "start": {"x": 1.0, "y": 0.0, "z": 0.0},
+            "end": {"x": 1.0, "y": 2.0, "z": 0.0},
+        },
+    }
+    positions = {"g0": (0.0, 0.0), "g1": (1.0, 0.0)}
+    walls_by_base_all = {
+        "w-long": [
+            {
+                "locator_id": "w-long::split::1",
+                "corners": [
+                    {"x": 2.0, "y": 0.0, "z": 0.0},
+                    {"x": 5.0, "y": 0.0, "z": 0.0},
+                    {"x": 5.0, "y": 2.5, "z": 0.0},
+                    {"x": 2.0, "y": 2.5, "z": 0.0},
+                ],
+            },
+            {
+                "locator_id": "w-long::split::0",
+                "corners": [
+                    {"x": 0.0, "y": 0.0, "z": 0.0},
+                    {"x": 2.0, "y": 0.0, "z": 0.0},
+                    {"x": 2.0, "y": 2.5, "z": 0.0},
+                    {"x": 0.0, "y": 2.5, "z": 0.0},
+                ],
+            },
+        ],
+    }
+    wall, base = resolve_tier_wall_for_perimeter_side(
+        side,
+        segments_by_id,
+        positions,
+        walls_by_base_all,
+        corner_tol=0.05,
+    )
+    assert base == "w-long"
+    assert wall["locator_id"] == "w-long::split::0"
 
 
 def test_perimeter_wall_quad_rim_not_full_wall_extent() -> None:
