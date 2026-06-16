@@ -16,6 +16,7 @@ class BuildingElement:
     corners: tuple[tuple[float, float, float], ...]
     room_index: int | None = None
     story: int | None = None
+    synthetic: bool = False
 
 
 @dataclass(frozen=True, slots=True)

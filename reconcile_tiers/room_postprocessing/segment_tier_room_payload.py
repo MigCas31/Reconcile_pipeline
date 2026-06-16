@@ -14,6 +14,7 @@ from reconcile_tiers.room_postprocessing.corner_graph import (
 from reconcile_tiers.room_postprocessing.export import build_corner_graph
 from reconcile_tiers.room_postprocessing.segment_group_representative import (
     base_wall_id,
+    wall_dict_from_perimeter_side_trimmed,
 )
 
 SEGMENT_TIER_SHELL = "segment_tier_classification"
@@ -146,14 +147,56 @@ def floor_overlaps_cycle(
         return False
 
 
+def _index_tier_walls_by_base_all(
+    payload: Mapping[str, Any],
+) -> dict[str, list[Mapping[str, Any]]]:
+    """All tier walls per physical id (every split piece kept)."""
+
+    out: dict[str, list[Mapping[str, Any]]] = {}
+    for room in payload.get("rooms") or []:
+        if not isinstance(room, Mapping):
+            continue
+        for wall in room.get("walls") or []:
+            if not isinstance(wall, Mapping):
+                continue
+            loc = str(wall.get("locator_id") or "")
+            if not loc:
+                continue
+            base = base_wall_id(loc)
+            out.setdefault(base, []).append(wall)
+    return out
+
+
+def _junction_positions_from_seg_room(
+    seg_room: Mapping[str, Any],
+) -> dict[str, tuple[float, float]]:
+    group_ids = list(seg_room.get("group_ids") or [])
+    polygon_xz = seg_room.get("polygon_xz") or []
+    if len(group_ids) != len(polygon_xz):
+        return {}
+    return {
+        str(gid): (float(p["x"]), float(p["z"]))
+        for gid, p in zip(group_ids, polygon_xz)
+        if isinstance(p, Mapping)
+    }
+
+
 def assign_tier_elements_to_cycle(
     seg_room: Mapping[str, Any],
     payload: Mapping[str, Any],
     *,
     boundary_tol: float = _DEFAULT_BOUNDARY_TOL_M,
     floor_overlap_min: float = _DEFAULT_FLOOR_OVERLAP_MIN,
+    corner_tol: float = 0.05,
+    original_payload: Mapping[str, Any] | None = None,
+    segments_by_id: Mapping[str, Mapping[str, Any]] | None = None,
 ) -> dict[str, Any] | None:
-    """Pick perimeter wall quads + verbatim tier floors/doors/windows for one cycle."""
+    """Pick rim-trimmed tier walls + verbatim tier floors/doors/windows for one cycle.
+
+    ``original_payload`` should be the unmodified tier payload whose rooms still
+    contain the original scanned walls.  When absent, ``payload`` is used for
+    the wall lookup (works when rooms have not yet been replaced).
+    """
 
     cycle_poly = _cycle_polygon(seg_room)
     if cycle_poly is None:
@@ -162,14 +205,28 @@ def assign_tier_elements_to_cycle(
     story_raw = seg_room.get("story")
     story = int(story_raw) if story_raw is not None else 0
 
+    wall_source = original_payload if original_payload is not None else payload
+    walls_by_base_all = _index_tier_walls_by_base_all(wall_source)
+    positions = _junction_positions_from_seg_room(seg_room)
+    seg_lookup = segments_by_id if segments_by_id is not None else {}
     walls: list[dict[str, Any]] = []
-    for quad in seg_room.get("perimeter_wall_quads") or []:
-        if not isinstance(quad, Mapping):
+    for side in seg_room.get("perimeter_sides") or []:
+        if not isinstance(side, Mapping):
             continue
-        corners = quad.get("corners")
-        if not isinstance(corners, list) or len(corners) < 4:
+        side_dict = dict(side)
+        trimmed = wall_dict_from_perimeter_side_trimmed(
+            side_dict,
+            walls_by_base_all,
+            seg_lookup,
+            positions,
+            corner_tol=corner_tol,
+        )
+        if trimmed is None:
             continue
-        walls.append(copy.deepcopy(dict(quad)))
+        source_wall_id = trimmed.get("source_wall_id")
+        if source_wall_id:
+            side_dict["source_wall_id"] = source_wall_id
+        walls.append(copy.deepcopy(trimmed))
 
     floors: list[dict[str, Any]] = []
     doors: list[dict[str, Any]] = []
@@ -247,12 +304,22 @@ def build_segment_tier_room_payload(
 ) -> dict[str, Any]:
     """Segment cycles for room list; perimeter walls + tier floors/doors/windows."""
 
+    # Keep a reference to the original payload so that wall geometry can be
+    # looked up even after ``out["rooms"]`` is replaced with segment-tier rooms.
+    original_payload = payload
+
     graph = build_corner_graph(
         payload,
         corner_tol=corner_tol,
         adjacency_tol=adjacency_tol,
     )
     segment_room_graph = graph.get("segment_room_graph") or {}
+    wall_segment_graph = graph.get("wall_segment_graph") or {}
+    segments_by_id: dict[str, Mapping[str, Any]] = {
+        str(seg["id"]): seg
+        for seg in (wall_segment_graph.get("segments") or [])
+        if isinstance(seg, Mapping) and seg.get("id")
+    }
 
     tier_rooms: list[dict[str, Any]] = []
     for node in segment_room_graph.get("nodes") or []:
@@ -263,6 +330,9 @@ def build_segment_tier_room_payload(
             payload,
             boundary_tol=boundary_tol,
             floor_overlap_min=floor_overlap_min,
+            corner_tol=corner_tol,
+            original_payload=original_payload,
+            segments_by_id=segments_by_id,
         )
         if assigned is None:
             continue

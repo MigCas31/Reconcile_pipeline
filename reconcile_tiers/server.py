@@ -16,6 +16,8 @@ APIs the viewer calls into:
     GET  /jobs/<id>                 →  status + log_tail of a dev_tools job
     GET  /room-postprocessing/graph →  corner-sharing element graph JSON
                                        (?uuid=, corner_tol=, adjacency_tol=, leaf_bridge_gap=)
+    GET  /scan-cache/buildings      →  index of buildings in .scan-cache/
+    GET  /scan-cache/building       →  raw per-room scan geometry (?uuid=)
 
 Run:
 
@@ -58,6 +60,9 @@ PORT = int(
 
 VIEWER_PATH = "/reconcile_tiers/web/viewer-tiers.html"
 CORNER_GRAPH_VIEWER_PATH = "/reconcile_tiers/web/viewer-corner-graph.html"
+SCAN_CACHE_VIEWER_PATH = "/reconcile_tiers/web/viewer-scan-cache.html"
+SCAN_CACHE_ROOT = WORKSPACE_ROOT / ".scan-cache"
+PIPELINE_OUTPUTS_ROOT = WORKSPACE_ROOT / "pipeline-outputs"
 
 # Reasons the rater can attach to a low rating to label the dominant failure
 # mode. Captured optionally on rate-button click; feeds future calibration
@@ -141,6 +146,15 @@ class TierServerHandler(SimpleHTTPRequestHandler):
             return
         if parsed.path == "/viewer-corner-graph.html":
             self._redirect(CORNER_GRAPH_VIEWER_PATH)
+            return
+        if parsed.path == "/viewer-scan-cache.html":
+            self._redirect(SCAN_CACHE_VIEWER_PATH)
+            return
+        if parsed.path == "/scan-cache/buildings":
+            self._handle_scan_cache_buildings()
+            return
+        if parsed.path == "/scan-cache/building":
+            self._handle_scan_cache_building(parsed.query)
             return
         if parsed.path == "/room-postprocessing/graph":
             self._handle_room_postprocessing_graph(parsed.query)
@@ -300,6 +314,34 @@ class TierServerHandler(SimpleHTTPRequestHandler):
             )
             return
         self._send_json(HTTPStatus.OK, result)
+
+    # --- scan-cache viewer -----------------------------------------------------
+
+    def _handle_scan_cache_buildings(self) -> None:
+        from reconcile_tiers.ingest.scan_cache_view import list_scan_buildings
+
+        self._send_json(
+            HTTPStatus.OK,
+            {"buildings": list_scan_buildings(SCAN_CACHE_ROOT)},
+        )
+
+    def _handle_scan_cache_building(self, query: str) -> None:
+        from reconcile_tiers.ingest.scan_cache_view import export_scan_building
+
+        params = urllib.parse.parse_qs(query)
+        building_uuid = (params.get("uuid") or [""])[0]
+        if not _is_safe_uuid(building_uuid):
+            self.send_error(HTTPStatus.BAD_REQUEST, "uuid query param required")
+            return
+        payload = export_scan_building(
+            building_uuid,
+            SCAN_CACHE_ROOT,
+            pipeline_dir=PIPELINE_OUTPUTS_ROOT,
+        )
+        if payload is None:
+            self.send_error(HTTPStatus.NOT_FOUND, "scan-cache not found for uuid")
+            return
+        self._send_json(HTTPStatus.OK, payload)
 
     # --- room postprocessing (corner graph) ------------------------------------
 

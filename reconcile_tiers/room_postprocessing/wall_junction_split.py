@@ -218,6 +218,7 @@ def _apply_wall_splits(
                 corners=corners,
                 room_index=wall.room_index,
                 story=wall.story,
+                synthetic=wall.synthetic,
             )
         )
     return out or [wall]

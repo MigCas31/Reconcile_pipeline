@@ -7,6 +7,8 @@ const DEFAULT_INDEX_URL =
 const PIPELINE_ROOT = "../../pipeline-outputs";
 const CONTEXT_OPACITY = 0.22;
 const FILLERS_APPLIED_STEP = "fillers_applied";
+const CEILING_EXTRACTED_STEP = "ceiling_extracted";
+const KINETIC_CEILING_DOMAIN = "kinetic-ceiling-steps";
 const CEILING_TILE_LABELS = new Set([
   "ceiling",
   "visual_shell",
@@ -317,11 +319,18 @@ async function fetchTrace(tracePath) {
   return trace;
 }
 
+function reconstructedCeilingStepName() {
+  return indexData?.domain === KINETIC_CEILING_DOMAIN
+    ? CEILING_EXTRACTED_STEP
+    : FILLERS_APPLIED_STEP;
+}
+
 function fillersAppliedFrame(trace) {
   if (!trace?.frames?.length) return null;
+  const stepName = reconstructedCeilingStepName();
   return (
-    trace.frames.find((frame) => frame.pipeline_step === FILLERS_APPLIED_STEP) ??
-    trace.frames[9] ??
+    trace.frames.find((frame) => frame.pipeline_step === stepName) ??
+    trace.frames[trace.frames.length - 1] ??
     null
   );
 }
@@ -329,6 +338,8 @@ function fillersAppliedFrame(trace) {
 function isReconstructedCeilingFace(face) {
   if (!face) return false;
   if (CEILING_TILE_LABELS.has(face.label)) return true;
+  if (face.label === "kinetic_ceiling") return true;
+  if (face.role === "ceiling_reconstructed") return true;
   return face.role === "filler";
 }
 

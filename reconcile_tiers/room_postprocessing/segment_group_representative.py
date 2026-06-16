@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 from collections import defaultdict
+from collections.abc import Mapping, Sequence
 from typing import Any
 
 
@@ -132,6 +133,286 @@ def _bottom_top_at_junction(
         {"x": float(bot["x"]), "y": float(bot["y"]), "z": float(bot["z"])},
         {"x": float(top["x"]), "y": float(top["y"]), "z": float(top["z"])},
     )
+
+
+def _corner_tuple(
+    raw: Mapping[str, float] | Sequence[float],
+) -> tuple[float, float, float]:
+    if isinstance(raw, Mapping):
+        return (float(raw["x"]), float(raw["y"]), float(raw["z"]))
+    return (float(raw[0]), float(raw[1]), float(raw[2]))
+
+
+def _corner_dict(pt: tuple[float, float, float]) -> dict[str, float]:
+    return {"x": pt[0], "y": pt[1], "z": pt[2]}
+
+
+def _xz_point_to_segment(
+    px: float,
+    pz: float,
+    a: tuple[float, float, float],
+    b: tuple[float, float, float],
+) -> tuple[float, float]:
+    ax, az = a[0], a[2]
+    bx, bz = b[0], b[2]
+    dx, dz = bx - ax, bz - az
+    len2 = dx * dx + dz * dz
+    if len2 < 1e-12:
+        return math.hypot(px - ax, pz - az), 0.0
+    t = ((px - ax) * dx + (pz - az) * dz) / len2
+    cx = ax + t * dx
+    cz = az + t * dz
+    return math.hypot(px - cx, pz - cz), t
+
+
+def _longest_horizontal_edge(
+    corners: Sequence[tuple[float, float, float]],
+    *,
+    target_y: float,
+    y_tol: float,
+) -> tuple[int, int] | None:
+    """Index pair for the longest near-horizontal edge at ``target_y``."""
+
+    n = len(corners)
+    best: tuple[int, int] | None = None
+    best_len = -1.0
+    for i in range(n):
+        p0 = corners[i]
+        p1 = corners[(i + 1) % n]
+        if abs(p0[1] - p1[1]) > y_tol:
+            continue
+        if abs(p0[1] - target_y) > y_tol and abs(p1[1] - target_y) > y_tol:
+            continue
+        length = math.hypot(p1[0] - p0[0], p1[2] - p0[2])
+        if length > best_len:
+            best_len = length
+            best = (i, (i + 1) % n)
+    return best
+
+
+def _top_edge_for_bottom(
+    corners: Sequence[tuple[float, float, float]],
+    bottom_i0: int,
+    bottom_i1: int,
+    *,
+    y_tol: float,
+) -> tuple[int, int] | None:
+    """Top rim edge paired with the bottom edge (quad walls)."""
+
+    ceil_y = max(c[1] for c in corners)
+    top_indices = [i for i, c in enumerate(corners) if c[1] >= ceil_y - y_tol]
+    if len(top_indices) < 2:
+        return None
+    b0 = corners[bottom_i0]
+    b1 = corners[bottom_i1]
+    if len(top_indices) == 2:
+        t0, t1 = top_indices
+    else:
+        t0 = min(top_indices, key=lambda i: _xz_dist_sq(b0[0], b0[2], corners[i][0], corners[i][2]))
+        t1 = max(
+            top_indices,
+            key=lambda i: _xz_dist_sq(b1[0], b1[2], corners[i][0], corners[i][2]),
+        )
+        if t0 == t1:
+            others = [i for i in top_indices if i != t0]
+            t1 = others[0] if others else t1
+    # Keep rim direction consistent with bottom edge in plan.
+    d_direct = _xz_dist_sq(corners[t0][0], corners[t0][2], b0[0], b0[2]) + _xz_dist_sq(
+        corners[t1][0], corners[t1][2], b1[0], b1[2]
+    )
+    d_swap = _xz_dist_sq(corners[t1][0], corners[t1][2], b0[0], b0[2]) + _xz_dist_sq(
+        corners[t0][0], corners[t0][2], b1[0], b1[2]
+    )
+    if d_swap < d_direct:
+        t0, t1 = t1, t0
+    return t0, t1
+
+
+def _full_wall_dict(
+    corners: Sequence[tuple[float, float, float]],
+    *,
+    locator_id: str,
+) -> dict[str, Any]:
+    return {
+        "locator_id": locator_id,
+        "corners": [_corner_dict(c) for c in corners],
+    }
+
+
+def _wall_bottom_top_rim(
+    corners: Sequence[tuple[float, float, float]],
+    *,
+    corner_tol: float,
+) -> tuple[
+    tuple[float, float, float],
+    tuple[float, float, float],
+    tuple[float, float, float],
+    tuple[float, float, float],
+] | None:
+    if len(corners) < 4:
+        return None
+    floor_y = min(c[1] for c in corners)
+    bottom = _longest_horizontal_edge(corners, target_y=floor_y, y_tol=corner_tol)
+    if bottom is None:
+        return None
+    bi0, bi1 = bottom
+    top = _top_edge_for_bottom(corners, bi0, bi1, y_tol=corner_tol)
+    if top is None:
+        return None
+    ti0, ti1 = top
+    return corners[bi0], corners[bi1], corners[ti0], corners[ti1]
+
+
+def _segment_initial_wall_id(seg: Mapping[str, Any] | None) -> str | None:
+    if seg is None:
+        return None
+    raw = seg.get("initial_wall_id")
+    if raw:
+        return str(raw)
+    wall_id = seg.get("wall_id")
+    if wall_id:
+        return base_wall_id(str(wall_id))
+    return None
+
+
+def _candidate_initial_wall_ids(
+    seg_a: Mapping[str, Any] | None,
+    seg_b: Mapping[str, Any] | None,
+) -> set[str]:
+    out: set[str] = set()
+    for seg in (seg_a, seg_b):
+        wid = _segment_initial_wall_id(seg)
+        if wid:
+            out.add(wid)
+    return out
+
+
+def _reference_quad_from_side(
+    side: Mapping[str, Any],
+    segments_by_id: Mapping[str, Mapping[str, Any]],
+    positions: Mapping[str, tuple[float, float]],
+) -> dict[str, Any] | None:
+    return wall_dict_from_perimeter_side(
+        dict(side),
+        dict(segments_by_id),
+        dict(positions),
+    )
+
+
+def _rim_distance_score(
+    reference_corners: Sequence[Mapping[str, float]],
+    tier_wall_corners: Sequence[Mapping[str, float] | Sequence[float]],
+    *,
+    corner_tol: float,
+) -> float:
+    """Sum of XZ distances from reference bottom rim to tier wall bottom rim."""
+
+    ref_pts = [
+        (float(c["x"]), float(c["z"]))
+        for c in reference_corners[:2]
+    ]
+    if len(ref_pts) < 2:
+        return math.inf
+
+    rim = _wall_bottom_top_rim(
+        [_corner_tuple(c) for c in tier_wall_corners],
+        corner_tol=corner_tol,
+    )
+    if rim is None:
+        return math.inf
+
+    b0, b1, _, _ = rim
+    score = 0.0
+    for px, pz in ref_pts:
+        dist, _ = _xz_point_to_segment(px, pz, b0, b1)
+        score += dist
+    return score
+
+
+def resolve_tier_wall_for_perimeter_side(
+    side: Mapping[str, Any],
+    segments_by_id: Mapping[str, Mapping[str, Any]],
+    positions: Mapping[str, tuple[float, float]],
+    walls_by_base_all: Mapping[str, Sequence[Mapping[str, Any]]],
+    *,
+    corner_tol: float = 0.05,
+) -> tuple[Mapping[str, Any], str] | None:
+    """Pick tier scan wall closest to the representative-segment quad."""
+
+    seg_a = segments_by_id.get(str(side.get("segment_id_a") or ""))
+    seg_b = segments_by_id.get(str(side.get("segment_id_b") or ""))
+    candidate_bases = _candidate_initial_wall_ids(seg_a, seg_b)
+
+    fallback_base = base_wall_id(str(side.get("wall_id") or ""))
+    if fallback_base and fallback_base != "leaf_bridge":
+        candidate_bases.add(fallback_base)
+
+    tier_candidates: list[tuple[Mapping[str, Any], str]] = []
+    for base in sorted(candidate_bases):
+        for wall in walls_by_base_all.get(base) or []:
+            tier_candidates.append((wall, base))
+
+    if not tier_candidates:
+        return None
+
+    reference = _reference_quad_from_side(side, segments_by_id, positions)
+    if reference is None:
+        wall, base = tier_candidates[0]
+        return wall, base
+
+    ref_corners = reference.get("corners") or []
+    best_wall: Mapping[str, Any] | None = None
+    best_base = ""
+    best_score = math.inf
+    for wall, base in tier_candidates:
+        score = _rim_distance_score(
+            ref_corners,
+            wall.get("corners") or [],
+            corner_tol=corner_tol,
+        )
+        loc = str(wall.get("locator_id") or "")
+        if score < best_score - 1e-12 or (
+            abs(score - best_score) <= 1e-12
+            and (
+                best_wall is None
+                or loc < str(best_wall.get("locator_id") or "")
+            )
+        ):
+            best_score = score
+            best_wall = wall
+            best_base = base
+
+    if best_wall is None:
+        return None
+    return best_wall, best_base
+
+
+def wall_dict_from_perimeter_side_trimmed(
+    side: Mapping[str, Any],
+    walls_by_base_all: Mapping[str, Sequence[Mapping[str, Any]]],
+    segments_by_id: Mapping[str, Mapping[str, Any]],
+    positions: Mapping[str, tuple[float, float]],
+    *,
+    corner_tol: float = 0.05,
+) -> dict[str, Any] | None:
+    """Full tier scan wall for one perimeter side (closest to representative segments)."""
+
+    resolved = resolve_tier_wall_for_perimeter_side(
+        side,
+        segments_by_id,
+        positions,
+        walls_by_base_all,
+        corner_tol=corner_tol,
+    )
+    if resolved is None:
+        return None
+    wall, base = resolved
+    corners = [_corner_tuple(c) for c in wall.get("corners") or []]
+    if len(corners) < 3:
+        return None
+    out = _full_wall_dict(corners, locator_id=base)
+    out["source_wall_id"] = base
+    return out
 
 
 def wall_dict_from_perimeter_side(
